@@ -12,12 +12,14 @@
 ini_set('error_reporting', E_ALL);
 ini_set("display_errors", 1);
 
+include_once( 'includes/enums/LitCommon.php' );
 include_once( 'includes/enums/LitLocale.php' );
-include_once( 'includes/LitSettings.php' );
+include_once( 'includes/enums/LitGrade.php' );
 include_once( 'includes/Festivity.php' );
 include_once( 'includes/Functions.php' );
-include_once( 'includes/StatusCodes.php' );
+include_once( 'includes/LitSettings.php' );
 include_once( 'includes/Messages.php' );
+include_once( 'includes/StatusCodes.php' );
 
 
 $isStaging = ( strpos( $_SERVER['HTTP_HOST'], "-staging" ) !== false );
@@ -29,6 +31,8 @@ define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/Li
 $litSettings = new LitSettings( $_GET, $stagingURL );
 $monthFmt = IntlDateFormatter::create($litSettings->LOCALE, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'MMMM' );
 $dateFmt  = IntlDateFormatter::create($litSettings->LOCALE, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'EEEE d MMMM yyyy');
+$litCommon = new LitCommon( $litSettings->LOCALE );
+$litGrade = new LitGrade( $litSettings->LOCALE );
 
 $nationalPresetOptions = '<option value="">---</option>';
 $diocesanPresetOptions = '<option value="">---</option>';
@@ -191,36 +195,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                 for ($ev = 0; $ev <= $cc; $ev++) {
                     $keyname = $LitCalKeys[$keyindex];
                     $festivity = $LitCal[$keyname];
-                    // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                    if ($festivity->common !== "" && $festivity->common !== "Proper") {
-                        $commons = explode(",", $festivity->common);
-                        $commons = array_map(function ($txt) use ($litSettings) {
-                            $common = explode(":", $txt);
-                            $commonGeneral = __($common[0], $litSettings->LOCALE);
-                            $commonSpecific = isset($common[1]) && $common[1] != "" ? __($common[1], $litSettings->LOCALE) : "";
-                            //$txt = str_replace(":", ": ", $txt);
-                            switch ($commonGeneral) {
-                                case __("Blessed Virgin Mary", $litSettings->LOCALE):
-                                    $commonKey = "of (SING_FEMM)";
-                                    break;
-                                case __("Virgins", $litSettings->LOCALE):
-                                    $commonKey = "of (PLUR_FEMM)";
-                                    break;
-                                case __("Martyrs", $litSettings->LOCALE):
-                                case __("Pastors", $litSettings->LOCALE):
-                                case __("Doctors", $litSettings->LOCALE):
-                                case __("Holy Men and Women", $litSettings->LOCALE):
-                                    $commonKey = "of (PLUR_MASC)";
-                                    break;
-                                default:
-                                    $commonKey = "of (SING_MASC)";
-                            }
-                            return __("From the Common", $litSettings->LOCALE) . " " . __($commonKey, $litSettings->LOCALE) . " " . $commonGeneral . ($commonSpecific != "" ? ": " . $commonSpecific : "");
-                        }, $commons);
-                        $festivity->common = implode("; " . __("or", $litSettings->LOCALE) . " ", $commons);
-                    } else if ($festivity->common == "Proper") {
-                        $festivity->common = __("Proper", $litSettings->LOCALE);
-                    }
+                    $festivity->common = $litCommon->C( $festivity->common );
                     
                     //check which liturgical season we are in, to apply color for the season to the row
                     $SeasonColor = "green";
@@ -272,42 +247,14 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                     }
                     $currentCycle = property_exists($festivity, "liturgicalYear") && $festivity->liturgicalYear !== null && $festivity->liturgicalYear !== "" ? " (" . $festivity->liturgicalYear . ")" : "";
                     echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivity->common . '</i></td>';
-                    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($keyname === 'AllSouls' ? __("COMMEMORATION",$litSettings->LOCALE) : ($festivity->displayGrade !== "" ? $festivity->displayGrade : $GRADE[$festivity->grade] ) ) . '</td>';
+                    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($keyname === 'AllSouls' ? __("COMMEMORATION",$litSettings->LOCALE) : ($festivity->displayGrade !== "" ? $festivity->displayGrade : $litGrade->i18n( $festivity->grade ) ) ) . '</td>';
                     echo '</tr>';
                     $keyindex++;
                 }
                 $keyindex--;
             } else {
                 // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                if ($festivity->common !== "" && $festivity->common !== "Proper") {
-                    $commons = explode(",", $festivity->common);
-                    $commons = array_map(function ($txt) use ($litSettings) {
-                        $common = explode(":", $txt);
-                        $commonGeneral = __($common[0], $litSettings->LOCALE);
-                        $commonSpecific = isset($common[1]) && $common[1] != "" ? __($common[1], $litSettings->LOCALE) : "";
-                        //$txt = str_replace(":", ": ", $txt);
-                        switch ($commonGeneral) {
-                            case __("Blessed Virgin Mary", $litSettings->LOCALE):
-                                $commonKey = "of (SING_FEMM)";
-                                break;
-                            case __("Virgins", $litSettings->LOCALE):
-                                $commonKey = "of (PLUR_FEMM)";
-                                break;
-                            case __("Martyrs", $litSettings->LOCALE):
-                            case __("Pastors", $litSettings->LOCALE):
-                            case __("Doctors", $litSettings->LOCALE):
-                            case __("Holy Men and Women", $litSettings->LOCALE):
-                                $commonKey = "of (PLUR_MASC)";
-                                break;
-                            default:
-                                $commonKey = "of (SING_MASC)";
-                        }
-                        return __("From the Common", $litSettings->LOCALE) . " " . __($commonKey, $litSettings->LOCALE) . " " . $commonGeneral . ($commonSpecific != "" ? ": " . $commonSpecific : "");
-                    }, $commons);
-                    $festivity->common = implode("; " . __("or", $litSettings->LOCALE) . " ", $commons);
-                } else if ($festivity->common == "Proper") {
-                    $festivity->common = __("Proper", $litSettings->LOCALE);
-                }
+                $festivity->common = $litCommon->C( $festivity->common );
 
                 //We will apply the color for the single festivity only to it's own table cells
                 $possibleColors = explode(",", $festivity->color);
@@ -347,7 +294,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                     $displayGrade = __("COMMEMORATION",$litSettings->LOCALE);
                 }
                 else if((int)$festivity->date->format('N') !== 7){
-                    $displayGrade = $GRADE[$festivity->grade];
+                    $displayGrade = $litGrade->i18n( $festivity->grade );
                 }
                 echo '<td class="dateEntry">' . $dateString . '</td>';
                 $currentCycle = property_exists($festivity, "liturgicalYear") && $festivity->liturgicalYear !== null && $festivity->liturgicalYear !== "" ? " (" . $festivity->liturgicalYear . ")" : "";
