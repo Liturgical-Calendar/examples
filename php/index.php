@@ -12,6 +12,7 @@
 ini_set('error_reporting', E_ALL);
 ini_set("display_errors", 1);
 
+include_once( 'includes/enum/LitLocale.php' );
 include_once( 'includes/LitSettings.php' );
 include_once( 'includes/Festivity.php' );
 include_once( 'includes/Functions.php' );
@@ -26,16 +27,6 @@ define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalMetadata.php");
 
 $litSettings = new LitSettings( $_GET );
-
-$GRADE = array();
-$GRADE[0] = __("FERIA",$litSettings->LOCALE);
-$GRADE[1] = __("COMMEMORATION",$litSettings->LOCALE);
-$GRADE[2] = __("OPTIONAL MEMORIAL",$litSettings->LOCALE);
-$GRADE[3] = __("MEMORIAL",$litSettings->LOCALE);
-$GRADE[4] = __("FEAST",$litSettings->LOCALE);
-$GRADE[5] = __("FEAST OF THE LORD",$litSettings->LOCALE);
-$GRADE[6] = __("SOLEMNITY",$litSettings->LOCALE);
-$GRADE[7] = __("HIGHER RANKING SOLEMNITY",$litSettings->LOCALE);
 
 $nationalPresetOptions = '<option value="">---</option>';
 $diocesanPresetOptions = '<option value="">---</option>';
@@ -88,7 +79,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
             $LitCal[$key]["type"],
             $LitCal[$key]["grade"],
             $LitCal[$key]["common"],
-            (isset($LitCal[$key]["liturgicalYear"]) ? $LitCal[$key]["liturgicalYear"] : null),
+            $LitCal[$key]["liturgicalYear"] ?? null,
             $LitCal[$key]["displayGrade"]
         );
     }
@@ -146,7 +137,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     echo '<td><label>' . __('EPIPHANY', $litSettings->LOCALE) . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " SELECTED" : "") . '>January 6</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "") . '>Sunday between January 2 and January 8</option></select></label></td>';
     echo '<td><label>' . __('ASCENSION', $litSettings->LOCALE) . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
     echo '<td><label>CORPUS CHRISTI (CORPUS DOMINI): <select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
-    echo '<td><label>LOCALE: <select name="locale" id="locale"><option value="EN" ' . ($litSettings->LOCALE === "EN" ? " SELECTED" : "") . '>EN</option><option value="IT" ' . ($litSettings->LOCALE === "IT" ? " SELECTED" : "") . '>IT</option><option value="LA" ' . ($litSettings->LOCALE === "LA" ? " SELECTED" : "") . '>LA</option></select></label></td>';
+    echo '<td><label>LOCALE: <select name="locale" id="locale"><option value=LitLocale::ENGLISH ' . ($litSettings->LOCALE === LitLocale::ENGLISH ? " SELECTED" : "") . '>EN</option><option value="IT" ' . ($litSettings->LOCALE === "IT" ? " SELECTED" : "") . '>IT</option><option value=LitLocale::LATIN ' . ($litSettings->LOCALE === LitLocale::LATIN ? " SELECTED" : "") . '>LA</option></select></label></td>';
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . __('or', $litSettings->LOCALE) . '</i><br /><i>Scegli il Calendario desiderato dall\'elenco</i></td>';
     echo '</tr><tr>';
@@ -259,21 +250,21 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                     echo '<tr style="background-color:' . $SeasonColor . ';' . (in_array($SeasonColor, $highContrast) ? 'color:white;' : '') . '">';
                     if($newMonth){
                         $monthRwsp = $cm + 1;
-                        echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === 'LA' ? strtoupper($months[(int)$festivity->date->format('n')]) : strtoupper(utf8_encode(strftime('%B', $festivity->date->format('U'))))) . '</div></td>';
+                        echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === LitLocale::LATIN ? strtoupper($months[(int)$festivity->date->format('n')]) : strtoupper(utf8_encode(strftime('%B', $festivity->date->format('U'))))) . '</div></td>';
                         $newMonth = false;
                     }
                     if ($ev == 0) {
                         $rwsp = $cc + 1;
                         $dateString = "";
                         switch ($litSettings->LOCALE) {
-                            case "LA":
+                            case LitLocale::LATIN:
                                 $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
                                 $dayOfTheWeekLatin = $daysOfTheWeek[$dayOfTheWeek];
                                 $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
                                 $monthLatin = $months[$month];
                                 $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
                                 break;
-                            case "EN":
+                            case LitLocale::ENGLISH:
                                 $dateString = $festivity->date->format('D, F jS, Y'); // G:i:s e') . "offset = " . $festivity->hourOffset;
                                 break;
                             default:
@@ -335,19 +326,19 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                 echo '<tr style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : '') . '">';
                 if($newMonth){
                     $monthRwsp = $cm +1;
-                    echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === 'LA' ? strtoupper($months[(int)$festivity->date->format('n')]) : strtoupper(utf8_encode(strftime('%B', $festivity->date->format('U'))))) . '</div></td>';
+                    echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === LitLocale::LATIN ? strtoupper($months[(int)$festivity->date->format('n')]) : strtoupper(utf8_encode(strftime('%B', $festivity->date->format('U'))))) . '</div></td>';
                     $newMonth = false;
                 }
                 $dateString = "";
                 switch ($litSettings->LOCALE) {
-                    case "LA":
+                    case LitLocale::LATIN:
                         $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
                         $dayOfTheWeekLatin = $daysOfTheWeek[$dayOfTheWeek];
                         $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
                         $monthLatin = $months[$month];
                         $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
                         break;
-                    case "EN":
+                    case LitLocale::ENGLISH:
                         $dateString = $festivity->date->format('D, F jS, Y'); //  G:i:s e') . "offset = " . $festivity->hourOffset;
                         break;
                     default:
