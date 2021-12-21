@@ -12,7 +12,7 @@
 ini_set('error_reporting', E_ALL);
 ini_set("display_errors", 1);
 
-include_once( 'includes/enum/LitLocale.php' );
+include_once( 'includes/enums/LitLocale.php' );
 include_once( 'includes/LitSettings.php' );
 include_once( 'includes/Festivity.php' );
 include_once( 'includes/Functions.php' );
@@ -26,7 +26,9 @@ $endpointV = $isStaging ? "dev" : "v3";
 define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalEngine.php");
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalMetadata.php");
 
-$litSettings = new LitSettings( $_GET );
+$litSettings = new LitSettings( $_GET, $stagingURL );
+$monthFmt = IntlDateFormatter::create($litSettings->LOCALE, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'MMMM' );
+$dateFmt  = IntlDateFormatter::create($litSettings->LOCALE, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'EEEE d MMMM yyyy');
 
 $nationalPresetOptions = '<option value="">---</option>';
 $diocesanPresetOptions = '<option value="">---</option>';
@@ -38,10 +40,6 @@ if( $MetaData !== null ) {
     $nationalPresetOptions = buildNationOptions( $nations, $litSettings->NationalCalendar );
     $diocesanPresetOptions = buildDioceseOptions( $MetaData, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar );
 }
-
-ini_set('date.timezone', 'Europe/Vatican');
-//ini_set('intl.default_locale', strtolower($litSettings->LOCALE) . '_' . $litSettings->LOCALE);
-setlocale(LC_TIME, strtolower($litSettings->LOCALE) . '_' . $litSettings->LOCALE);
 
 $SUNDAY_CYCLE = ["A", "B", "C"];
 $WEEKDAY_CYCLE = ["I", "II"];
@@ -250,7 +248,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                     echo '<tr style="background-color:' . $SeasonColor . ';' . (in_array($SeasonColor, $highContrast) ? 'color:white;' : '') . '">';
                     if($newMonth){
                         $monthRwsp = $cm + 1;
-                        echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === LitLocale::LATIN ? strtoupper($months[(int)$festivity->date->format('n')]) : strtoupper(utf8_encode(strftime('%B', $festivity->date->format('U'))))) . '</div></td>';
+                        echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === LitLocale::LATIN ? strtoupper( $months[ (int)$festivity->date->format('n') ] ) : strtoupper( $monthFmt->format( $festivity->date->format('U') ) ) ) . '</div></td>';
                         $newMonth = false;
                     }
                     if ($ev == 0) {
@@ -268,7 +266,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                                 $dateString = $festivity->date->format('D, F jS, Y'); // G:i:s e') . "offset = " . $festivity->hourOffset;
                                 break;
                             default:
-                                $dateString = utf8_encode(strftime('%A %e %B %Y', $festivity->date->format('U')));
+                                $dateString = $dateFmt->format( $festivity->date->format('U') );
                         }
                         echo '<td rowspan="' . $rwsp . '" class="dateEntry">' . $dateString . '</td>';
                     }
@@ -326,23 +324,23 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                 echo '<tr style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : '') . '">';
                 if($newMonth){
                     $monthRwsp = $cm +1;
-                    echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === LitLocale::LATIN ? strtoupper($months[(int)$festivity->date->format('n')]) : strtoupper(utf8_encode(strftime('%B', $festivity->date->format('U'))))) . '</div></td>';
+                    echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ( $litSettings->LOCALE === LitLocale::LATIN ? strtoupper( $months[ (int)$festivity->date->format('n') ] ) : strtoupper( $monthFmt->format( $festivity->date->format('U') ) ) ) . '</div></td>';
                     $newMonth = false;
                 }
                 $dateString = "";
                 switch ($litSettings->LOCALE) {
                     case LitLocale::LATIN:
                         $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
-                        $dayOfTheWeekLatin = $daysOfTheWeek[$dayOfTheWeek];
+                        $dayOfTheWeekLatin = $daysOfTheWeek[ $dayOfTheWeek ];
                         $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
-                        $monthLatin = $months[$month];
+                        $monthLatin = $months[ $month ];
                         $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
                         break;
                     case LitLocale::ENGLISH:
                         $dateString = $festivity->date->format('D, F jS, Y'); //  G:i:s e') . "offset = " . $festivity->hourOffset;
                         break;
                     default:
-                        $dateString = utf8_encode(strftime('%A %e %B %Y', $festivity->date->format('U')));
+                        $dateString = $dateFmt->format( $festivity->date->format('U') );
                 }
                 $displayGrade = "";
                 if($keyname === 'AllSouls'){

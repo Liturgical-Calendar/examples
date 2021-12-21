@@ -36,9 +36,23 @@ class LitSettings {
     //The upper limit is determined by the limit of PHP in dealing with DateTime objects
     const YEAR_UPPER_LIMIT          = 9999;
   
-    public function __construct( array $DATA ){
+    public function __construct( array $DATA, string $stagingURL ) {
+
+        //set a few default values
         $this->YEAR = (int)date("Y");
-        foreach( $DATA as $key => $value ){
+
+        if( !empty( $_COOKIE["currentLocale"] ) ) {
+            $this->LOCALE = $_COOKIE["currentLocale"];
+        }
+        elseif( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+            $this->LOCALE = Locale::acceptFromHttp( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+        }
+        else {
+            $this->LOCALE = LitLocale::ENGLISH;
+        }
+
+        //set values based on the GET global variable
+        foreach( $DATA as $key => $value ) {
             $key = strtoupper( $key );
             if( in_array( $key, self::ALLOWED_PARAMS ) ){
                 switch( $key ){
@@ -66,7 +80,7 @@ class LitSettings {
                         $this->CorpusChristi    = CorpusChristi::isValid( strtoupper( $value ) )    ? strtoupper( $value ) : CorpusChristi::THURSDAY;
                         break;
                     case "LOCALE":
-                        $this->LOCALE           = LitLocale::isValid( strtoupper( $value ) )       ? strtoupper( $value ) : LitLocale::LATIN;
+                        $this->LOCALE           = LitLocale::isValid( strtoupper( $value ) )        ? strtoupper( $value ) : LitLocale::LATIN;
                         break;
                     case "NATIONALCALENDAR":
                         $this->NationalCalendar         = in_array( strtoupper( $value ), self::SUPPORTED_NATIONAL_PRESETS ) ? strtoupper( $value ) : null;
@@ -79,6 +93,34 @@ class LitSettings {
 
         if( $this->NationalCalendar !== null ) {
             $this->updateSettingsByNation();
+        }
+
+        //we only need the two letter ISO code, not the national extension
+        if( strpos( $this->LOCALE, "_" ) ) {
+            $this->LOCALE = explode( "_", $this->LOCALE )[0];
+        } else if ( strpos( $this->LOCALE, "-" ) ) {
+            $this->LOCALE = explode( "-", $this->LOCALE )[0];
+        }
+        $localeArray = [
+            strtolower( $this->LOCALE ) . '_' . strtoupper( $this->LOCALE ) . '.utf8',
+            strtolower( $this->LOCALE ) . '_' . strtoupper( $this->LOCALE ) . '.UTF-8',
+            strtolower( $this->LOCALE ) . '_' . strtoupper( $this->LOCALE ),
+            strtolower( $this->LOCALE )
+        ];
+        ini_set('date.timezone', 'Europe/Vatican');
+        setlocale( LC_ALL, $localeArray );
+        bindtextdomain("litcal", "i18n");
+        textdomain("litcal");
+        if( !isset( $_COOKIE["currentLocale"] ) || $_COOKIE["currentLocale"] !== $this->LOCALE ) {
+            setcookie(
+                "currentLocale",                                //name
+                $this->LOCALE,                                  //value
+                time() + 60*60*24*40,                           //expire in 30 days
+                "/examples/",                                   //path
+                "litcal{$stagingURL}.johnromanodorazio.com",    //domain
+                true,                                           //https only
+                false                                           //httponly (if true, cookie won't be available to javascript)
+            );
         }
 
     }
