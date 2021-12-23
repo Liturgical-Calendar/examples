@@ -67,5 +67,9 @@
     "January 6": "6 Ianuarii",
     "Sunday Jan 2↔Jan 8": "Dominica 2 Ian↔8 Ian",
     "Italy": "Italia",
-    "Vatican": "Vaticanum"
+    "Vatican": "Vaticanum",
+    "weekday": "feria",
+    "Commemoration": "Commemoratio",
+    "Optional memorial": "Memoria ad libitum",
+    
 }
