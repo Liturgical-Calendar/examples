@@ -89,7 +89,14 @@ let messages = null,
                             firstDay: 0,
                             eventOrder: 'idx',
                             eventDidMount: info => {
-                                $(info.el).attr('data-tooltip', encodeURI(info.event.extendedProps.description));
+                                //$(info.el).attr('data-tooltip', encodeURI(info.event.extendedProps.description));
+                                var tooltip = new Tooltip(info.el, {
+                                    title: info.event.extendedProps.description,
+                                    placement: 'top',
+                                    trigger: 'hover',
+                                    container: 'body',
+                                    html: true
+                                });
                             }
                         };
                     if ($Settings.locale !== 'en') {
@@ -101,6 +108,12 @@ let messages = null,
                     let calendar = new FullCalendar.Calendar(calendarEl, fullCalendarSettings);
 
                     calendar.render();
+                    /*$('[data-tooltip]').tooltip({
+                        items: "[data-tooltip]",
+                        content: function() {
+                            return decodeURI( $(this).attr('data-tooltip') );
+                        }
+                    });*/
 
                     //even though the following code works for Latin, the Latin however is not removed for successive renders
                     //in other locales. Must have something to do with how the renders are working, like an append or something?
@@ -112,12 +125,6 @@ let messages = null,
                         });
                     }
                     */
-                    $('[data-tooltip]').tooltip({
-                        items: "[data-tooltip]",
-                        content: function() {
-                            return decodeURI( $(this).attr('data-tooltip') );
-                        }
-                    });
 
                 }
                 if (LitCalData.hasOwnProperty('Messages')) {
@@ -235,7 +242,7 @@ let messages = null,
                 return $colors.join(" " + __("or") + " ");
             }
             else {
-                let $highlightColor = $colorstr === 'pink' ? 'text-shadow:1px 1px 3px DarkGray;' : '';
+                let $highlightColor = $colorstr === 'pink' ? 'text-shadow: 0 0 2px #000;' : '';
                 return '<span style="color:' + ($colorstr === 'white' ? 'gray' : $colorstr) + ';' + $highlightColor + '">' + __($colorstr) + '</span>';
             }
         }
