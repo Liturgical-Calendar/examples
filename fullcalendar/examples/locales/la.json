@@ -71,5 +71,9 @@
     "weekday": "feria",
     "Commemoration": "Commemoratio",
     "Optional memorial": "Memoria ad libitum",
-    
+    "Memorial": "Memoria obligatoria",
+    "FEAST": "FESTUM",
+    "FEAST OF THE LORD": "FESTUM DOMINI",
+    "SOLEMNITY": "SOLLEMNITAS",
+    "celebration with precedence over solemnities": "celebratio altioris ordinis quam sollemnitatis"
 }
