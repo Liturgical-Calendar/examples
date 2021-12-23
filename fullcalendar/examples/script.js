@@ -30,7 +30,6 @@ let messages = null,
     },
     $events = [],
     pad = n => n < 10 ? '0' + n : n,
-    litGrade = new LitGrade($Settings.locale),
     genLitCal = () => {
         $.ajax({
             method: 'POST',
@@ -59,7 +58,8 @@ let messages = null,
                         }
                         else if (dy !== 7 || $festivity.grade > 3) {
                             //$festivityGrade = _G($festivity.grade) + ', ';
-                            $festivityGrade = litGrade.i18n( $festivity.grade ) + ', ';
+                            let { strVal, tags } = LitGrade.strWTags( $festivity.grade );
+                            $festivityGrade = tags[0] + __( strVal ) + tags[1] + ', ';
                         }
 
                         let $description = '<b>' + $festivity.name + '</b><br>' + $festivityGrade + '<i>' + _CC($festivity.color, true) + '</i><br><i style="font-size:.8em;">' + _C($festivity.common) + '</i>' + ($festivity.hasOwnProperty('liturgicalYear') ? '<br>' + $festivity.liturgicalYear : '');
@@ -177,28 +177,7 @@ let messages = null,
             autoOpen: false
         });
 
-        if($Settings.nationalcalendar === 'USA'){
-            if(Object.keys($DiocesesUSA).length > 0){
-                $('#diocesancalendar').prop('disabled', false);
-                $('#diocesancalendar').append('<option value=""></option>');
-                for(const [key, value] of Object.entries($DiocesesUSA)){
-                    $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
-                }
-            } else {
-                $('#diocesancalendar').prop('disabled', true);
-            }
-        } else if ($Settings.nationalcalendar === 'ITALY'){
-            if(Object.keys($DiocesesItaly).length > 0){
-                $('#diocesancalendar').prop('disabled', false);
-                $('#diocesancalendar').append('<option value=""></option>');
-                for(const [key, value] of Object.entries($DiocesesItaly)){
-                    $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
-                }
-            } else {
-                $('#diocesancalendar').prop('disabled', true);
-            }
-        }
-
+        handleDiocesesList( $Settings.nationalcalendar );
     },
     __ = key => {
         if ( messages !== null && typeof messages === 'object') {
@@ -275,8 +254,25 @@ let messages = null,
     //dayNames = ['Dies Solis', 'Dies Lunae', 'Dies Martis', 'Dies Mercurii', 'Dies Iovis', 'Dies Veneris', 'Dies Saturni'],
     //dayNamesShort = ['Sol', 'Lun', 'Mart', 'Merc', 'Iov', 'Ven', 'Sat'],
     $index = {},
-    $DiocesesUSA,
-    $DiocesesItaly;
+    handleDiocesesList = val => {
+        $('#diocesancalendar').empty();
+        if( val === "VATICAN" || val === "" ) {
+            $('#diocesancalendar').prop('disabled', true);
+        } else {
+            let $DiocesesList;
+            if(Object.keys($index).length > 0){
+                $DiocesesList = Object.filter($index, key => key.nation === val);
+            }
+            if(Object.keys($DiocesesList).length > 0) {
+                $('#diocesancalendar').prop('disabled', false);
+                for(const [key, value] of Object.entries($DiocesesList)){
+                    $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
+                }
+            } else {
+                $('#diocesancalendar').prop('disabled', true);
+            }
+        }
+    };
 
 jQuery.ajax({
     url: metadataURL,
@@ -288,8 +284,6 @@ jQuery.ajax({
         console.log('retrieved data from index file:');
         console.log(data);
         $index = data;
-        $DiocesesUSA = Object.filter($index, key => key.nation == "USA");
-        $DiocesesItaly = Object.filter($index, key => key.nation == "ITALY");
     }
 });
 
@@ -320,9 +314,7 @@ $(document).ready(() => {
         console.log('$Settings = ');
         console.log($Settings);
         $('#settingsWrapper').dialog("close");
-        //createHeader();
         Cookies.set( 'litCalSettings', JSON.stringify($Settings), { secure: true } );
-        litGrade = new LitGrade( $Settings.locale );
         if( $Settings.locale !== 'en' ){
             loadMessages( $Settings.locale, genLitCal);
         } else {
@@ -337,20 +329,6 @@ $(document).ready(() => {
     }
 
     $(document).on('change', '#nationalcalendar', ev => {
-        /*
-        $('#diocesancalendar').empty();
-        if(Object.keys($index).length > 0){
-        $DiocesesList = Object.filter($index, key => key.nation == $(this).val());
-        }
-        if(Object.keys($DiocesesList).length > 0){
-        $('#diocesancalendar').prop('disabled', false);
-        for(const [key, value] of Object.entries($DiocesesList)){
-            $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
-        }
-        } else {
-        $('#diocesancalendar').prop('disabled', true);
-        }
-        */
         switch( $(ev.currentTarget).val() ) {
             case "VATICAN":
                 $('#locale').val('la');
@@ -379,16 +357,6 @@ $(document).ready(() => {
                 $Settings.corpuschristi = 'SUNDAY';
                 $Settings.nationalcalendar = 'ITALY';
                 $('#calSettingsForm :input').not('#diocesancalendar').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
-                $('#diocesancalendar').empty();
-                if(Object.keys($DiocesesItaly).length > 0){
-                $('#diocesancalendar').prop('disabled', false);
-                $('#diocesancalendar').append('<option value=""></option>');
-                for(const [key, value] of Object.entries($DiocesesItaly)){
-                    $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
-                }
-                } else {
-                $('#diocesancalendar').prop('disabled', true);
-                }
                 break;
             case "USA":
                 $('#locale').val('en');
@@ -403,127 +371,14 @@ $(document).ready(() => {
                 $Settings.diocesancalendar = '';
                 $Settings.nationalcalendar = 'USA';
                 $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
-
-                //TODO: once the data for the Diocese of Rome has been define through the UI interface
-                //      and the relative JSON file created, the following operation should be abstracted for any nation in the list
-                //      and not applied here with the hardcoded value "USA"
-                //      The logic has been started up above, before the 'switch'
-                //      However we have to keep in mind that Rome groups together the celebrations for the whole Lazio region in a single booklet
-                //      This would mean that we have to create the ability of creating groups, to group together the data from more than one diocese
-                //      Perhaps another value can be added to the index, to indicate a group definition, such that all the diocesan calendars belonging to that group can be pulled...
-                $('#diocesancalendar').empty();
-                if(Object.keys($DiocesesUSA).length > 0){
-                $('#diocesancalendar').prop('disabled', false);
-                $('#diocesancalendar').append('<option value=""></option>');
-                for(const [key, value] of Object.entries($DiocesesUSA)){
-                    $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
-                }
-                } else {
-                    $('#diocesancalendar').prop('disabled', true);
-                }
                 break;
             default:
                 $('#calSettingsForm :input').prop('disabled', false);
-                $('#diocesancalendar').val("").prop('disabled', true);
                 $Settings.nationalcalendar = '';
         }
+        handleDiocesesList( $(ev.currentTarget).val() );
     });
 
     $(document).on('change', '#diocesancalendar', ev => { $Settings.diocesancalendar = $(ev.currentTarget).val(); });
 
 });
-
-class LitGrade {
-    static HIGHER_SOLEMNITY = Symbol('HigherSolemnity');
-    static SOLEMNITY        = Symbol('Solemnity');
-    static FEAST_LORD       = Symbol('FeastLord');
-    static FEAST            = Symbol('Feast');
-    static MEMORIAL         = Symbol('Memorial');
-    static MEMORIAL_OPT     = Symbol('OptionalMemorial');
-    static COMMEMORATION    = Symbol('Commemoration');
-    static WEEKDAY          = Symbol('Weekday');
-    static valuesAsInt      = [ 0, 1, 2, 3, 4, 5, 6, 7 ];
-    static values           = [
-        this.HIGHER_SOLEMNITY,
-        this.SOLEMNITY,
-        this.FEAST_LORD,
-        this.FEAST,
-        this.MEMORIAL,
-        this.MEMORIAL_OPT,
-        this.COMMEMORATION,
-        this.WEEKDAY
-    ];
-    static valueToEnum      = {
-        7:  this.HIGHER_SOLEMNITY,
-        6:  this.SOLEMNITY,
-        5:  this.FEAST_LORD,
-        4:  this.FEAST,
-        3:  this.MEMORIAL,
-        2:  this.MEMORIAL_OPT,
-        1:  this.COMMEMORATION,
-        0:  this.WEEKDAY
-    }
-    static isValid = ( value ) => {
-        if( typeof value === 'number' ) {
-            return this.valuesAsInt.includes( value );
-        } else {
-            return this.values.includes( value );
-        }
-    };
-    static enumFromValue = ( value ) => this.valueToEnum[value];
-    #locale  = 'la';
-    constructor( locale ) {
-        this.#locale = locale;
-    }
-    i18n = ( value, html = true ) => {
-        if( typeof value === 'number' ){
-            value = this.enumFromValue( value );
-        }
-        switch( value ) {
-            case WEEKDAY:
-                /**translators: liturgical rank. Keep lowercase  */
-                grade = this.locale === 'la' ? 'feria'                 : __( "weekday" );
-                tags = ['<i>','</i>'];
-            break;
-            case COMMEMORATION:
-                /**translators: liturgical rank. Keep Capitalized  */
-                grade = this.locale === 'la' ? 'Commemoratio'          : __( "Commemoration" );
-                tags = ['<i>','</i>'];
-            break;
-            case MEMORIAL_OPT:
-                /**translators: liturgical rank. Keep Capitalized  */
-                grade = this.locale === 'la' ? 'Memoria ad libitum'    : __( "Optional memorial" );
-                tags = ['',''];
-            break;
-            case MEMORIAL:
-                /**translators: liturgical rank. Keep Capitalized  */
-                grade = this.locale === 'la' ? 'Memoria obligatoria'   : __( "Memorial" );
-                tags = ['',''];
-            break;
-            case FEAST:
-                /**translators: liturgical rank. Keep UPPERCASE  */
-                grade = this.locale === 'la' ? 'FESTUM'                : __( "FEAST" );
-                tags = ['',''];
-            break;
-            case FEAST_LORD:
-                /**translators: liturgical rank. Keep UPPERCASE  */
-                grade = this.locale === 'la' ? 'FESTUM DOMINI'         : __( "FEAST OF THE LORD" );
-                tags = ['<b>','</b>'];
-            break;
-            case SOLEMNITY:
-                /**translators: liturgical rank. Keep UPPERCASE  */
-                grade = this.locale === 'la' ? 'SOLLEMNITAS'           : __( "SOLEMNITY" );
-                tags = ['<b>','</b>'];
-            break;
-            case HIGHER_SOLEMNITY:
-                /**translators: liturgical rank. Keep lowercase  */
-                grade = this.locale === 'la' ? 'celebratio altioris ordinis quam sollemnitatis' : __( "celebration with precedence over solemnities" );
-                tags = ['<b><i>','</i></b>'];
-            break;
-            default:
-                grade = this.locale === 'la' ? 'feria'                 : __( "weekday" );
-                tags = ['',''];
-        }
-        return html ? tags[0] . grade . tags[1] : grade;
-    }
-}
