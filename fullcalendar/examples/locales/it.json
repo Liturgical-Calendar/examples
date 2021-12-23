@@ -68,12 +68,12 @@
     "Sunday Jan 2↔Jan 8": "Domenica 2 Gennaio↔8 Gennaio",
     "Italy": "Italia",
     "Vatican": "Vaticano",
-    "weekday": "",
-    "Commemoration": "",
-    "Optional memorial": "",
-    "Memorial": "",
-    "FEAST": "",
-    "FEAST OF THE LORD": "",
-    "SOLEMNITY": "",
-    "celebration with precedence over solemnities": ""
+    "weekday": "feria",
+    "Commemoration": "Commemorazione",
+    "Optional memorial": "Memoria facoltativa",
+    "Memorial": "Memoria",
+    "FEAST": "FESTA",
+    "FEAST OF THE LORD": "FESTA DEL SIGNORE",
+    "SOLEMNITY": "SOLENNITÀ",
+    "celebration with precedence over solemnities": "celebrazione con precedenza sulle solennità"
 }
