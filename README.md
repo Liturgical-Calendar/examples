@@ -6,6 +6,12 @@ A few examples of how to render a calendar, create an App, or create a widget, u
 ## [Fullcalendar](https://litcal.johnromanodorazio.com/examples/fullcalendar)
 An example of making an AJAX request against the Liturgical Calendar API, and then rendering the results using [Fullcalendar](https://github.com/fullcalendar/fullcalendar).
 
+### Translation of the Fullcalendar example
+The Fullcalendar example uses JSON files for all translatable strings.
+<a href="https://translate.johnromanodorazio.com/engage/liturgical-calendar/">
+<img src="https://translate.johnromanodorazio.com/widgets/liturgical-calendar/-/fullcalendar-example/open-graph.png" alt="Translation status" />
+</a>
+
 ## [Javascript](https://litcal.johnromanodorazio.com/examples/javascript)
 A simple rendering of a calendar with Liturgical events from the Liturgical Calendar API, using Javascript both to make an AJAX request and to render the HTML of the calendar.
 
