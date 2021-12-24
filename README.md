@@ -1,5 +1,7 @@
-# A collection of examples for usage of the Liturgical Calendar API
-A few examples of how to render a calendar, create an App, create a widget, using the data from the Liturgical Calendar API and using different programming languages and web frameworks.
+[![CodeFactor](https://www.codefactor.io/repository/github/liturgical-calendar/examples/badge)](https://www.codefactor.io/repository/github/liturgical-calendar/examples)
+
+# Collection of examples for usage of the Liturgical Calendar API
+A few examples of how to render a calendar, create an App, or create a widget, using the data from the Liturgical Calendar API and using different programming languages and web frameworks.
 
 ## [Fullcalendar](https://litcal.johnromanodorazio.com/examples/fullcalendar)
 An example of making an AJAX request against the Liturgical Calendar API, and then rendering the results using [Fullcalendar](https://github.com/fullcalendar/fullcalendar).
