@@ -221,7 +221,7 @@ let today = new Date(),
                                 else if(dy !== 7 || $festivity.grade > 3){
                                     $festivityGrade = $GRADE[$festivity.grade];
                                 }
-                                strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + __($festivity.color) + '</i><br /><i>' + $festivity.common + '</i></td>';
+                                strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + i18next.t($festivity.color) + '</i><br /><i>' + $festivity.common + '</i></td>';
                                 strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
                                 strHTML += '</tr>';
                                 $keyindex++;
@@ -276,7 +276,7 @@ let today = new Date(),
                             if($festivity.hasOwnProperty('displayGrade') && $festivity.displayGrade !== ''){
                                 $festivityGrade = $festivity.displayGrade;
                             }         
-                            strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + __($festivity.color) + '</i><br /><i>' + $festivity.common + '</i></td>';
+                            strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + i18next.t($festivity.color) + '</i><br /><i>' + $festivity.common + '</i></td>';
                             strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
                             strHTML += '</tr>';
                         }
