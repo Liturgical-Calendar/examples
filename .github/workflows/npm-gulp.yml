@@ -30,7 +30,7 @@ jobs:
         # The committer's name
         name: github-actions
         # The commit message
-        message: regenerated i18n/litcal.pot from source files
+        message: regenerated i18next translation.json files from source files
         # The branch to push the changes back to, defaults to the current branch
         branch: ${{ github.ref }}
         # The files to add separated by space, defaults to every file
