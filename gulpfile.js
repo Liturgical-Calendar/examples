@@ -8,11 +8,11 @@ gulp.task('i18next', function() {
             lngs: ['en', 'es', 'de', 'fr', 'it', 'pt', 'la'], // supported languages
             resource: {
                 // the source path is relative to current working directory
-                loadPath: 'javascript/locales/{{lng}}/{{ns}}.json',
+                loadPath: process.env.GITHUB_WORKSPACE+'/javascript/locales/{{lng}}/{{ns}}.json',
 
                 // the destination path is relative to your `gulp.dest()` path
                 savePath: 'locales/{{lng}}/{{ns}}.json'
             }
         }))
-        .pipe(gulp.dest('javascript'));
+        .pipe(gulp.dest(process.env.GITHUB_WORKSPACE+'/javascript'));
 });
