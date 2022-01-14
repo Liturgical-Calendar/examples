@@ -20,19 +20,22 @@ i18next.use(i18nextHttpBackend).init({
   });
 
 const translCommon = common => {
-    if( common === '' ) return common; 
+    if( common === '' ) return common;
     if( common === 'Proper' ) {
         return i18next.t('Proper');
     } else {
         $commons = common.split(",");
         $commons = $commons.map($txt => {
             let $common = $txt.split(":");
-            let $commonGeneral = i18next.t($common[0].replaceAll(' ', '-'));
-            let $commonSpecific = (typeof $common[1] !== 'undefined' && $common[1] != "") ? i18next.t($common[1].replaceAll(' ', '-')) : "";
+            let commonGeneralKey = $common[0].replaceAll(' ', '-');
+            let commonSpecificKey = (typeof $common[1] !== 'undefined' && $common[1] != "") ? $common[1].replaceAll(' ', '-') : "";
+            let $commonGeneral = i18next.exists(commonGeneralKey) ? i18next.t(commonGeneralKey) : $common[0];
+            let $commonSpecific = commonSpecificKey !== "" && i18next.exists( commonSpecificKey ) ? i18next.t( commonSpecificKey ) : (typeof $common[1] !== 'undefined' ? $common[1] : "");
             let $commonKey = '';
             //$txt = str_replace(":", ": ", $txt);
             switch ($commonGeneral) {
                 case i18next.t("Blessed-Virgin-Mary"):
+                case i18next.t("Dedication-of-a-Church"):
                     $commonKey = i18next.t("of", {context: "(SING_FEMM)"});
                     break;
                 case i18next.t("Virgins"):
