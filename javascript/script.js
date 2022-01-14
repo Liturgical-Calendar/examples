@@ -5,15 +5,18 @@ const endpointV = isStaging ? 'dev' : 'v3';
 const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalEngine.php`;
 const metadataURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalMetadata.php`;
 
+if(Cookies.get("currentLocale") === undefined){
+    Cookies.set("currentLocale", navigator.language );
+}
+
 i18next.use(i18nextHttpBackend).init({
     debug: true,
     lng: Cookies.get("currentLocale").substring(0,2),
     backend: {
         loadPath: 'locales/{{lng}}/{{ns}}.json'
     }
-  }, function(err, t) {
+  }, (err, t) => {
     jqueryI18next.init(i18next, $);
-
   });
 
 const translCommon = common => {
@@ -188,10 +191,10 @@ let today = new Date(),
                                 /*
                                 let $festivityColorString = "";
                                 if($possibleColors.length === 1){
-                                    $festivityColorString = __($possibleColors[0]);
+                                    $festivityColorString = i18next.t($possibleColors[0]);
                                 } else if ($possibleColors.length > 1){
-                                    $possibleColors = $possibleColors.map($txt => __($txt) });
-                                    $festivityColorString = $possibleColors.join("</i> " + __("or") + " <i>");
+                                    $possibleColors = $possibleColors.map($txt => i18next.t($txt) });
+                                    $festivityColorString = $possibleColors.join("</i> " + i18next.t("or") + " <i>");
                                 }
                                 */
                                 strHTML += '<tr style="background-color:' + $SeasonColor + ';' + ($highContrast.indexOf($SeasonColor) != -1 ? 'color:white;' : '') + '">';
@@ -243,10 +246,10 @@ let today = new Date(),
                             /*
                             let $festivityColorString = "";
                             if($possibleColors.length === 1){
-                                $festivityColorString = __($possibleColors[0]);
+                                $festivityColorString = i18next.t($possibleColors[0]);
                             } else if ($possibleColors.length > 1){
-                                $possibleColors = $possibleColors.map($txt => __($txt) });
-                                $festivityColorString = $possibleColors.join("</i> " + __("or") + " <i>");
+                                $possibleColors = $possibleColors.map($txt => i18next.t($txt) });
+                                $festivityColorString = $possibleColors.join("</i> " + i18next.t("or") + " <i>");
                             }
                             */
                             strHTML += '<tr style="background-color:' + $SeasonColor + ';' + ($highContrast.indexOf($SeasonColor) != -1 ? 'color:white;' : 'color:black;') + '">';
@@ -298,31 +301,6 @@ let today = new Date(),
             });
     },
     $messages = {
-        "green": {
-            "en": "green",
-            "it": "verde",
-            "la": "viridis"
-        },
-        "purple": {
-            "en": "purple",
-            "it": "viola",
-            "la": "purpura"
-        },
-        "white": {
-            "en": "white",
-            "it": "bianco",
-            "la": "albus"
-        },
-        "red": {
-            "en": "red",
-            "it": "rosso",
-            "la": "ruber"
-        },
-        "pink": {
-            "en": "pink",
-            "it": "rosa",
-            "la": "rosea"
-        },
         "Customize options for generating the Roman Calendar": {
             "en": "Customize options for generating the Roman Calendar",
             "it": "Personalizza le opzioni per la generazione del Calendario Romano",
@@ -566,129 +544,133 @@ let today = new Date(),
         }
     });
 
+$(document).on('click', '#openSettings', () => { $('#settingsWrapper').dialog("open"); });
+$(document).on("submit", "#calSettingsForm", event => {
+    event.preventDefault();
+    let formValues = $(event.currentTarget).serializeArray();
+    for(const obj of formValues){
+        $Settings[obj.name] = obj.value;
+    }
+
+    i18next.changeLanguage($Settings.locale.toLowerCase(), (err, t) => {
+        jqueryI18next.init(i18next, $);
+        Cookies.set("currentLocale", $Settings.locale.toLowerCase() );
+    });
+
+    console.log('$Settings = ');
+    console.log($Settings);
+
+    $GRADE = [
+        __("FERIA"),
+        __("COMMEMORATION"),
+        __("OPTIONAL MEMORIAL"),
+        __("MEMORIAL"),
+        __("FEAST"),
+        __("FEAST OF THE LORD"),
+        __("SOLEMNITY"),
+        __("HIGHER RANKING SOLEMNITY")
+    ];
+    $('#settingsWrapper').dialog("close");
+    genLitCal();
+    return false;
+});
+
+$(document).on('change','#nationalcalendar', ev => {
+    switch( $(ev.currentTarget).val() ){
+      case "VATICAN":
+        $('#locale').val('LA');
+        $('#epiphany').val('JAN6');
+        $('#ascension').val('THURSDAY');
+        $('#corpusChristi').val('THURSDAY');
+        $('#diocesancalendar').val("");
+        $Settings.locale = 'LA';
+        $Settings.epiphany = 'JAN6';
+        $Settings.ascension = 'THURSDAY';
+        $Settings.corpusChristi = 'THURSDAY';
+        $Settings.diocesancalendar = '';
+        $Settings.nationalcalendar = 'VATICAN';
+
+        $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled',true);
+      break;
+      case "ITALY":
+        $('#locale').val('IT');
+        $('#epiphany').val('JAN6');
+        $('#ascension').val('SUNDAY');
+        $('#corpusChristi').val('SUNDAY');
+        $Settings.locale = 'IT';
+        $Settings.epiphany = 'JAN6';
+        $Settings.ascension = 'SUNDAY';
+        $Settings.corpusChristi = 'SUNDAY';
+        $Settings.diocesancalendar = '';
+        $Settings.nationalcalendar = 'ITALY';
+        $('#calSettingsForm :input').not('#diocesancalendar').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled',true);
+        $('#diocesancalendar').empty();
+        if(Object.keys($DiocesesItaly).length > 0){
+          $('#diocesancalendar').prop('disabled', false);
+          $('#diocesancalendar').append('<option value=""></option>');
+          for(const [key, value] of Object.entries($DiocesesItaly)){
+            $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
+          }
+        } else {
+          $('#diocesancalendar').prop('disabled', true);
+        }
+      break;
+      case "USA":
+        $('#locale').val('EN');
+        $('#epiphany').val('SUNDAY_JAN2_JAN8');
+        $('#ascension').val('SUNDAY');
+        $('#corpusChristi').val('SUNDAY');
+        $Settings.locale = 'EN';
+        $Settings.epiphany = 'SUNDAY_JAN2_JAN8';
+        $Settings.ascension = 'SUNDAY';
+        $Settings.corpusChristi = 'SUNDAY';
+        $Settings.diocesancalendar = '';
+        $Settings.nationalcalendar = 'USA';
+        $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled',true);
+
+        //TODO: once the data for the Diocese of Rome has been define through the UI interface
+        //      and the relative JSON file created, the following operation should be abstracted for any nation in the list
+        //      and not applied here with the hardcoded value "USA"
+        //      The logic has been started up above, before the 'switch'
+        //      However we have to keep in mind that Rome groups together the celebrations for the whole Lazio region in a single booklet
+        //      This would mean that we have to create the ability of creating groups, to group together the data from more than one diocese
+        //      Perhaps another value can be added to the index, to indicate a group definition, such that all the diocesan calendars belonging to that group can be pulled...
+        $('#diocesancalendar').empty();
+        if(Object.keys($DiocesesUSA).length > 0){
+          $('#diocesancalendar').prop('disabled', false);
+          $('#diocesancalendar').append('<option value=""></option>');
+          for(const [key, value] of Object.entries($DiocesesUSA)){
+            $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
+          }
+        } else {
+          $('#diocesancalendar').prop('disabled', true);
+        }
+        break;
+      default:
+        $('#calSettingsForm :input').prop('disabled',false);
+        $('#diocesancalendar').val("").prop('disabled',true);
+        $Settings.nationalcalendar = '';
+    }
+});
+
+$(document).on('change', '#diocesancalendar', ev => {
+    $Settings.diocesancalendar = $(ev.currentTarget).val();
+});
 
 $(document).ready(() => {
     document.title = __("Generate Roman Calendar");
     $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
     createHeader();
-    $(document).on('click', '#openSettings', () => { $('#settingsWrapper').dialog("open"); });
     $('#generateLitCal').button();
-    $(document).on("submit", "#calSettingsForm", event => {
-        event.preventDefault();
-        let formValues = $(event.currentTarget).serializeArray();
-        for(const obj of formValues){
-            $Settings[obj.name] = obj.value;
-        }
-
-        console.log('$Settings = ');
-        console.log($Settings);
-
-        $GRADE = [
-            __("FERIA"),
-            __("COMMEMORATION"),
-            __("OPTIONAL MEMORIAL"),
-            __("MEMORIAL"),
-            __("FEAST"),
-            __("FEAST OF THE LORD"),
-            __("SOLEMNITY"),
-            __("HIGHER RANKING SOLEMNITY")
-        ];
-        $('#settingsWrapper').dialog("close");
-        genLitCal();
-        return false;
-    });
 
     if($('#nationalcalendar').val() !== "ITALY"){
         $('#diocesancalendar').prop('disabled',true);
     }
 
-    $(document).on('change','#nationalcalendar', ev => {
-        switch( $(ev.currentTarget).val() ){
-          case "VATICAN":
-            $('#locale').val('LA');
-            $('#epiphany').val('JAN6');
-            $('#ascension').val('THURSDAY');
-            $('#corpusChristi').val('THURSDAY');
-            $('#diocesancalendar').val("");
-            $Settings.locale = 'LA';
-            $Settings.epiphany = 'JAN6';
-            $Settings.ascension = 'THURSDAY';
-            $Settings.corpusChristi = 'THURSDAY';
-            $Settings.diocesancalendar = '';
-            $Settings.nationalcalendar = 'VATICAN';
-
-            $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled',true);
-          break;
-          case "ITALY":
-            $('#locale').val('IT');
-            $('#epiphany').val('JAN6');
-            $('#ascension').val('SUNDAY');
-            $('#corpusChristi').val('SUNDAY');
-            $Settings.locale = 'IT';
-            $Settings.epiphany = 'JAN6';
-            $Settings.ascension = 'SUNDAY';
-            $Settings.corpusChristi = 'SUNDAY';
-            $Settings.diocesancalendar = '';
-            $Settings.nationalcalendar = 'ITALY';
-            $('#calSettingsForm :input').not('#diocesancalendar').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled',true);
-            $('#diocesancalendar').empty();
-            if(Object.keys($DiocesesItaly).length > 0){
-              $('#diocesancalendar').prop('disabled', false);
-              $('#diocesancalendar').append('<option value=""></option>');
-              for(const [key, value] of Object.entries($DiocesesItaly)){
-                $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
-              }
-            } else {
-              $('#diocesancalendar').prop('disabled', true);
-            }
-          break;
-          case "USA":
-            $('#locale').val('EN');
-            $('#epiphany').val('SUNDAY_JAN2_JAN8');
-            $('#ascension').val('SUNDAY');
-            $('#corpusChristi').val('SUNDAY');
-            $Settings.locale = 'EN';
-            $Settings.epiphany = 'SUNDAY_JAN2_JAN8';
-            $Settings.ascension = 'SUNDAY';
-            $Settings.corpusChristi = 'SUNDAY';
-            $Settings.diocesancalendar = '';
-            $Settings.nationalcalendar = 'USA';
-            $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled',true);
-            
-            //TODO: once the data for the Diocese of Rome has been define through the UI interface
-            //      and the relative JSON file created, the following operation should be abstracted for any nation in the list
-            //      and not applied here with the hardcoded value "USA"
-            //      The logic has been started up above, before the 'switch'
-            //      However we have to keep in mind that Rome groups together the celebrations for the whole Lazio region in a single booklet
-            //      This would mean that we have to create the ability of creating groups, to group together the data from more than one diocese
-            //      Perhaps another value can be added to the index, to indicate a group definition, such that all the diocesan calendars belonging to that group can be pulled...
-            $('#diocesancalendar').empty();
-            if(Object.keys($DiocesesUSA).length > 0){
-              $('#diocesancalendar').prop('disabled', false);
-              $('#diocesancalendar').append('<option value=""></option>');
-              for(const [key, value] of Object.entries($DiocesesUSA)){
-                $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
-              }
-            } else {
-              $('#diocesancalendar').prop('disabled', true);
-            }
-            break;
-          default:
-            $('#calSettingsForm :input').prop('disabled',false);
-            $('#diocesancalendar').val("").prop('disabled',true);
-            $Settings.nationalcalendar = '';
-        }
-    });
-
-    $(document).on('change', '#diocesancalendar', ev => {
-        $Settings.diocesancalendar = $(ev.currentTarget).val();
-    });
-
     $('#settingsWrapper').dialog("open");
 });
 
 Object.filter = (obj, predicate) => 
-Object.keys(obj)
+    Object.keys(obj)
       .filter( key => predicate(obj[key]) )
       .reduce( (res, key) => (res[key] = obj[key], res), {} );
-
