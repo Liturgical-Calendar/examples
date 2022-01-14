@@ -15,6 +15,12 @@ The Fullcalendar example uses JSON files for all translatable strings.
 ## [Javascript](https://litcal.johnromanodorazio.com/examples/javascript)
 A simple rendering of a calendar with Liturgical events from the Liturgical Calendar API, using Javascript both to make an AJAX request and to render the HTML of the calendar.
 
+### Translation of the Javascript example
+The Javascript example uses `i18next.js` for all translatable strings.
+<a href="https://translate.johnromanodorazio.com/engage/liturgical-calendar/">
+<img src="https://translate.johnromanodorazio.com/widgets/liturgical-calendar/-/javascript-example/open-graph.png" alt="Translation status" />
+</a>
+
 ## [PHP](https://litcal.johnromanodorazio.com/examples/php)
 A simple rendering of a calendar with Liturgical events from the Liturgical Calendar API, using PHP both to make a cURL request and to render the HTML of the calendar.
 
