@@ -15,7 +15,7 @@ i18next.use(i18nextHttpBackend).init({
     backend: {
         loadPath: 'locales/{{lng}}/{{ns}}.json'
     }
-  }, (err, t) => {
+  }, () => { //err, t
     jqueryI18next.init(i18next, $);
   });
 
@@ -555,7 +555,7 @@ $(document).on("submit", "#calSettingsForm", event => {
         $Settings[obj.name] = obj.value;
     }
 
-    i18next.changeLanguage($Settings.locale.toLowerCase(), (err, t) => {
+    i18next.changeLanguage($Settings.locale.toLowerCase(), () => { //err, t
         jqueryI18next.init(i18next, $);
         Cookies.set("currentLocale", $Settings.locale.toLowerCase() );
     });
