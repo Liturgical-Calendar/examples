@@ -63,11 +63,11 @@
     "National-Calendar": "National Calendar",
     "Vatican": "Vatican",
     "Italy": "Italy",
-    "Sun-Jan2-Jan8": "",
-    "Diocesan-Calendar": "",
-    "Thursday": "",
-    "Sunday": "",
-    "CustomizeOptions": "",
-    "of": "",
-    "January-6": ""
+    "Sun-Jan2-Jan8": "Sunday Jan 2↔Jan 8",
+    "Diocesan-Calendar": "Diocesan Calendar",
+    "Thursday": "Thursday",
+    "Sunday": "Sunday",
+    "CustomizeOptions": "Customize options for generating the Roman Calendar",
+    "of": "of",
+    "January-6": "January 6"
 }
