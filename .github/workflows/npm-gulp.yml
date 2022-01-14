@@ -23,5 +23,5 @@ jobs:
 
     - name: Build
       run: |
-        npm install --save-dev i18next-scanner
+        npm install --save-dev gulp i18next-scanner
         gulp
