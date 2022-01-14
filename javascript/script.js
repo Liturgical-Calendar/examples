@@ -268,10 +268,10 @@ let today = new Date(),
                             $currentCycle = ($festivity.hasOwnProperty("liturgicalYear") ? ' (' + $festivity.liturgicalYear + ')' : "");
                             $festivityGrade = '';
                             if(dy !== 7){
-                                $festivityGrade = ($keyname === 'AllSouls' ? __("COMMEMORATION") : $GRADE[$festivity.grade]);
+                                $festivityGrade = ($keyname === 'AllSouls' ? i18next.t("COMMEMORATION") : $GRADE[$festivity.grade]);
                             }
                             else if($festivity.grade > 3){
-                                $festivityGrade = ($keyname === 'AllSouls' ? __("COMMEMORATION") : $GRADE[$festivity.grade]);
+                                $festivityGrade = ($keyname === 'AllSouls' ? i18next.t("COMMEMORATION") : $GRADE[$festivity.grade]);
                             }              
                             if($festivity.hasOwnProperty('displayGrade') && $festivity.displayGrade !== ''){
                                 $festivityGrade = $festivity.displayGrade;
@@ -285,7 +285,7 @@ let today = new Date(),
                     createHeader();
                     $('#LitCalTable tbody').html(strHTML);
                     $('#dayCnt').text($dayCnt);
-                    $('#LitCalMessages thead').html(`<tr><th colspan=2 style="text-align:center;">${__("Information about the current calculation of the Liturgical Year")}</th></tr>`);
+                    $('#LitCalMessages thead').html(`<tr><th colspan=2 style="text-align:center;">${i18next.t("Information-about-current-calculation")}</th></tr>`);
                     $('#spinnerWrapper').fadeOut('slow');
                 }
                 if(LitCalData.hasOwnProperty('Messages')){
@@ -302,118 +302,6 @@ let today = new Date(),
                 console.log(jqXHR.responseText);
               }
             });
-    },
-    $messages = {
-        "Customize options for generating the Roman Calendar": {
-            "en": "Customize options for generating the Roman Calendar",
-            "it": "Personalizza le opzioni per la generazione del Calendario Romano",
-            "la": "Elige optiones per generationem Calendarii Romani"
-        },
-        "Generate Roman Calendar": {
-            "en": "Generate Roman Calendar",
-            "it": "Genera Calendario Romano",
-            "la": "Calendarium Romanum Generare"
-        },
-        "Liturgical Calendar Calculation for a Given Year": {
-            "en": "Liturgical Calendar Calculation for a Given Year",
-            "it": "Calcolo del Calendario Liturgico per un dato anno",
-            "la": "Computus Calendarii Liturgici pro anno dedi"
-        },
-        "HTML presentation elaborated by JAVASCRIPT using an AJAX request to a %s": {
-            "en": "HTML presentation elaborated by JAVASCRIPT using an AJAX request to a %s",
-            "it": "Presentazione HTML elaborata con JAVASCRIPT usando una richiesta AJAX al motore PHP %s",
-            "la": "Repraesentatio HTML elaborata cum JAVASCRIPT utendo petitionem AJAX ad machinam PHP %s"
-        },
-        "You are requesting a year prior to 1970: it is not possible to request years prior to 1970.": {
-            "en": "You are requesting a year prior to 1970: it is not possible to request years prior to 1970.",
-            "it": "Stai effettuando una richiesta per un anno che è precedente al 1970: non è possibile richiedere anni precedenti al 1970.",
-            "la": "Rogavisti annum ante 1970: non potest rogare annos ante annum 1970."
-        },
-        "Configurations being used to generate this calendar:": {
-            "en": "Configurations being used to generate this calendar:",
-            "it": "Configurazioni utilizzate per la generazione di questo calendario:",
-            "la": "Optiones electuus ut generare hic calendarium:"
-        },
-        "Date in Gregorian Calendar": {
-            "en": "Date in Gregorian Calendar",
-            "it": "Data nel Calendario Gregoriano",
-            "la": "Dies in Calendario Gregoriano"
-        },
-        "General Roman Calendar Festivity": {
-            "en": "General Roman Calendar Festivity",
-            "it": "Festività nel Calendario Romano Generale",
-            "la": "Festivitas in Calendario Romano Generale"
-        },
-        "Grade of the Festivity": {
-            "en": "Grade of the Festivity",
-            "it": "Grado della Festività",
-            "la": "Gradum Festivitatis"
-        },
-        "YEAR": {
-            "en": "YEAR",
-            "it": "ANNO",
-            "la": "ANNUM"
-        },
-        "EPIPHANY": {
-            "en": "EPIPHANY",
-            "it": "EPIFANIA",
-            "la": "EPIPHANIA"
-        },
-        "ASCENSION": {
-            "en": "ASCENSION",
-            "it": "ASCENSIONE",
-            "la": "ASCENSIO",
-        },
-        "Month": {
-            "en": "Month",
-            "it": "Mese",
-            "la": "Mensis"
-        },
-        "FERIA": {
-            "en": "<i>weekday</i>",
-            "it": "<i>feria</i>",
-            "la": "<i>feria</i>"
-        },
-        "COMMEMORATION": {
-            "en": "Commemoration",
-            "it": "Commemorazione",
-            "la": "Commemoratio"
-        },
-        "OPTIONAL MEMORIAL": {
-            "en": "Optional memorial",
-            "it": "Memoria facoltativa",
-            "la": "Memoria ad libitum"
-        },
-        "MEMORIAL": {
-            "en": "Memorial",
-            "it": "Memoria",
-            "la": "Memoria"
-        },
-        "FEAST": {
-            "en": "Feast",
-            "it": "Festa",
-            "la": "Festum"
-        },
-        "FEAST OF THE LORD": {
-            "en": "Feast of the Lord",
-            "it": "Festa del Signore",
-            "la": "Festa Domini"
-        },
-        "SOLEMNITY": {
-            "en": "Solemnity",
-            "it": "Solennità",
-            "la": "Sollemnitas"
-        },
-        "HIGHER RANKING SOLEMNITY": {
-            "en": "<i>precedence over solemnities</i>",
-            "it": "<i>precedenza sulle solennità</i>",
-            "la": "<i>præcellentia ante solemnitates</i>"
-        },
-        "Information about the current calculation of the Liturgical Year": {
-            "en": "Information about the current calculation of the Liturgical Year",
-            "it": "Informazioni sull'attuale calcolo dell'Anno Liturgico",
-            "la": "Notitiæ de computatione præsente Anni Liturgici"
-        }
     },
     $daysOfTheWeek = [
         "dies Solis",
@@ -439,22 +327,6 @@ let today = new Date(),
         "December"
     ],
     $GRADE = [],
-    __ = $key => {
-        $lcl = $Settings.locale.toLowerCase();
-        if ($messages !== null && typeof $messages == 'object') {
-            if ($messages.hasOwnProperty($key) && typeof $messages[$key] == 'object') {
-                if ($messages[$key].hasOwnProperty($lcl)) {
-                    return $messages[$key][$lcl];
-                } else {
-                    return $messages[$key]["en"];
-                }
-            } else {
-                return $key;
-            }
-        } else {
-            return $key;
-        }
-    },
     getLatinDateStr = $date => {
         $festivity_date_str = $daysOfTheWeek[$date.getUTCDay()];
         $festivity_date_str += ', ';
@@ -466,32 +338,32 @@ let today = new Date(),
         return $festivity_date_str;
     },
     createHeader = () => {
-        document.title = __("Generate Roman Calendar");
+        document.title = i18next.t("Generate-Roman-Calendar");
         $('#settingsWrapper').dialog("destroy").remove();
         $('header').empty();
-        let templateStr = __('HTML presentation elaborated by JAVASCRIPT using an AJAX request to a %s');
+        let templateStr = i18next.t('HTML-presentation');
         templateStr = templateStr.replace('%s','<a href="../../LitCalEngine.php">PHP engine</a>');
         let $header = `
-            <h1 style="text-align:center;">${__('Liturgical Calendar Calculation for a Given Year')} (${$Settings.year})</h1>
+            <h1 style="text-align:center;">${i18next.t('LitCal-Calculation')} (${$Settings.year})</h1>
             <h2 style="text-align:center;">${templateStr}</h2>
             <div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">
-            <h3>${__('Configurations being used to generate this calendar:')}</h3>
-            <span>${__('YEAR')} = ${$Settings.year}, ${__('EPIPHANY')} = ${$Settings.epiphany}, ${__('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpusChristi}, LOCALE = ${$Settings.locale}</span>
+            <h3>${i18next.t('Configurations-used')}</h3>
+            <span>${i18next.t('YEAR')} = ${$Settings.year}, ${i18next.t('EPIPHANY')} = ${$Settings.epiphany}, ${i18next.t('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpusChristi}, LOCALE = ${$Settings.locale}</span>
             </div>`,
-        $tbheader = `<tr><th>${__("Month")}</th><th>${__("Date in Gregorian Calendar")}</th><th>${__("General Roman Calendar Festivity")}</th><th>${__("Grade of the Festivity")}</th></tr>`,
+        $tbheader = `<tr><th>${i18next.t("Month")}</th><th>${i18next.t("Date-Gregorian-Calendar")}</th><th>${i18next.t("General-Roman-Calendar-Festivity")}</th><th>${i18next.t("Grade-of-the-Festivity")}</th></tr>`,
         $settingsDialog = `<div id="settingsWrapper"><form id="calSettingsForm"><table id="calSettings">
-        <tr><td colspan="2"><label>${__('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
-        <tr><td><label>${__('LOCALE')}: </td><td><select name="locale" id="locale"><option value="EN" ${($Settings.locale === "EN" ? " SELECTED" : "")}>ENGLISH</option><option value="IT" ${($Settings.locale === "IT" ? " SELECTED" : "")}>ITALIANO</option><option value="LA" ${($Settings.locale === "LA" ? " SELECTED" : "")}>LATINO</option></select></label></td><td>${__('NATIONAL PRESET')}: </td><td><select id="nationalcalendar" name="nationalcalendar"><option value=""></option><option value="VATICAN" ${($Settings.nationalcalendar === "VATICAN" ? " SELECTED" : "")}>${__('Vatican')}</option><option value="ITALY" ${($Settings.nationalcalendar === "ITALY" ? " SELECTED" : "")}>${__('Italy')}</option><option value="USA" ${($Settings.nationalcalendar === "USA" ? " SELECTED" : "")}>USA</option></select></td></tr>
-        <tr><td><label>${__('EPIPHANY')}: </td><td><select name="epiphany" id="epiphany"><option value="JAN6" ${($Settings.epiphany === "JAN6" ? " SELECTED" : "")}>${__('January 6')}</option><option value="SUNDAY_JAN2_JAN8" ${($Settings.epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "")}>${__('Sunday Jan 2↔Jan 8')}</option></select></label></td><td>${__('DIOCESAN PRESET')}: </td><td><select id="diocesancalendar" name="diocesancalendar" ${($Settings.nationalcalendar == '' || $Settings.nationalcalendar == 'VATICAN' ) ? 'disabled' : ''}></select></td></tr>
-        <tr><td><label>${__('ASCENSION')}: </td><td><select name="ascension" id="ascension"><option value="THURSDAY" ${($Settings.ascension === "THURSDAY" ? " SELECTED" : "")}>${__('Thursday')}</option><option value="SUNDAY" ${($Settings.ascension === "SUNDAY" ? " SELECTED" : "")}>${__('Sunday')}</option></select></label></td><td></td><td></td></tr>
-        <tr><td><label>CORPUS CHRISTI: </td><td><select name="corpusChristi" id="corpusChristi"><option value="THURSDAY" ${($Settings.corpusChristi === "THURSDAY" ? " SELECTED" : "")}>${__('Thursday')}</option><option value="SUNDAY" ${($Settings.corpusChristi === "SUNDAY" ? " SELECTED" : "")}>${__('Sunday')}</option></select></label></td><td></td><td></td></tr>
-        <tr><td colspan="4" style="text-align:center;"><input type="submit" id="generateLitCal" value="${__("Generate Roman Calendar")}" /></td></tr>
+        <tr><td colspan="2"><label>${i18next.t('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
+        <tr><td><label>${i18next.t('LOCALE')}: </td><td><select name="locale" id="locale"><option value="EN" ${($Settings.locale === "EN" ? " SELECTED" : "")}>ENGLISH</option><option value="IT" ${($Settings.locale === "IT" ? " SELECTED" : "")}>ITALIANO</option><option value="LA" ${($Settings.locale === "LA" ? " SELECTED" : "")}>LATINO</option></select></label></td><td>${i18next.t('National-Calendar')}: </td><td><select id="nationalcalendar" name="nationalcalendar"><option value=""></option><option value="VATICAN" ${($Settings.nationalcalendar === "VATICAN" ? " SELECTED" : "")}>${i18next.t('Vatican')}</option><option value="ITALY" ${($Settings.nationalcalendar === "ITALY" ? " SELECTED" : "")}>${i18next.t('Italy')}</option><option value="USA" ${($Settings.nationalcalendar === "USA" ? " SELECTED" : "")}>USA</option></select></td></tr>
+        <tr><td><label>${i18next.t('EPIPHANY')}: </td><td><select name="epiphany" id="epiphany"><option value="JAN6" ${($Settings.epiphany === "JAN6" ? " SELECTED" : "")}>${i18next.t('January 6')}</option><option value="SUNDAY_JAN2_JAN8" ${($Settings.epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "")}>${i18next.t('Sun-Jan2-Jan8')}</option></select></label></td><td>${i18next.t('Diocesan-Calendar')}: </td><td><select id="diocesancalendar" name="diocesancalendar" ${($Settings.nationalcalendar == '' || $Settings.nationalcalendar == 'VATICAN' ) ? 'disabled' : ''}></select></td></tr>
+        <tr><td><label>${i18next.t('ASCENSION')}: </td><td><select name="ascension" id="ascension"><option value="THURSDAY" ${($Settings.ascension === "THURSDAY" ? " SELECTED" : "")}>${i18next.t('Thursday')}</option><option value="SUNDAY" ${($Settings.ascension === "SUNDAY" ? " SELECTED" : "")}>${i18next.t('Sunday')}</option></select></label></td><td></td><td></td></tr>
+        <tr><td><label>CORPUS CHRISTI: </td><td><select name="corpusChristi" id="corpusChristi"><option value="THURSDAY" ${($Settings.corpusChristi === "THURSDAY" ? " SELECTED" : "")}>${i18next.t('Thursday')}</option><option value="SUNDAY" ${($Settings.corpusChristi === "SUNDAY" ? " SELECTED" : "")}>${i18next.t('Sunday')}</option></select></label></td><td></td><td></td></tr>
+        <tr><td colspan="4" style="text-align:center;"><input type="submit" id="generateLitCal" value="${i18next.t("Generate-Roman-Calendar")}" /></td></tr>
         </table></form></div>`;
         $('header').html($header);
         $('#LitCalTable thead').html($tbheader);
 
         $($settingsDialog).dialog({
-            title: __('Customize options for generating the Roman Calendar'),
+            title: i18next.t('CustomizeOptions'),
             modal: true,
             width: '80%',
             show: {
@@ -564,14 +436,14 @@ $(document).on("submit", "#calSettingsForm", event => {
     console.log($Settings);
 
     $GRADE = [
-        __("FERIA"),
-        __("COMMEMORATION"),
-        __("OPTIONAL MEMORIAL"),
-        __("MEMORIAL"),
-        __("FEAST"),
-        __("FEAST OF THE LORD"),
-        __("SOLEMNITY"),
-        __("HIGHER RANKING SOLEMNITY")
+        i18next.t("FERIA"),
+        i18next.t("COMMEMORATION"),
+        i18next.t("OPTIONAL-MEMORIAL"),
+        i18next.t("MEMORIAL"),
+        i18next.t("FEAST"),
+        i18next.t("FEAST-OF-THE-LORD"),
+        i18next.t("SOLEMNITY"),
+        i18next.t("HIGHER-RANKING-SOLEMNITY")
     ];
     $('#settingsWrapper').dialog("close");
     genLitCal();
@@ -661,7 +533,7 @@ $(document).on('change', '#diocesancalendar', ev => {
 });
 
 $(document).ready(() => {
-    document.title = __("Generate Roman Calendar");
+    document.title = i18next.t("Generate-Roman-Calendar");
     $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
     createHeader();
     $('#generateLitCal').button();
