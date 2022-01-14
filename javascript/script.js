@@ -101,19 +101,6 @@ let today = new Date(),
             }
         }
     },
-    /*ordSuffix = ord => {
-        var ord_suffix = ''; //st, nd, rd, th
-        if (ord === 1 || (ord % 10 === 1 && ord != 11)) {
-            ord_suffix = 'st';
-        } else if (ord === 2 || (ord % 10 === 2 && ord != 12)) {
-            ord_suffix = 'nd';
-        } else if (ord === 3 || (ord % 10 === 3 && ord != 13)) {
-            ord_suffix = 'rd';
-        } else {
-            ord_suffix = 'th';
-        }
-        return ord_suffix;
-    },*/
     genLitCal = () => {
         $.ajax({
             method: 'POST',
