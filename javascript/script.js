@@ -5,6 +5,51 @@ const endpointV = isStaging ? 'dev' : 'v3';
 const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalEngine.php`;
 const metadataURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalMetadata.php`;
 
+i18next.use(i18nextHttpBackend).init({
+    debug: true,
+    lng: Cookies.get("currentLocale").substring(0,2),
+    backend: {
+        loadPath: 'locales/{{lng}}/{{ns}}.json'
+    }
+  }, function(err, t) {
+    jqueryI18next.init(i18next, $);
+
+  });
+
+const translCommon = common => {
+    if( common === '' ) return common; 
+    if( common === 'Proper' ) {
+        return i18next.t('Proper');
+    } else {
+        $commons = common.split(",");
+        $commons = $commons.map($txt => {
+            let $common = $txt.split(":");
+            let $commonGeneral = i18next.t($common[0].replaceAll(' ', '-'));
+            let $commonSpecific = (typeof $common[1] !== 'undefined' && $common[1] != "") ? i18next.t($common[1].replaceAll(' ', '-')) : "";
+            let $commonKey = '';
+            //$txt = str_replace(":", ": ", $txt);
+            switch ($commonGeneral) {
+                case i18next.t("Blessed-Virgin-Mary"):
+                    $commonKey = i18next.t("of", {context: "(SING_FEMM)"});
+                    break;
+                case i18next.t("Virgins"):
+                    $commonKey = i18next.t("of", {context: "(PLUR_FEMM)"});
+                    break;
+                case i18next.t("Martyrs"):
+                case i18next.t("Pastors"):
+                case i18next.t("Doctors"):
+                case i18next.t("Holy-Men-and-Women"):
+                    $commonKey = i18next.t("of", {context: "(PLUR_MASC)"});
+                    break;
+                default:
+                    $commonKey = i18next.t("of", {context: "(SING_MASC)"});
+            }
+            return i18next.t("From-the-Common") + " " + $commonKey + " " + $commonGeneral + ($commonSpecific != "" ? ": " + $commonSpecific : "");
+        });
+        return $commons.join("; " + i18next.t("or") + " ");
+    }
+}
+
 let today = new Date(),
     $Settings = {
         "year": today.getUTCFullYear(),
@@ -124,36 +169,7 @@ let today = new Date(),
                                 $keyname = $LitCalKeys[$keyindex];
                                 $festivity = $LitCal[$keyname];
                                 // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                                if ($festivity.common !== "" && $festivity.common !== "Proper") {
-                                    $commons = $festivity.common.split(",");
-                                    $commons = $commons.map($txt => {
-                                        let $common = $txt.split(":");
-                                        let $commonGeneral = __($common[0]);
-                                        let $commonSpecific = (typeof $common[1] !== 'undefined' && $common[1] != "") ? __($common[1]) : "";
-                                        let $commonKey = '';
-                                        //$txt = str_replace(":", ": ", $txt);
-                                        switch ($commonGeneral) {
-                                            case __("Blessed Virgin Mary"):
-                                                $commonKey = "of (SING_FEMM)";
-                                                break;
-                                            case __("Virgins"):
-                                                $commonKey = "of (PLUR_FEMM)";
-                                                break;
-                                            case __("Martyrs"):
-                                            case __("Pastors"):
-                                            case __("Doctors"):
-                                            case __("Holy Men and Women"):
-                                                $commonKey = "of (PLUR_MASC)";
-                                                break;
-                                            default:
-                                                $commonKey = "of (SING_MASC)";
-                                        }
-                                        return __("From the Common") + " " + __($commonKey) + " " + $commonGeneral + ($commonSpecific != "" ? ": " + $commonSpecific : "");
-                                    });
-                                    $festivity.common = $commons.join("; " + __("or") + " ");
-                                } else if ($festivity.common == "Proper") {
-                                    $festivity.common = __($festivity.common);
-                                }
+                                $festivity.common = translCommon( $festivity.common );
                                 //$festivity.color = $festivity.color.split(",")[0];
 
                                 //check which liturgical season we are in, to use the right color for that season...
@@ -208,36 +224,7 @@ let today = new Date(),
 
                         } else {
                             // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                            if ($festivity.common !== "" && $festivity.common !== "Proper") {
-                                $commons = $festivity.common.split(",");
-                                $commons = $commons.map($txt => {
-                                    let $common = $txt.split(":");
-                                    let $commonGeneral = __($common[0]);
-                                    let $commonSpecific = (typeof $common[1] !== 'undefined' && $common[1] != "") ? __($common[1]) : "";
-                                    let $commonKey = '';
-                                    //$txt = str_replace(":", ": ", $txt);
-                                    switch ($commonGeneral) {
-                                        case __("Blessed Virgin Mary"):
-                                            $commonKey = "of (SING_FEMM)";
-                                            break;
-                                        case __("Virgins"):
-                                            $commonKey = "of (PLUR_FEMM)";
-                                            break;
-                                        case __("Martyrs"):
-                                        case __("Pastors"):
-                                        case __("Doctors"):
-                                        case __("Holy Men and Women"):
-                                            $commonKey = "of (PLUR_MASC)";
-                                            break;
-                                        default:
-                                            $commonKey = "of (SING_MASC)";
-                                    }
-                                    return __("From the Common") + " " + __($commonKey) + " " + $commonGeneral + ($commonSpecific != "" ? ": " + $commonSpecific : "");
-                                });
-                                $festivity.common = $commons.join("; " + __("or") + " ");
-                            } else if ($festivity.common == "Proper") {
-                                $festivity.common = __($festivity.common);
-                            }
+                            $festivity.common = translCommon($festivity.common);
                             //$festivity.color = $festivity.color.split(",")[0];
 
                             //check which liturgical season we are in, to use the right color for that season...
@@ -311,172 +298,6 @@ let today = new Date(),
             });
     },
     $messages = {
-        "From the Common": {
-            "en": "From the Common",
-            "it": "Dal Comune",
-            "la": "De Communi"
-        },
-        "of (SING_MASC)": {
-            "en": "of",
-            "it": "del",
-            "la": ""
-        },
-        "of (SING_FEMM)": {
-            "en": "of the",
-            "it": "della",
-            "la": ""
-        },
-        "of (PLUR_MASC)": {
-            "en": "of",
-            "it": "dei",
-            "la": ""
-        },
-        "of (PLUR_MASC_ALT)": {
-            "en": "of",
-            "it": "degli",
-            "la": ""
-        },
-        "of (PLUR_FEMM)": {
-            "en": "of",
-            "it": "delle",
-            "la": ""
-        },
-        /*translators: in reference to the Common of the Blessed Virgin Mary */
-        "Blessed Virgin Mary": {
-            "en": "Blessed Virgin Mary",
-            "it": "Beata Vergine Maria",
-            "la": "Beatæ Virginis Mariæ"
-        },
-        "Martyrs": {
-            "en": "Martyrs",
-            "it": "Martiri",
-            "la": "Martyrum"
-        },
-        "Pastors": {
-            "en": "Pastors",
-            "it": "Pastori",
-            "la": "Pastorum"
-        },
-        "Doctors": {
-            "en": "Doctors",
-            "it": "Dottori della Chiesa",
-            "la": "Doctorum Ecclesiae"
-        },
-        "Virgins": {
-            "en": "Virgins",
-            "it": "Vergini",
-            "la": "Virginum"
-        },
-        "Holy Men and Women": {
-            "en": "Holy Men and Women",
-            "it": "Santi e delle Sante",
-            "la": "Sanctorum et Sanctarum"
-        },
-        "For One Martyr": {
-            "en": "For One Martyr",
-            "it": "Per un martire",
-            "la": "Pro uno martyre"
-        },
-        "For Several Martyrs": {
-            "en": "For Several Martyrs",
-            "it": "Per più martiri",
-            "la": "Pro pluribus martyribus"
-        },
-        "For Missionary Martyrs": {
-            "en": "For Missionary Martyrs",
-            "it": "Per i martiri missionari",
-            "la": "Pro missionariis martyribus"
-        },
-        "For a Virgin Martyr": {
-            "en": "For a Virgin Martyr",
-            "it": "Per una vergine martire",
-            "la": "Pro virgine martyre"
-        },
-        "For Several Pastors": {
-            "en": "For Several Pastors",
-            "it": "Per i pastori",
-            "la": "Pro Pastoribus"
-        },
-        "For a Pope": {
-            "en": "For a Pope",
-            "it": "Per i papi",
-            "la": "Pro Papa"
-        },
-        "For a Bishop": {
-            "en": "For a Bishop",
-            "it": "Per i vescovi",
-            "la": "Pro Episcopo"
-        },
-        "For One Pastor": {
-            "en": "For One Pastor",
-            "it": "Per un Pastore",
-            "la": "Pro Pastoribus"
-        },
-        "For Missionaries": {
-            "en": "For Missionaries",
-            "it": "Per i missionari",
-            "la": "Pro missionariis"
-        },
-        "For One Virgin": {
-            "en": "For One Virgin",
-            "it": "Per una vergine",
-            "la": "Pro una virgine"
-        },
-        "For Several Virgins": {
-            "en": "For Several Virgins",
-            "it": "Per più vergini",
-            "la": "Pro pluribus virginibus"
-        },
-        "For Religious": {
-            "en": "For Religious",
-            "it": "Per i religiosi",
-            "la": "Pro Religiosis"
-        },
-        "For Those Who Practiced Works of Mercy": {
-            "en": "For Those Who Practiced Works of Mercy",
-            "it": "Per gli operatori di misericordia",
-            "la": "Pro iis qui opera Misericordiæ Exercuerunt"
-        },
-        "For an Abbot": {
-            "en": "For an Abbot",
-            "it": "Per un abate",
-            "la": "Pro abbate"
-        },
-        "For a Monk": {
-            "en": "For a Monk",
-            "it": "Per un monaco",
-            "la": "Pro monacho"
-        },
-        "For a Nun": {
-            "en": "For a Nun",
-            "it": "Per i religiosi",
-            "la": "Pro moniali"
-        },
-        "For Educators": {
-            "en": "For Educators",
-            "it": "Per gli educatori",
-            "la": "Pro Educatoribus"
-        },
-        "For Holy Women": {
-            "en": "For Holy Women",
-            "it": "Per le sante",
-            "la": "Pro Sanctis Mulieribus"
-        },
-        "For One Saint": {
-            "en": "For One Saint",
-            "it": "Per un Santo",
-            "la": "Pro uno Sancto"
-        },
-        "or": {
-            "en": "or",
-            "it": "oppure",
-            "la": "vel"
-        },
-        "Proper": {
-            "en": "Proper",
-            "it": "Proprio",
-            "la": "Proprium"
-        },
         "green": {
             "en": "green",
             "it": "verde",
