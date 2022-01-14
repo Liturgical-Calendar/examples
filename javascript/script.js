@@ -163,7 +163,6 @@ let today = new Date(),
                                 $festivity = $LitCal[$keyname];
                                 // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
                                 $festivity.common = translCommon( $festivity.common );
-                                //$festivity.color = $festivity.color.split(",")[0];
 
                                 //check which liturgical season we are in, to use the right color for that season...
                                 let $SeasonColor = "green";
@@ -178,15 +177,15 @@ let today = new Date(),
                                 //We will apply the color for the single festivity only to it's own table cells
                                 let $possibleColors =  $festivity.color.split(",");
                                 let $CSScolor = $possibleColors[0];
-                                /*
+                                
                                 let $festivityColorString = "";
                                 if($possibleColors.length === 1){
                                     $festivityColorString = i18next.t($possibleColors[0]);
                                 } else if ($possibleColors.length > 1){
-                                    $possibleColors = $possibleColors.map($txt => i18next.t($txt) });
+                                    $possibleColors = $possibleColors.map($txt => i18next.t($txt));
                                     $festivityColorString = $possibleColors.join("</i> " + i18next.t("or") + " <i>");
                                 }
-                                */
+                                
                                 strHTML += '<tr style="background-color:' + $SeasonColor + ';' + ($highContrast.indexOf($SeasonColor) != -1 ? 'color:white;' : '') + '">';
                                 if ($newMonth) {
                                     let $monthRwsp = $cm.count + 1;
@@ -208,7 +207,7 @@ let today = new Date(),
                                 else if(dy !== 7 || $festivity.grade > 3){
                                     $festivityGrade = $GRADE[$festivity.grade];
                                 }
-                                strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + i18next.t($festivity.color) + '</i><br /><i>' + $festivity.common + '</i></td>';
+                                strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + $festivityColorString + '</i><br /><i>' + $festivity.common + '</i></td>';
                                 strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
                                 strHTML += '</tr>';
                                 $keyindex++;
