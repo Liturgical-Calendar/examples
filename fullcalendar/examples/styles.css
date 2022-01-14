@@ -275,10 +275,6 @@ td.rotate div {
   position: absolute;
   margin: 5px;
   box-shadow: -1 0 6px rgba(0,0,0,0.5);
-}
-
-.tooltip .tooltip-arrow,
-.popper .popper__arrow {
   border-color: #fff9e5;
 }
 
@@ -289,7 +285,7 @@ td.rotate div {
 
 .popper[x-placement^="top"] .popper__arrow,
 .tooltip[x-placement^="top"] .tooltip-arrow {
-  border-width: 5px 5px 0 5px;
+  border-width: 5px 5px 0;
   border-left-color: transparent;
   border-right-color: transparent;
   border-bottom-color: transparent;
@@ -306,7 +302,7 @@ td.rotate div {
 
 .tooltip[x-placement^="bottom"] .tooltip-arrow,
 .popper[x-placement^="bottom"] .popper__arrow {
-  border-width: 0 5px 5px 5px;
+  border-width: 0 5px 5px;
   border-left-color: transparent;
   border-right-color: transparent;
   border-top-color: transparent;
