@@ -9,9 +9,9 @@ gulp.task('i18next', function() {
             resource: {
                 // the source path is relative to current working directory
                 loadPath: process.env.GITHUB_WORKSPACE+'/javascript/locales/{{lng}}/{{ns}}.json',
-
                 // the destination path is relative to your `gulp.dest()` path
-                savePath: 'locales/{{lng}}/{{ns}}.json'
+                savePath: 'locales/{{lng}}/{{ns}}.json',
+                jsonIndent: 4
             }
         }))
         .pipe(gulp.dest(process.env.GITHUB_WORKSPACE+'/javascript'));
