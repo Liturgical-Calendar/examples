@@ -89,8 +89,7 @@ let messages = null,
                             firstDay: 0,
                             eventOrder: 'idx',
                             eventDidMount: info => {
-                                //$(info.el).attr('data-tooltip', encodeURI(info.event.extendedProps.description));
-                                var tooltip = new Tooltip(info.el, {
+                                new Tooltip(info.el, {
                                     title: info.event.extendedProps.description,
                                     placement: 'top',
                                     trigger: 'hover',
@@ -108,12 +107,6 @@ let messages = null,
                     let calendar = new FullCalendar.Calendar(calendarEl, fullCalendarSettings);
 
                     calendar.render();
-                    /*$('[data-tooltip]').tooltip({
-                        items: "[data-tooltip]",
-                        content: function() {
-                            return decodeURI( $(this).attr('data-tooltip') );
-                        }
-                    });*/
 
                     //even though the following code works for Latin, the Latin however is not removed for successive renders
                     //in other locales. Must have something to do with how the renders are working, like an append or something?
@@ -310,7 +303,7 @@ $(document).ready(() => {
     //document.title = __("Generate Roman Calendar");
     $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
 
-    $(document).on('click', '#openSettings', ev => { $('#settingsWrapper').dialog("open"); });
+    $(document).on('click', '#openSettings', () => { $('#settingsWrapper').dialog("open"); });
 
     $(document).on("submit", '#calSettingsForm', event => {
         event.preventDefault();
@@ -386,6 +379,6 @@ $(document).ready(() => {
         handleDiocesesList( $(ev.currentTarget).val() );
     });
 
-    $(document).on('change', '#diocesancalendar', ev => { $Settings.diocesancalendar = $(ev.currentTarget).val(); });
+    $(document).on('change', '#diocesancalendar', () => { $Settings.diocesancalendar = $(ev.currentTarget).val(); });
 
 });
