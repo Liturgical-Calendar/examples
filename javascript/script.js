@@ -91,28 +91,28 @@ let today = new Date(),
         month: 'long',
         timeZone: 'UTC'
     },
-    countSameDayEvents = ($currentKeyIndex, $EventsArray, $cc) => {
-        let $Keys = Object.keys($EventsArray);
-        let $currentFestivity = $EventsArray[$Keys[$currentKeyIndex]];
+    countSameDayEvents = ($currentKeyIndex, eventsArray, cc) => {
+        let $Keys = Object.keys(eventsArray);
+        let $currentFestivity = eventsArray[$Keys[$currentKeyIndex]];
         //console.log("currentFestivity: " + $currentFestivity.name + " | " + $currentFestivity.date);
         if ($currentKeyIndex < $Keys.length - 1) {
-            let $nextFestivity = $EventsArray[$Keys[$currentKeyIndex + 1]];
+            let $nextFestivity = eventsArray[$Keys[$currentKeyIndex + 1]];
             //console.log("nextFestivity: " + $nextFestivity.name + " | " + $nextFestivity.date);
             if ($nextFestivity.date.getTime() === $currentFestivity.date.getTime()) {
                 //console.log("We have an occurrence!");
-                $cc.count++;
-                countSameDayEvents($currentKeyIndex + 1, $EventsArray, $cc);
+                cc.count++;
+                countSameDayEvents($currentKeyIndex + 1, eventsArray, cc);
             }
         }
     },
-    countSameMonthEvents = ($currentKeyIndex, $EventsArray, $cm) => {
-        let $Keys = Object.keys($EventsArray);
-        let $currentFestivity = $EventsArray[$Keys[$currentKeyIndex]];
+    countSameMonthEvents = ($currentKeyIndex, eventsArray, cm) => {
+        let $Keys = Object.keys(eventsArray);
+        let $currentFestivity = eventsArray[$Keys[$currentKeyIndex]];
         if ($currentKeyIndex < $Keys.length - 1) {
-            let $nextFestivity = $EventsArray[$Keys[$currentKeyIndex + 1]];
+            let $nextFestivity = eventsArray[$Keys[$currentKeyIndex + 1]];
             if ($nextFestivity.date.getUTCMonth() == $currentFestivity.date.getUTCMonth()) {
-                $cm.count++;
-                countSameMonthEvents($currentKeyIndex + 1, $EventsArray, $cm);
+                cm.count++;
+                countSameMonthEvents($currentKeyIndex + 1, eventsArray, cm);
             }
         }
     },
@@ -129,7 +129,7 @@ let today = new Date(),
     },
     processColors = festivity => {
         let possibleColors =  festivity.color.split(",");
-        
+        let CSSColor = possibleColors[0];
         let festivityColorString;
         if(possibleColors.length === 1){
             festivityColorString = i18next.t(possibleColors[0]);
@@ -137,7 +137,7 @@ let today = new Date(),
             possibleColors = possibleColors.map(txt => i18next.t(txt));
             festivityColorString = possibleColors.join("</i> " + i18next.t("or") + " <i>");
         }
-        return { CSScolor: possibleColors[0], festivityColorString: festivityColorString };
+        return { CSScolor: CSSColor, festivityColorString: festivityColorString };
     },
     getFestivityGrade = (festivity, dy, keyname) => {
         if(festivity.hasOwnProperty('displayGrade') && festivity.displayGrade !== ''){
@@ -147,6 +147,34 @@ let today = new Date(),
             festivityGrade = (keyname === 'AllSouls' ? i18next.t("COMMEMORATION") : $GRADE[festivity.grade]);
         }
         return festivityGrade;
+    },
+    buildHTMLString = (strHTML, festivity, LitCal, newMonth, cc, cm, dy, keyname, ev) => {
+
+        festivity.common = translCommon( festivity.common );
+        let { CSScolor, festivityColorString } = processColors( festivity );
+        let seasonColor = getSeasonColor( festivity, LitCal );
+        strHTML += '<tr style="background-color:' + seasonColor + ';' + (highContrast.indexOf(seasonColor) != -1 ? 'color:white;' : 'color:black;') + '">';
+        if (newMonth) {
+            let monthRwsp = cm.count + 1;
+            strHTML += '<td class="rotate" rowspan = "' + monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format(festivity.date).toUpperCase()) + '</div></td>';
+            newMonth = false;
+        }
+        let festivity_date_str = $Settings.locale == 'LA' ? getLatinDateStr(festivity.date) : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlDTOptions).format(festivity.date);
+
+        if( ev === null ) {
+            strHTML += '<td class="dateEntry">' + festivity_date_str + '</td>';
+        }
+        else if ( ev == 0 ) {
+            strHTML += '<td class="dateEntry" rowspan="' + (cc.count + 1) + '">' + festivity_date_str + '</td>';
+        }
+
+        let currentCycle = (festivity.hasOwnProperty("liturgicalYear") ? ' (' + festivity.liturgicalYear + ')' : "");
+        let festivityGrade = getFestivityGrade( festivity, dy, keyname );
+        strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivity.name + currentCycle + ' - <i>' + festivityColorString + '</i><br /><i>' + festivity.common + '</i></td>';
+        strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivityGrade + '</td>';
+        strHTML += '</tr>';
+        return { newHTMLStr: strHTML, monthFlag: newMonth };
+
     },
     genLitCal = () => {
         $.ajax({
@@ -163,96 +191,58 @@ let today = new Date(),
                         LitCal[key].date = new Date(LitCal[key].date * 1000);
                     }
 
-                    let $dayCnt = 0;
+                    let dayCnt = 0;
                     let LitCalKeys = Object.keys(LitCal);
 
-                    let $currentMonth = -1;
-                    let $newMonth = false;
-                    let $cm = {
+                    let currentMonth = -1;
+                    let newMonth = false;
+                    let cm = {
                         count: 0
                     };
-                    let $cc = {
+                    let cc = {
                         count: 0
                     };
-                    for (let $keyindex = 0; $keyindex < LitCalKeys.length; $keyindex++) {
-                        $dayCnt++;
-                        let keyname = LitCalKeys[$keyindex];
+                    for (let keyindex = 0; keyindex < LitCalKeys.length; keyindex++) {
+                        dayCnt++;
+                        let keyname = LitCalKeys[keyindex];
                         let festivity = LitCal[keyname];
                         let dy = (festivity.date.getUTCDay() === 0 ? 7 : festivity.date.getUTCDay()); // get the day of the week
 
                         //If we are at the start of a new month, count how many events we have in that same month, so we can display the Month table cell
-                        if (festivity.date.getUTCMonth() !== $currentMonth) {
-                            $newMonth = true;
-                            $currentMonth = festivity.date.getUTCMonth();
-                            $cm.count = 0;
-                            countSameMonthEvents($keyindex, LitCal, $cm);
+                        if (festivity.date.getUTCMonth() !== currentMonth) {
+                            newMonth = true;
+                            currentMonth = festivity.date.getUTCMonth();
+                            cm.count = 0;
+                            countSameMonthEvents(keyindex, LitCal, cm);
                         }
 
                         //Let's check if we have more than one event on the same day, such as optional memorials...
-                        $cc.count = 0;
-                        countSameDayEvents($keyindex, LitCal, $cc);
+                        cc.count = 0;
+                        countSameDayEvents(keyindex, LitCal, cc);
                         //console.log(festivity.name);
-                        //console.log($cc);
-                        if ($cc.count > 0) {
+                        //console.log(cc);
+                        if (cc.count > 0) {
                             console.log("we have an occurrence of multiple festivities on same day");
-                            for (let $ev = 0; $ev <= $cc.count; $ev++) {
-                                keyname = LitCalKeys[$keyindex];
+                            for (let ev = 0; ev <= cc.count; ev++) {
+                                keyname = LitCalKeys[keyindex];
                                 festivity = LitCal[keyname];
-                                // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                                festivity.common = translCommon( festivity.common );
-
-                                let seasonColor = getSeasonColor( festivity, LitCal );
-                                let { CSScolor, festivityColorString } = processColors( festivity );
-
-                                strHTML += '<tr style="background-color:' + seasonColor + ';' + (highContrast.indexOf(seasonColor) != -1 ? 'color:white;' : '') + '">';
-                                if ($newMonth) {
-                                    let $monthRwsp = $cm.count + 1;
-                                    strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format(festivity.date).toUpperCase()) + '</div></td>';
-                                    $newMonth = false;
-                                }
-
-                                if ($ev == 0) {
-                                    let $rwsp = $cc.count + 1;
-                                    let festivity_date_str = $Settings.locale == 'LA' ? getLatinDateStr(festivity.date) : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlDTOptions).format(festivity.date);
-                                    strHTML += '<td rowspan="' + $rwsp + '" class="dateEntry">' + festivity_date_str + '</td>';
-                                }
-                                currentCycle = (festivity.hasOwnProperty("liturgicalYear") ? ' (' + festivity.liturgicalYear + ')' : "");
-                                festivityGrade = getFestivityGrade( festivity, dy, keyname );
-                                strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivity.name + currentCycle + ' - <i>' + festivityColorString + '</i><br /><i>' + festivity.common + '</i></td>';
-                                strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivityGrade + '</td>';
-                                strHTML += '</tr>';
-                                $keyindex++;
+                                let { newHTMLStr, monthFlag } = buildHTMLString( strHTML, festivity, LitCal, newMonth, cc, cm, dy, keyname, ev );
+                                strHTML = newHTMLStr;
+                                newMonth = monthFlag;
+                                keyindex++;
                             }
-                            $keyindex--;
+                            keyindex--;
 
                         } else {
-                            // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                            festivity.common = translCommon(festivity.common);
-
-                            let seasonColor = getSeasonColor( festivity, LitCal );
-                            let { CSScolor, festivityColorString } = processColors( festivity );
-
-                            strHTML += '<tr style="background-color:' + seasonColor + ';' + (highContrast.indexOf(seasonColor) != -1 ? 'color:white;' : 'color:black;') + '">';
-                            if ($newMonth) {
-                                let $monthRwsp = $cm.count + 1;
-                                strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format(festivity.date).toUpperCase()) + '</div></td>';
-                                $newMonth = false;
-                            }
-
-                            let festivity_date_str = $Settings.locale == 'LA' ? getLatinDateStr(festivity.date) : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlDTOptions).format(festivity.date);
-
-                            strHTML += '<td class="dateEntry">' + festivity_date_str + '</td>';
-                            currentCycle = (festivity.hasOwnProperty("liturgicalYear") ? ' (' + festivity.liturgicalYear + ')' : "");
-                            festivityGrade = getFestivityGrade( festivity, dy, keyname );
-                            strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivity.name + currentCycle + ' - <i>' + festivityColorString + '</i><br /><i>' + festivity.common + '</i></td>';
-                            strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivityGrade + '</td>';
-                            strHTML += '</tr>';
+                            let { newHTMLStr, monthFlag } = buildHTMLString( strHTML, festivity, LitCal, newMonth, cc, cm, dy, keyname, null );
+                            strHTML = newHTMLStr;
+                            newMonth = monthFlag;
                         }
 
                     }
                     createHeader();
                     $('#LitCalTable tbody').html(strHTML);
-                    $('#dayCnt').text($dayCnt);
+                    $('#dayCnt').text(dayCnt);
                     $('#LitCalMessages thead').html(`<tr><th colspan=2 style="text-align:center;">${i18next.t("Information-about-current-calculation")}</th></tr>`);
                     $('#spinnerWrapper').fadeOut('slow');
                 }
