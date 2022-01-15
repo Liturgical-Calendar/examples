@@ -129,16 +129,15 @@ let today = new Date(),
     },
     processColors = festivity => {
         let possibleColors =  festivity.color.split(",");
-        let CSScolor = $possibleColors[0];
         
-        let festivityColorString = "";
+        let festivityColorString;
         if(possibleColors.length === 1){
             festivityColorString = i18next.t(possibleColors[0]);
         } else if (possibleColors.length > 1){
             possibleColors = possibleColors.map(txt => i18next.t(txt));
             festivityColorString = possibleColors.join("</i> " + i18next.t("or") + " <i>");
         }
-        return { CSScolor: CSScolor, festivityColorString: festivityColorString };
+        return { CSScolor: possibleColors[0], festivityColorString: festivityColorString };
     },
     getFestivityGrade = (festivity, dy, keyname) => {
         if(festivity.hasOwnProperty('displayGrade') && festivity.displayGrade !== ''){
