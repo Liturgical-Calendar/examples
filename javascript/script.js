@@ -295,32 +295,36 @@ let today = new Date(),
         festivity_date_str += $date.getUTCFullYear();
         return festivity_date_str;
     },
+    buildHeaderAndDialog = () => {
+        let templateStr = i18next.t('HTML-presentation').replace('%s',`<a href="${endpointURL}">PHP engine</a>`),
+            header = `
+                <h1 style="text-align:center;">${i18next.t('LitCal-Calculation')} (${$Settings.year})</h1>
+                <h2 style="text-align:center;">${templateStr}</h2>
+                <div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">
+                <h3>${i18next.t('Configurations-used')}</h3>
+                <span>${i18next.t('YEAR')} = ${$Settings.year}, ${i18next.t('EPIPHANY')} = ${$Settings.epiphany}, ${i18next.t('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpusChristi}, LOCALE = ${$Settings.locale}</span>
+                </div>`,
+            tbheader = `
+                <tr><th>${i18next.t("Month")}</th><th>${i18next.t("Date-Gregorian-Calendar")}</th><th>${i18next.t("General-Roman-Calendar-Festivity")}</th><th>${i18next.t("Grade-of-the-Festivity")}</th></tr>`,
+            settingsDialog = `<div id="settingsWrapper"><form id="calSettingsForm"><table id="calSettings">
+                <tr><td colspan="2"><label>${i18next.t('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
+                <tr><td><label>LOCALE: </td><td><select name="locale" id="locale"><option value="EN" ${($Settings.locale === "EN" ? " SELECTED" : "")}>ENGLISH</option><option value="IT" ${($Settings.locale === "IT" ? " SELECTED" : "")}>ITALIANO</option><option value="LA" ${($Settings.locale === "LA" ? " SELECTED" : "")}>LATINO</option></select></label></td><td>${i18next.t('National-Calendar')}: </td><td><select id="nationalcalendar" name="nationalcalendar"><option value=""></option><option value="VATICAN" ${($Settings.nationalcalendar === "VATICAN" ? " SELECTED" : "")}>${i18next.t('Vatican')}</option><option value="ITALY" ${($Settings.nationalcalendar === "ITALY" ? " SELECTED" : "")}>${i18next.t('Italy')}</option><option value="USA" ${($Settings.nationalcalendar === "USA" ? " SELECTED" : "")}>USA</option></select></td></tr>
+                <tr><td><label>${i18next.t('EPIPHANY')}: </td><td><select name="epiphany" id="epiphany"><option value="JAN6" ${($Settings.epiphany === "JAN6" ? " SELECTED" : "")}>${i18next.t('January-6')}</option><option value="SUNDAY_JAN2_JAN8" ${($Settings.epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "")}>${i18next.t('Sun-Jan2-Jan8')}</option></select></label></td><td>${i18next.t('Diocesan-Calendar')}: </td><td><select id="diocesancalendar" name="diocesancalendar" ${($Settings.nationalcalendar == '' || $Settings.nationalcalendar == 'VATICAN' ) ? 'disabled' : ''}></select></td></tr>
+                <tr><td><label>${i18next.t('ASCENSION')}: </td><td><select name="ascension" id="ascension"><option value="THURSDAY" ${($Settings.ascension === "THURSDAY" ? " SELECTED" : "")}>${i18next.t('Thursday')}</option><option value="SUNDAY" ${($Settings.ascension === "SUNDAY" ? " SELECTED" : "")}>${i18next.t('Sunday')}</option></select></label></td><td></td><td></td></tr>
+                <tr><td><label>CORPUS CHRISTI: </td><td><select name="corpusChristi" id="corpusChristi"><option value="THURSDAY" ${($Settings.corpusChristi === "THURSDAY" ? " SELECTED" : "")}>${i18next.t('Thursday')}</option><option value="SUNDAY" ${($Settings.corpusChristi === "SUNDAY" ? " SELECTED" : "")}>${i18next.t('Sunday')}</option></select></label></td><td></td><td></td></tr>
+                <tr><td colspan="4" style="text-align:center;"><input type="submit" id="generateLitCal" value="${i18next.t("Generate-Roman-Calendar")}" /></td></tr>
+                </table></form></div>`;
+        return { header: header, tbheader: tbheader, settingsDialog: settingsDialog };
+    },
     createHeader = () => {
         document.title = i18next.t("Generate-Roman-Calendar");
         $('#settingsWrapper').dialog("destroy").remove();
         $('header').empty();
-        let templateStr = i18next.t('HTML-presentation');
-        templateStr = templateStr.replace('%s',`<a href="${endpointURL}">PHP engine</a>`);
-        let $header = `
-            <h1 style="text-align:center;">${i18next.t('LitCal-Calculation')} (${$Settings.year})</h1>
-            <h2 style="text-align:center;">${templateStr}</h2>
-            <div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">
-            <h3>${i18next.t('Configurations-used')}</h3>
-            <span>${i18next.t('YEAR')} = ${$Settings.year}, ${i18next.t('EPIPHANY')} = ${$Settings.epiphany}, ${i18next.t('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpusChristi}, LOCALE = ${$Settings.locale}</span>
-            </div>`,
-        $tbheader = `<tr><th>${i18next.t("Month")}</th><th>${i18next.t("Date-Gregorian-Calendar")}</th><th>${i18next.t("General-Roman-Calendar-Festivity")}</th><th>${i18next.t("Grade-of-the-Festivity")}</th></tr>`,
-        $settingsDialog = `<div id="settingsWrapper"><form id="calSettingsForm"><table id="calSettings">
-        <tr><td colspan="2"><label>${i18next.t('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
-        <tr><td><label>LOCALE: </td><td><select name="locale" id="locale"><option value="EN" ${($Settings.locale === "EN" ? " SELECTED" : "")}>ENGLISH</option><option value="IT" ${($Settings.locale === "IT" ? " SELECTED" : "")}>ITALIANO</option><option value="LA" ${($Settings.locale === "LA" ? " SELECTED" : "")}>LATINO</option></select></label></td><td>${i18next.t('National-Calendar')}: </td><td><select id="nationalcalendar" name="nationalcalendar"><option value=""></option><option value="VATICAN" ${($Settings.nationalcalendar === "VATICAN" ? " SELECTED" : "")}>${i18next.t('Vatican')}</option><option value="ITALY" ${($Settings.nationalcalendar === "ITALY" ? " SELECTED" : "")}>${i18next.t('Italy')}</option><option value="USA" ${($Settings.nationalcalendar === "USA" ? " SELECTED" : "")}>USA</option></select></td></tr>
-        <tr><td><label>${i18next.t('EPIPHANY')}: </td><td><select name="epiphany" id="epiphany"><option value="JAN6" ${($Settings.epiphany === "JAN6" ? " SELECTED" : "")}>${i18next.t('January-6')}</option><option value="SUNDAY_JAN2_JAN8" ${($Settings.epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "")}>${i18next.t('Sun-Jan2-Jan8')}</option></select></label></td><td>${i18next.t('Diocesan-Calendar')}: </td><td><select id="diocesancalendar" name="diocesancalendar" ${($Settings.nationalcalendar == '' || $Settings.nationalcalendar == 'VATICAN' ) ? 'disabled' : ''}></select></td></tr>
-        <tr><td><label>${i18next.t('ASCENSION')}: </td><td><select name="ascension" id="ascension"><option value="THURSDAY" ${($Settings.ascension === "THURSDAY" ? " SELECTED" : "")}>${i18next.t('Thursday')}</option><option value="SUNDAY" ${($Settings.ascension === "SUNDAY" ? " SELECTED" : "")}>${i18next.t('Sunday')}</option></select></label></td><td></td><td></td></tr>
-        <tr><td><label>CORPUS CHRISTI: </td><td><select name="corpusChristi" id="corpusChristi"><option value="THURSDAY" ${($Settings.corpusChristi === "THURSDAY" ? " SELECTED" : "")}>${i18next.t('Thursday')}</option><option value="SUNDAY" ${($Settings.corpusChristi === "SUNDAY" ? " SELECTED" : "")}>${i18next.t('Sunday')}</option></select></label></td><td></td><td></td></tr>
-        <tr><td colspan="4" style="text-align:center;"><input type="submit" id="generateLitCal" value="${i18next.t("Generate-Roman-Calendar")}" /></td></tr>
-        </table></form></div>`;
-        $('header').html($header);
-        $('#LitCalTable thead').html($tbheader);
+        let { header, tbheader, settingsDialog } = buildHeaderAndDialog();
+        $('header').html(header);
+        $('#LitCalTable thead').html(tbheader);
 
-        $($settingsDialog).dialog({
+        $(settingsDialog).dialog({
             title: i18next.t('CustomizeOptions'),
             modal: true,
             width: '80%',
