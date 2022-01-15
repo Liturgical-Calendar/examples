@@ -127,6 +127,28 @@ let today = new Date(),
         }
         return seasonColor;
     },
+    processColors = festivity => {
+        let possibleColors =  festivity.color.split(",");
+        let CSScolor = $possibleColors[0];
+        
+        let festivityColorString = "";
+        if(possibleColors.length === 1){
+            festivityColorString = i18next.t(possibleColors[0]);
+        } else if (possibleColors.length > 1){
+            possibleColors = possibleColors.map(txt => i18next.t(txt));
+            festivityColorString = possibleColors.join("</i> " + i18next.t("or") + " <i>");
+        }
+        return { CSScolor: CSScolor, festivityColorString: festivityColorString };
+    },
+    getFestivityGrade = (festivity, dy, keyname) => {
+        if(festivity.hasOwnProperty('displayGrade') && festivity.displayGrade !== ''){
+            festivityGrade = festivity.displayGrade;
+        }
+        else if(dy !== 7 || festivity.grade > 3){
+            festivityGrade = (keyname === 'AllSouls' ? i18next.t("COMMEMORATION") : $GRADE[festivity.grade]);
+        }
+        return festivityGrade;
+    },
     genLitCal = () => {
         $.ajax({
             method: 'POST',
@@ -143,7 +165,7 @@ let today = new Date(),
                     }
 
                     let $dayCnt = 0;
-                    let $LitCalKeys = Object.keys($LitCal);
+                    let LitCalKeys = Object.keys(LitCal);
 
                     let $currentMonth = -1;
                     let $newMonth = false;
@@ -153,70 +175,52 @@ let today = new Date(),
                     let $cc = {
                         count: 0
                     };
-                    for (let $keyindex = 0; $keyindex < $LitCalKeys.length; $keyindex++) {
+                    for (let $keyindex = 0; $keyindex < LitCalKeys.length; $keyindex++) {
                         $dayCnt++;
-                        let $keyname = $LitCalKeys[$keyindex];
-                        let $festivity = $LitCal[$keyname];
-                        let dy = ($festivity.date.getUTCDay() === 0 ? 7 : $festivity.date.getUTCDay()); // get the day of the week
+                        let keyname = LitCalKeys[$keyindex];
+                        let festivity = LitCal[keyname];
+                        let dy = (festivity.date.getUTCDay() === 0 ? 7 : festivity.date.getUTCDay()); // get the day of the week
 
                         //If we are at the start of a new month, count how many events we have in that same month, so we can display the Month table cell
-                        if ($festivity.date.getUTCMonth() !== $currentMonth) {
+                        if (festivity.date.getUTCMonth() !== $currentMonth) {
                             $newMonth = true;
-                            $currentMonth = $festivity.date.getUTCMonth();
+                            $currentMonth = festivity.date.getUTCMonth();
                             $cm.count = 0;
-                            countSameMonthEvents($keyindex, $LitCal, $cm);
+                            countSameMonthEvents($keyindex, LitCal, $cm);
                         }
 
                         //Let's check if we have more than one event on the same day, such as optional memorials...
                         $cc.count = 0;
-                        countSameDayEvents($keyindex, $LitCal, $cc);
-                        //console.log($festivity.name);
+                        countSameDayEvents($keyindex, LitCal, $cc);
+                        //console.log(festivity.name);
                         //console.log($cc);
                         if ($cc.count > 0) {
                             console.log("we have an occurrence of multiple festivities on same day");
                             for (let $ev = 0; $ev <= $cc.count; $ev++) {
-                                $keyname = $LitCalKeys[$keyindex];
-                                $festivity = $LitCal[$keyname];
+                                keyname = LitCalKeys[$keyindex];
+                                festivity = LitCal[keyname];
                                 // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                                $festivity.common = translCommon( $festivity.common );
+                                festivity.common = translCommon( festivity.common );
 
-                                let seasonColor = getSeasonColor( $festivity, $LitCal );
+                                let seasonColor = getSeasonColor( festivity, LitCal );
+                                let { CSScolor, festivityColorString } = processColors( festivity );
 
-                                //We will apply the color for the single festivity only to it's own table cells
-                                let $possibleColors =  $festivity.color.split(",");
-                                let $CSScolor = $possibleColors[0];
-                                
-                                let $festivityColorString = "";
-                                if($possibleColors.length === 1){
-                                    $festivityColorString = i18next.t($possibleColors[0]);
-                                } else if ($possibleColors.length > 1){
-                                    $possibleColors = $possibleColors.map($txt => i18next.t($txt));
-                                    $festivityColorString = $possibleColors.join("</i> " + i18next.t("or") + " <i>");
-                                }
-                                
                                 strHTML += '<tr style="background-color:' + seasonColor + ';' + (highContrast.indexOf(seasonColor) != -1 ? 'color:white;' : '') + '">';
                                 if ($newMonth) {
                                     let $monthRwsp = $cm.count + 1;
-                                    strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[$festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format($festivity.date).toUpperCase()) + '</div></td>';
+                                    strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format(festivity.date).toUpperCase()) + '</div></td>';
                                     $newMonth = false;
                                 }
 
                                 if ($ev == 0) {
                                     let $rwsp = $cc.count + 1;
-                                    let $festivity_date_str = $Settings.locale == 'LA' ? getLatinDateStr($festivity.date) : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlDTOptions).format($festivity.date);
-
-                                    strHTML += '<td rowspan="' + $rwsp + '" class="dateEntry">' + $festivity_date_str + '</td>';
+                                    let festivity_date_str = $Settings.locale == 'LA' ? getLatinDateStr(festivity.date) : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlDTOptions).format(festivity.date);
+                                    strHTML += '<td rowspan="' + $rwsp + '" class="dateEntry">' + festivity_date_str + '</td>';
                                 }
-                                $currentCycle = ($festivity.hasOwnProperty("liturgicalYear") ? ' (' + $festivity.liturgicalYear + ')' : "");
-                                $festivityGrade = '';
-                                if($festivity.hasOwnProperty('displayGrade') && $festivity.displayGrade !== ''){
-                                    $festivityGrade = $festivity.displayGrade;
-                                }         
-                                else if(dy !== 7 || $festivity.grade > 3){
-                                    $festivityGrade = $GRADE[$festivity.grade];
-                                }
-                                strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + $festivityColorString + '</i><br /><i>' + $festivity.common + '</i></td>';
-                                strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
+                                currentCycle = (festivity.hasOwnProperty("liturgicalYear") ? ' (' + festivity.liturgicalYear + ')' : "");
+                                festivityGrade = getFestivityGrade( festivity, dy, keyname );
+                                strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivity.name + currentCycle + ' - <i>' + festivityColorString + '</i><br /><i>' + festivity.common + '</i></td>';
+                                strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivityGrade + '</td>';
                                 strHTML += '</tr>';
                                 $keyindex++;
                             }
@@ -224,43 +228,25 @@ let today = new Date(),
 
                         } else {
                             // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                            $festivity.common = translCommon($festivity.common);
+                            festivity.common = translCommon(festivity.common);
 
-                            let seasonColor = getSeasonColor( $festivity, $LitCal );
+                            let seasonColor = getSeasonColor( festivity, LitCal );
+                            let { CSScolor, festivityColorString } = processColors( festivity );
 
-                            //We will apply the color for the single festivity only to it's own table cells
-                            let $possibleColors =  $festivity.color.split(",");
-                            let $CSScolor = $possibleColors[0];
-                            let $festivityColorString = "";
-                            if($possibleColors.length === 1){
-                                $festivityColorString = i18next.t($possibleColors[0]);
-                            } else if ($possibleColors.length > 1){
-                                $possibleColors = $possibleColors.map($txt => i18next.t($txt));
-                                $festivityColorString = $possibleColors.join("</i> " + i18next.t("or") + " <i>");
-                            }
                             strHTML += '<tr style="background-color:' + seasonColor + ';' + (highContrast.indexOf(seasonColor) != -1 ? 'color:white;' : 'color:black;') + '">';
                             if ($newMonth) {
                                 let $monthRwsp = $cm.count + 1;
-                                strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[$festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format($festivity.date).toUpperCase()) + '</div></td>';
+                                strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format(festivity.date).toUpperCase()) + '</div></td>';
                                 $newMonth = false;
                             }
 
-                            let $festivity_date_str = $Settings.locale == 'LA' ? getLatinDateStr($festivity.date) : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlDTOptions).format($festivity.date);
+                            let festivity_date_str = $Settings.locale == 'LA' ? getLatinDateStr(festivity.date) : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlDTOptions).format(festivity.date);
 
-                            strHTML += '<td class="dateEntry">' + $festivity_date_str + '</td>';
-                            $currentCycle = ($festivity.hasOwnProperty("liturgicalYear") ? ' (' + $festivity.liturgicalYear + ')' : "");
-                            $festivityGrade = '';
-                            if(dy !== 7){
-                                $festivityGrade = ($keyname === 'AllSouls' ? i18next.t("COMMEMORATION") : $GRADE[$festivity.grade]);
-                            }
-                            else if($festivity.grade > 3){
-                                $festivityGrade = ($keyname === 'AllSouls' ? i18next.t("COMMEMORATION") : $GRADE[$festivity.grade]);
-                            }              
-                            if($festivity.hasOwnProperty('displayGrade') && $festivity.displayGrade !== ''){
-                                $festivityGrade = $festivity.displayGrade;
-                            }         
-                            strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + $festivityColorString + '</i><br /><i>' + $festivity.common + '</i></td>';
-                            strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
+                            strHTML += '<td class="dateEntry">' + festivity_date_str + '</td>';
+                            currentCycle = (festivity.hasOwnProperty("liturgicalYear") ? ' (' + festivity.liturgicalYear + ')' : "");
+                            festivityGrade = getFestivityGrade( festivity, dy, keyname );
+                            strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivity.name + currentCycle + ' - <i>' + festivityColorString + '</i><br /><i>' + festivity.common + '</i></td>';
+                            strHTML += '<td style="background-color:'+CSScolor+';' + (highContrast.indexOf(CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + festivityGrade + '</td>';
                             strHTML += '</tr>';
                         }
 
@@ -311,14 +297,14 @@ let today = new Date(),
     ],
     $GRADE = [],
     getLatinDateStr = $date => {
-        $festivity_date_str = $daysOfTheWeek[$date.getUTCDay()];
-        $festivity_date_str += ', ';
-        $festivity_date_str += $date.getUTCDate();
-        $festivity_date_str += ' ';
-        $festivity_date_str += $months[$date.getUTCMonth()];
-        $festivity_date_str += ' ';
-        $festivity_date_str += $date.getUTCFullYear();
-        return $festivity_date_str;
+        festivity_date_str = $daysOfTheWeek[$date.getUTCDay()];
+        festivity_date_str += ', ';
+        festivity_date_str += $date.getUTCDate();
+        festivity_date_str += ' ';
+        festivity_date_str += $months[$date.getUTCMonth()];
+        festivity_date_str += ' ';
+        festivity_date_str += $date.getUTCFullYear();
+        return festivity_date_str;
     },
     createHeader = () => {
         document.title = i18next.t("Generate-Roman-Calendar");
