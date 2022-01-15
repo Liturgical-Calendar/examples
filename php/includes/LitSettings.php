@@ -35,22 +35,8 @@ class LitSettings {
 
     //The upper limit is determined by the limit of PHP in dealing with DateTime objects
     const YEAR_UPPER_LIMIT          = 9999;
-  
-    public function __construct( array $DATA, string $stagingURL ) {
-
-        //set a few default values
-        $this->YEAR = (int)date("Y");
-
-        if( !empty( $_COOKIE["currentLocale"] ) ) {
-            $this->LOCALE = $_COOKIE["currentLocale"];
-        }
-        elseif( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
-            $this->LOCALE = Locale::acceptFromHttp( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
-        }
-        else {
-            $this->LOCALE = LitLocale::ENGLISH;
-        }
-
+    
+    private function SetVars( array $DATA ) {
         //set values based on the GET global variable
         foreach( $DATA as $key => $value ) {
             $key = strtoupper( $key );
@@ -90,6 +76,24 @@ class LitSettings {
                 }
             }
         }
+    }
+  
+    public function __construct( array $DATA, string $stagingURL ) {
+
+        //set a few default values
+        $this->YEAR = (int)date("Y");
+
+        if( !empty( $_COOKIE["currentLocale"] ) ) {
+            $this->LOCALE = $_COOKIE["currentLocale"];
+        }
+        elseif( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+            $this->LOCALE = Locale::acceptFromHttp( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+        }
+        else {
+            $this->LOCALE = LitLocale::ENGLISH;
+        }
+
+        $this->SetVars( $DATA );
 
         if( $this->NationalCalendar !== null ) {
             $this->updateSettingsByNation();
