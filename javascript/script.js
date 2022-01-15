@@ -69,6 +69,8 @@ const translCommon = common => {
     }
 }
 
+const highContrast = ['purple', 'red', 'green'];
+
 let today = new Date(),
     $Settings = {
         "year": today.getUTCFullYear(),
@@ -114,6 +116,17 @@ let today = new Date(),
             }
         }
     },
+    getSeasonColor = (festivity,LitCal) => {
+        let seasonColor = "green";
+        if ((festivity.date.getTime() >= LitCal["Advent1"].date.getTime() && festivity.date.getTime() < LitCal["Christmas"].date.getTime()) || (festivity.date.getTime() >= LitCal["AshWednesday"].date.getTime() && festivity.date.getTime() < LitCal["Easter"].date.getTime())) {
+            seasonColor = "purple";
+        } else if (festivity.date.getTime() >= LitCal["Easter"].date.getTime() && festivity.date.getTime() <= LitCal["Pentecost"].date.getTime()) {
+            seasonColor = "white";
+        } else if (festivity.date.getTime() >= LitCal["Christmas"].date.getTime() || festivity.date.getTime() <= LitCal["BaptismLord"].date.getTime()) {
+            seasonColor = "white";
+        }
+        return seasonColor;
+    },
     genLitCal = () => {
         $.ajax({
             method: 'POST',
@@ -123,23 +136,13 @@ let today = new Date(),
                 console.log(LitCalData);
 
                 let strHTML = '';
-                /*
-                let $YEAR = 0;
-                if (LitCalData.hasOwnProperty("Settings")) {
-                    $YEAR = LitCalData.Settings.YEAR;
-                }
-                */
                 if (LitCalData.hasOwnProperty("LitCal")) {
-                    let $LitCal = LitCalData.LitCal;
-
-                    for (const key in $LitCal) {
-                        if ($LitCal.hasOwnProperty(key)) {
-                            $LitCal[key].date = new Date($LitCal[key].date * 1000); //transform PHP timestamp to javascript date object
-                        }
+                    let { LitCal } = LitCalData.LitCal;
+                    for (const key in LitCal) {
+                        LitCal[key].date = new Date(LitCal[key].date * 1000);
                     }
 
                     let $dayCnt = 0;
-                    const $highContrast = ['purple', 'red', 'green'];
                     let $LitCalKeys = Object.keys($LitCal);
 
                     let $currentMonth = -1;
@@ -177,15 +180,7 @@ let today = new Date(),
                                 // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
                                 $festivity.common = translCommon( $festivity.common );
 
-                                //check which liturgical season we are in, to use the right color for that season...
-                                let $SeasonColor = "green";
-                                if (($festivity.date.getTime() >= $LitCal["Advent1"].date.getTime() && $festivity.date.getTime() < $LitCal["Christmas"].date.getTime()) || ($festivity.date.getTime() >= $LitCal["AshWednesday"].date.getTime() && $festivity.date.getTime() < $LitCal["Easter"].date.getTime())) {
-                                    $SeasonColor = "purple";
-                                } else if ($festivity.date.getTime() >= $LitCal["Easter"].date.getTime() && $festivity.date.getTime() <= $LitCal["Pentecost"].date.getTime()) {
-                                    $SeasonColor = "white";
-                                } else if ($festivity.date.getTime() >= $LitCal["Christmas"].date.getTime() || $festivity.date.getTime() <= $LitCal["BaptismLord"].date.getTime()) {
-                                    $SeasonColor = "white";
-                                }
+                                let seasonColor = getSeasonColor( $festivity, $LitCal );
 
                                 //We will apply the color for the single festivity only to it's own table cells
                                 let $possibleColors =  $festivity.color.split(",");
@@ -199,7 +194,7 @@ let today = new Date(),
                                     $festivityColorString = $possibleColors.join("</i> " + i18next.t("or") + " <i>");
                                 }
                                 
-                                strHTML += '<tr style="background-color:' + $SeasonColor + ';' + ($highContrast.indexOf($SeasonColor) != -1 ? 'color:white;' : '') + '">';
+                                strHTML += '<tr style="background-color:' + seasonColor + ';' + (highContrast.indexOf(seasonColor) != -1 ? 'color:white;' : '') + '">';
                                 if ($newMonth) {
                                     let $monthRwsp = $cm.count + 1;
                                     strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[$festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format($festivity.date).toUpperCase()) + '</div></td>';
@@ -220,8 +215,8 @@ let today = new Date(),
                                 else if(dy !== 7 || $festivity.grade > 3){
                                     $festivityGrade = $GRADE[$festivity.grade];
                                 }
-                                strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + $festivityColorString + '</i><br /><i>' + $festivity.common + '</i></td>';
-                                strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
+                                strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + $festivityColorString + '</i><br /><i>' + $festivity.common + '</i></td>';
+                                strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
                                 strHTML += '</tr>';
                                 $keyindex++;
                             }
@@ -231,15 +226,7 @@ let today = new Date(),
                             // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
                             $festivity.common = translCommon($festivity.common);
 
-                            //check which liturgical season we are in, to use the right color for that season...
-                            let $SeasonColor = "green";
-                            if (($festivity.date.getTime() >= $LitCal["Advent1"].date.getTime() && $festivity.date.getTime() < $LitCal["Christmas"].date.getTime()) || ($festivity.date.getTime() >= $LitCal["AshWednesday"].date.getTime() && $festivity.date.getTime() < $LitCal["Easter"].date.getTime())) {
-                                $SeasonColor = "purple";
-                            } else if ($festivity.date.getTime() >= $LitCal["Easter"].date.getTime() && $festivity.date.getTime() <= $LitCal["Pentecost"].date.getTime()) {
-                                $SeasonColor = "white";
-                            } else if ($festivity.date.getTime() >= $LitCal["Christmas"].date.getTime() || $festivity.date.getTime() <= $LitCal["BaptismLord"].date.getTime()) {
-                                $SeasonColor = "white";
-                            }
+                            let seasonColor = getSeasonColor( $festivity, $LitCal );
 
                             //We will apply the color for the single festivity only to it's own table cells
                             let $possibleColors =  $festivity.color.split(",");
@@ -251,7 +238,7 @@ let today = new Date(),
                                 $possibleColors = $possibleColors.map($txt => i18next.t($txt));
                                 $festivityColorString = $possibleColors.join("</i> " + i18next.t("or") + " <i>");
                             }
-                            strHTML += '<tr style="background-color:' + $SeasonColor + ';' + ($highContrast.indexOf($SeasonColor) != -1 ? 'color:white;' : 'color:black;') + '">';
+                            strHTML += '<tr style="background-color:' + seasonColor + ';' + (highContrast.indexOf(seasonColor) != -1 ? 'color:white;' : 'color:black;') + '">';
                             if ($newMonth) {
                                 let $monthRwsp = $cm.count + 1;
                                 strHTML += '<td class="rotate" rowspan = "' + $monthRwsp + '"><div>' + ($Settings.locale === 'LA' ? $months[$festivity.date.getUTCMonth()].toUpperCase() : new Intl.DateTimeFormat($Settings.locale.toLowerCase(), IntlMonthFmt).format($festivity.date).toUpperCase()) + '</div></td>';
@@ -272,8 +259,8 @@ let today = new Date(),
                             if($festivity.hasOwnProperty('displayGrade') && $festivity.displayGrade !== ''){
                                 $festivityGrade = $festivity.displayGrade;
                             }         
-                            strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + $festivityColorString + '</i><br /><i>' + $festivity.common + '</i></td>';
-                            strHTML += '<td style="background-color:'+$CSScolor+';' + ($highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
+                            strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivity.name + $currentCycle + ' - <i>' + $festivityColorString + '</i><br /><i>' + $festivity.common + '</i></td>';
+                            strHTML += '<td style="background-color:'+$CSScolor+';' + (highContrast.indexOf($CSScolor) != -1 ? 'color:white;' : 'color:black;') + '">' + $festivityGrade + '</td>';
                             strHTML += '</tr>';
                         }
 
