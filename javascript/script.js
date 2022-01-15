@@ -159,7 +159,7 @@ let today = new Date(),
 
                 let strHTML = '';
                 if (LitCalData.hasOwnProperty("LitCal")) {
-                    let { LitCal } = LitCalData.LitCal;
+                    let { LitCal } = LitCalData;
                     for (const key in LitCal) {
                         LitCal[key].date = new Date(LitCal[key].date * 1000);
                     }
