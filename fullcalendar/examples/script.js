@@ -28,83 +28,81 @@ let messages = null,
         "locale": "la",
         "returntype": "JSON"
     },
-    $events = [],
+    events = [],
     pad = n => n < 10 ? '0' + n : n,
+    fullCalendarSettings = {
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listMonth'
+        },
+        dayMaxEvents: true,
+        events: events,
+        firstDay: 0,
+        eventOrder: 'idx',
+        eventDidMount: info => {
+            new Tooltip(info.el, {
+                title: info.event.extendedProps.description,
+                placement: 'top',
+                trigger: 'hover',
+                container: 'body',
+                html: true
+            });
+        }
+    },
     genLitCal = () => {
         $.ajax({
             method: 'POST',
             data: $Settings,
             url: endpointURL,
             success: LitCalData => {
-                console.log(LitCalData);
+                //console.log(LitCalData);
                 if (LitCalData.hasOwnProperty("LitCal")) {
                     createHeader();
-                    let $LitCal = LitCalData.LitCal;
-
-                    for (let key in $LitCal) {
-                        $LitCal[key].date = new Date($LitCal[key].date * 1000); //transform PHP timestamp to javascript date object
+                    let { LitCal } = LitCalData;
+                    for (let key in LitCal) {
+                        LitCal[key].date = new Date(LitCal[key].date * 1000); //transform PHP timestamp to javascript date object
                     }
-                    let $LitCalKeys = Object.keys($LitCal);
-                    for (let $keyindex = 0; $keyindex < $LitCalKeys.length; $keyindex++) {
-                        let $keyname = $LitCalKeys[$keyindex];
-                        let $festivity = $LitCal[$keyname];
-                        let dy = ($festivity.date.getDay() === 0 ? 7 : $festivity.date.getDay()); // get the day of the week
-                        let $possibleColors = $festivity.color.split(",");
-                        let $CSScolor = $possibleColors[0];
-                        let $textColor = ($CSScolor === 'white' || $CSScolor === 'pink' ? 'black' : 'white');
-                        let $festivityGrade = '';
-                        if ($festivity.hasOwnProperty('displayGrade') && $festivity.displayGrade !== '') {
-                            $festivityGrade = $festivity.displayGrade + ', ';
+                    let LitCalKeys = Object.keys(LitCal);
+                    for (let keyindex = 0; keyindex < LitCalKeys.length; keyindex++) {
+                        let keyname = LitCalKeys[keyindex];
+                        let festivity = LitCal[keyname];
+                        let dy = (festivity.date.getDay() === 0 ? 7 : festivity.date.getDay()); // get the day of the week
+                        let possibleColors = festivity.color.split(",");
+                        let CSScolor = possibleColors[0];
+                        let textColor = (CSScolor === 'white' || CSScolor === 'pink' ? 'black' : 'white');
+                        let festivityGrade = '';
+                        if (festivity.hasOwnProperty('displayGrade') && festivity.displayGrade !== '') {
+                            festivityGrade = festivity.displayGrade + ', ';
                         }
-                        else if (dy !== 7 || $festivity.grade > 3) {
-                            //$festivityGrade = _G($festivity.grade) + ', ';
-                            let { strVal, tags } = LitGrade.strWTags( $festivity.grade );
-                            $festivityGrade = tags[0] + __( strVal ) + tags[1] + ', ';
+                        else if (dy !== 7 || festivity.grade > 3) {
+                            //festivityGrade = _G(festivity.grade) + ', ';
+                            let { strVal, tags } = LitGrade.strWTags( festivity.grade );
+                            festivityGrade = tags[0] + __( strVal ) + tags[1] + ', ';
                         }
 
-                        let $description = '<b>' + $festivity.name + '</b><br>' + $festivityGrade + '<i>' + _CC($festivity.color, true) + '</i><br><i style="font-size:.8em;">' + _C($festivity.common) + '</i>' + ($festivity.hasOwnProperty('liturgicalYear') ? '<br>' + $festivity.liturgicalYear : '');
-                        $events[$keyindex] = {
-                            title: $festivity.name,
-                            start: $festivity.date.getUTCFullYear() + '-' + pad($festivity.date.getUTCMonth() + 1) + '-' + pad($festivity.date.getUTCDate()),
-                            backgroundColor: $CSScolor,
-                            textColor: $textColor,
-                            description: $description,
-                            idx: $festivity.eventIdx
+                        let description = '<b>' + festivity.name + '</b><br>' + festivityGrade + '<i>' + _CC(festivity.color, true) + '</i><br><i style="font-size:.8em;">' + _C(festivity.common) + '</i>' + (festivity.hasOwnProperty('liturgicalYear') ? '<br>' + festivity.liturgicalYear : '');
+                        events[keyindex] = {
+                            title: festivity.name,
+                            start: festivity.date.getUTCFullYear() + '-' + pad(festivity.date.getUTCMonth() + 1) + '-' + pad(festivity.date.getUTCDate()),
+                            backgroundColor: CSScolor,
+                            textColor: textColor,
+                            description: description,
+                            idx: festivity.eventIdx
                         };
 
-                        if ($keyindex === $LitCalKeys.length - 1) {
+                        if (keyindex === LitCalKeys.length - 1) {
                             $('#spinnerWrapper').fadeOut('slow');
                         }
                     }
 
-                    let calendarEl = document.getElementById('calendar'),
-                        fullCalendarSettings = {
-                            headerToolbar: {
-                                left: 'prev,next today',
-                                center: 'title',
-                                right: 'dayGridMonth,listMonth'
-                            },
-                            dayMaxEvents: true, // allow "more" link when too many events
-                            events: $events,
-                            firstDay: 0,
-                            eventOrder: 'idx',
-                            eventDidMount: info => {
-                                new Tooltip(info.el, {
-                                    title: info.event.extendedProps.description,
-                                    placement: 'top',
-                                    trigger: 'hover',
-                                    container: 'body',
-                                    html: true
-                                });
-                            }
-                        };
                     if ($Settings.locale !== 'en') {
                         fullCalendarSettings.locale = $Settings.locale;
                     }
                     if (parseInt($Settings.year) !== today.getFullYear()) {
                         fullCalendarSettings.initialDate = $Settings.year + '-01-01';
                     }
-                    let calendar = new FullCalendar.Calendar(calendarEl, fullCalendarSettings);
+                    let calendar = new FullCalendar.Calendar(document.getElementById('calendar'), fullCalendarSettings);
 
                     calendar.render();
 
