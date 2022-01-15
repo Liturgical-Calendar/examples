@@ -11,7 +11,8 @@ if(Cookies.get("currentLocale") === undefined){
 
 i18next.use(i18nextHttpBackend).init({
     debug: true,
-    lng: Cookies.get("currentLocale").substring(0,2),
+    lng: Cookies.get("currentLocale").substring(0,2).toLowerCase(),
+    fallbackLng: 'en',
     backend: {
         loadPath: 'locales/{{lng}}/{{ns}}.json'
     }
