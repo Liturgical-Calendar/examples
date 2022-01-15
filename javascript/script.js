@@ -1,5 +1,5 @@
 const thirdLevelDomain = window.location.hostname.split('.')[0];
-const isStaging = ( thirdLevelDomain === 'litcal' || thirdLevelDomain === 'litcal-staging' || window.location.pathname.includes( '-staging' ) );
+const isStaging = ( thirdLevelDomain === 'litcal-staging' || window.location.pathname.includes( '-staging' ) );
 const stagingURL = isStaging ? '-staging' : '';
 const endpointV = isStaging ? 'dev' : 'v3';
 const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalEngine.php`;
@@ -17,7 +17,19 @@ i18next.use(i18nextHttpBackend).init({
     }
   }, () => { //err, t
     jqueryI18next.init(i18next, $);
-  });
+    $(document).ready(() => {
+        document.title = i18next.t("Generate-Roman-Calendar");
+        $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
+        createHeader();
+        $('#generateLitCal').button();
+    
+        if($('#nationalcalendar').val() !== "ITALY"){
+            $('#diocesancalendar').prop('disabled',true);
+        }
+    
+        $('#settingsWrapper').dialog("open");
+    });
+});
 
 const translCommon = common => {
     if( common === '' ) return common;
@@ -325,7 +337,7 @@ let today = new Date(),
         $('#settingsWrapper').dialog("destroy").remove();
         $('header').empty();
         let templateStr = i18next.t('HTML-presentation');
-        templateStr = templateStr.replace('%s','<a href="../../LitCalEngine.php">PHP engine</a>');
+        templateStr = templateStr.replace('%s',`<a href="${endpointURL}">PHP engine</a>`);
         let $header = `
             <h1 style="text-align:center;">${i18next.t('LitCal-Calculation')} (${$Settings.year})</h1>
             <h2 style="text-align:center;">${templateStr}</h2>
@@ -515,18 +527,6 @@ $(document).on('change', '#diocesancalendar', ev => {
     $Settings.diocesancalendar = $(ev.currentTarget).val();
 });
 
-$(document).ready(() => {
-    document.title = i18next.t("Generate-Roman-Calendar");
-    $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
-    createHeader();
-    $('#generateLitCal').button();
-
-    if($('#nationalcalendar').val() !== "ITALY"){
-        $('#diocesancalendar').prop('disabled',true);
-    }
-
-    $('#settingsWrapper').dialog("open");
-});
 
 Object.filter = (obj, predicate) => 
     Object.keys(obj)
