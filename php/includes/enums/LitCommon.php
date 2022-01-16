@@ -267,7 +267,7 @@ class LitCommon {
                     return $fromTheCommon . " " . $this->getPossessive( $commonGeneral ) . " " . $this->i18n( $commonGeneral ) . ($commonSpecific != "" ? ": " . $this->i18n( $commonSpecific ) : "");
                 }, $commons);
                 /**translators: when there are multiple possible commons, this will be the glue "or from the common of..." */
-                $common = implode( "; " . _( "or" ) . " ", $commons );
+                $common = implode( "; " . ($this->locale === "la" ? "vel" : _( "or" )) . " ", $commons );
             }
         }
         return $common;
