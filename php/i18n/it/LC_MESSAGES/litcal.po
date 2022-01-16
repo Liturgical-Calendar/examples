@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-16 11:35+0000\n"
-"PO-Revision-Date: 2022-01-16 00:04+0000\n"
+"PO-Revision-Date: 2022-01-16 11:47+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/it/>\n"
@@ -21,38 +21,41 @@ msgstr ""
 
 #: php/index.php:93 php/index.php:147
 msgid "Generate Roman Calendar"
-msgstr ""
+msgstr "Genera il Calendario Romano"
 
 #: php/index.php:114
 msgid "Liturgical Calendar Calculation for a Given Year"
-msgstr ""
+msgstr "Calcolo del Calendario Liturgico per un dato anno"
 
 #: php/index.php:115
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
+"Presentazione HTML elaborata da PHP con l'utilizzo di una richiesta cURL a %s"
 
 #: php/index.php:123
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
+"Hai richiesto un anno precedente al 1970: non è possibile richiedere anni "
+"prima del 1970."
 
 #: php/index.php:129
 msgid "Customize options for generating the Roman Calendar"
-msgstr ""
+msgstr "Configurare le impostazioni per la generazione del Calendario Romano"
 
 #: php/index.php:131 php/index.php:155
 msgid "YEAR"
-msgstr ""
+msgstr "ANNO"
 
 #: php/index.php:132 php/index.php:155
 msgid "EPIPHANY"
-msgstr ""
+msgstr "EPIFANIA"
 
 #: php/index.php:133 php/index.php:155
 msgid "ASCENSION"
-msgstr ""
+msgstr "ASCENSIONE"
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
 #: php/index.php:142 php/includes/enums/LitCommon.php:270
@@ -61,35 +64,35 @@ msgstr "oppure"
 
 #: php/index.php:154
 msgid "Configurations being used to generate this calendar:"
-msgstr ""
+msgstr "Le impostazioni utilizzate per generare questo calendario:"
 
 #: php/index.php:156
 msgid "NATION"
-msgstr ""
+msgstr "NAZIONE"
 
 #: php/index.php:156
 msgid "DIOCESE"
-msgstr ""
+msgstr "DIOCESI"
 
 #: php/index.php:161
 msgid "Month"
-msgstr ""
+msgstr "Mese"
 
 #: php/index.php:161
 msgid "Date in Gregorian Calendar"
-msgstr ""
+msgstr "Data nel Calendario Gregoriano"
 
 #: php/index.php:161
 msgid "General Roman Calendar Festivity"
-msgstr ""
+msgstr "Festività del Calendario Romano Universale"
 
 #: php/index.php:161
 msgid "Grade of the Festivity"
-msgstr ""
+msgstr "Grado della Festività"
 
 #: php/index.php:210
 msgid "Information about the current calculation of the Liturgical Year"
-msgstr ""
+msgstr "Informazioni sull'attuale calcolo dell'Anno Liturgico"
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:23
