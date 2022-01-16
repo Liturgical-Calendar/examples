@@ -1,4 +1,34 @@
 <?php
+include_once('includes/enums/LitColor.php');
+include_once('includes/enums/LitGrade.php');
+include_once('includes/enums/LitCommon.php');
+
+$daysOfTheWeek = [
+    "dies Solis",
+    "dies Lunæ",
+    "dies Martis",
+    "dies Mercurii",
+    "dies Iovis",
+    "dies Veneris",
+    "dies Saturni"
+];
+
+$months = [
+    "",
+    "Ianuarius",
+    "Februarius",
+    "Martius",
+    "Aprilis",
+    "Maius",
+    "Iunius",
+    "Iulius",
+    "Augustus",
+    "September",
+    "October",
+    "November",
+    "December"
+];
+
 /**************************
  * UTILITY FUNCTIONS
  *************************/
@@ -125,4 +155,90 @@ function prepareQueryData( $litSettings ) {
         $queryData["diocesancalendar"] = $litSettings->DiocesanCalendar;
     }
     return $queryData;
+}
+
+function getSeasonColor( $festivity, $LitCal ) {
+    $SeasonColor = "green";
+    if (($festivity->date > $LitCal["Advent1"]->date  && $festivity->date < $LitCal["Christmas"]->date) || ($festivity->date > $LitCal["AshWednesday"]->date && $festivity->date < $LitCal["Easter"]->date)) {
+        $SeasonColor = "purple";
+    } else if ($festivity->date > $LitCal["Easter"]->date && $festivity->date < $LitCal["Pentecost"]->date) {
+        $SeasonColor = "white";
+    } else if ($festivity->date > $LitCal["Christmas"]->date || $festivity->date < $LitCal["BaptismLord"]->date) {
+        $SeasonColor = "white";
+    }
+    return $SeasonColor;
+}
+
+function processColors( $festivity, $locale ) {
+    //We will apply the color for the single festivity only to it's own table cells
+    $possibleColors = explode(",", $festivity->color);
+    $CSScolor = $possibleColors[0];
+    $festivityColorString = "";
+    if(count($possibleColors) === 1){
+        $festivityColorString = LitColor::i18n( $possibleColors[0], $locale );
+    } else if (count($possibleColors) > 1){
+        $possibleColors = array_map(function($txt) use ($locale){
+            return LitColor::i18n( $txt, $locale );
+        }, $possibleColors);
+        $festivityColorString = implode("</i> " . _( "or" ) . " <i>", $possibleColors);
+    }
+    return [ $CSScolor, $festivityColorString ];
+}
+
+function buildHTML( $festivity, $LitCal, &$newMonth, $cc, $cm, $keyname, $locale, $ev = null ) {
+    global $daysOfTheWeek;
+    global $months;
+    $monthFmt = IntlDateFormatter::create($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'MMMM' );
+    $dateFmt  = IntlDateFormatter::create($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'EEEE d MMMM yyyy');
+    
+    $litGrade = new LitGrade( $locale );
+    $litCommon = new LitCommon( $locale );
+    $festivity->common = $litCommon->C( $festivity->common );
+    $highContrast = ['purple', 'red', 'green'];
+    $SeasonColor = getSeasonColor( $festivity, $LitCal );
+    [ $CSScolor, $festivityColorString ] = processColors( $festivity, $locale );
+
+    echo '<tr style="background-color:' . $SeasonColor . ';' . (in_array($SeasonColor, $highContrast) ? 'color:white;' : '') . '">';
+    if($newMonth){
+        $monthRwsp = $cm + 1;
+        echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($locale === LitLocale::LATIN ? strtoupper( $months[ (int)$festivity->date->format('n') ] ) : strtoupper( $monthFmt->format( $festivity->date->format('U') ) ) ) . '</div></td>';
+        $newMonth = false;
+    }
+    $dateString = "";
+    $displayGrade = "";
+    if($keyname === 'AllSouls'){
+        $displayGrade = _( "COMMEMORATION" );
+    }
+    else if((int)$festivity->date->format('N') !== 7){
+        $displayGrade = $litGrade->i18n( $festivity->grade );
+    }
+    switch ($locale) {
+        case LitLocale::LATIN:
+            $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
+            $dayOfTheWeekLatin = $daysOfTheWeek[$dayOfTheWeek];
+            $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
+            $monthLatin = $months[$month];
+            $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
+            break;
+        case LitLocale::ENGLISH:
+            $dateString = $festivity->date->format('D, F jS, Y'); // G:i:s e') . "offset = " . $festivity->hourOffset;
+            break;
+        default:
+            $dateString = $dateFmt->format( $festivity->date->format('U') );
+    }
+    if( $ev === null ) {
+        echo '<td class="dateEntry">' . $dateString . '</td>';
+    }
+    else if ($ev === 0) {
+        echo '<td class="dateEntry" rowspan="' . ($cc + 1) . '">' . $dateString . '</td>';
+    }
+    $currentCycle = property_exists($festivity, "liturgicalYear") && $festivity->liturgicalYear !== null && $festivity->liturgicalYear !== "" ? " (" . $festivity->liturgicalYear . ")" : "";
+    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivity->common . '</i></td>';
+    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $displayGrade . '</td>';
+    echo '</tr>';
+
+
+    //echo '<td>' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivity->common . '</i></td>';
+    //echo '<td>' . $displayGrade . '</td>';
+
 }

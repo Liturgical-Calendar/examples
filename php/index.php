@@ -12,13 +12,10 @@
 ini_set('error_reporting', E_ALL);
 ini_set("display_errors", 1);
 
-include_once( 'includes/enums/LitCommon.php' );
 include_once( 'includes/enums/LitLocale.php' );
-include_once( 'includes/enums/LitGrade.php' );
 include_once( 'includes/Festivity.php' );
 include_once( 'includes/Functions.php' );
 include_once( 'includes/LitSettings.php' );
-include_once( 'includes/Messages.php' );
 include_once( 'includes/StatusCodes.php' );
 
 
@@ -29,10 +26,6 @@ define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalMetadata.php");
 
 $litSettings = new LitSettings( $_GET, $stagingURL );
-$monthFmt = IntlDateFormatter::create($litSettings->LOCALE, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'MMMM' );
-$dateFmt  = IntlDateFormatter::create($litSettings->LOCALE, IntlDateFormatter::FULL, IntlDateFormatter::FULL, 'UTC', IntlDateFormatter::GREGORIAN, 'EEEE d MMMM yyyy');
-$litCommon = new LitCommon( $litSettings->LOCALE );
-$litGrade = new LitGrade( $litSettings->LOCALE );
 
 $nationalCalendarOptions = '<option value="">---</option>';
 $diocesanCalendarOptions = '<option value="">---</option>';
@@ -139,7 +132,12 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     echo '<td><label>' . _( 'EPIPHANY' ) . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " SELECTED" : "") . '>January 6</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "") . '>Sunday between January 2 and January 8</option></select></label></td>';
     echo '<td><label>' . _( 'ASCENSION' ) . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
     echo '<td><label>CORPUS CHRISTI (CORPUS DOMINI): <select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
-    echo '<td><label>LOCALE: <select name="locale" id="locale"><option value=LitLocale::ENGLISH ' . ($litSettings->LOCALE === LitLocale::ENGLISH ? " SELECTED" : "") . '>EN</option><option value="IT" ' . ($litSettings->LOCALE === "IT" ? " SELECTED" : "") . '>IT</option><option value=LitLocale::LATIN ' . ($litSettings->LOCALE === LitLocale::LATIN ? " SELECTED" : "") . '>LA</option></select></label></td>';
+    echo '<td><label>LOCALE: ';
+    echo '<select name="locale" id="locale">';
+    echo '<option value="' . LitLocale::ENGLISH . '" ' . ($litSettings->LOCALE === LitLocale::ENGLISH ? " SELECTED" : "") . '>' . LitLocale::ENGLISH . '</option>';
+    echo '<option value="' . LitLocale::ITALIAN . '" ' . ($litSettings->LOCALE === LitLocale::ITALIAN ? " SELECTED" : "") . '>' . LitLocale::ITALIAN . '</option>';
+    echo '<option value="' . LitLocale::LATIN . '" ' . ($litSettings->LOCALE === LitLocale::LATIN ? " SELECTED" : "") . '>' . LitLocale::LATIN. '</option>';
+    echo '</select></label></td>';
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _( 'or' ) . '</i><br /><i>Scegli il Calendario desiderato dall\'elenco</i></td>';
     echo '</tr><tr>';
@@ -166,7 +164,6 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
 
         $dayCnt = 0;
         //for($i=1997;$i<=2037;$i++){
-        $highContrast = ['purple', 'red', 'green'];
 
         $LitCalKeys = array_keys($LitCal);
 
@@ -195,112 +192,12 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                 for ($ev = 0; $ev <= $cc; $ev++) {
                     $keyname = $LitCalKeys[$keyindex];
                     $festivity = $LitCal[$keyname];
-                    $festivity->common = $litCommon->C( $festivity->common );
-                    
-                    //check which liturgical season we are in, to apply color for the season to the row
-                    $SeasonColor = "green";
-                    if (($festivity->date > $LitCal["Advent1"]->date  && $festivity->date < $LitCal["Christmas"]->date) || ($festivity->date > $LitCal["AshWednesday"]->date && $festivity->date < $LitCal["Easter"]->date)) {
-                        $SeasonColor = "purple";
-                    } else if ($festivity->date > $LitCal["Easter"]->date && $festivity->date < $LitCal["Pentecost"]->date) {
-                        $SeasonColor = "white";
-                    } else if ($festivity->date > $LitCal["Christmas"]->date || $festivity->date < $LitCal["BaptismLord"]->date) {
-                        $SeasonColor = "white";
-                    }
-
-                    //We will apply the color for the single festivity only to it's own table cells
-                    $possibleColors = explode(",", $festivity->color);
-                    $CSScolor = $possibleColors[0];
-                    $festivityColorString = "";
-                    if(count($possibleColors) === 1){
-                        $festivityColorString = _( $possibleColors[0] );
-                    } else if (count($possibleColors) > 1){
-                        $possibleColors = array_map(function($txt) use ($litSettings){
-                            return _( $txt );
-                        },$possibleColors);
-                        $festivityColorString = implode("</i> " . _( "or" ) . " <i>", $possibleColors);
-                    }
-
-                    echo '<tr style="background-color:' . $SeasonColor . ';' . (in_array($SeasonColor, $highContrast) ? 'color:white;' : '') . '">';
-                    if($newMonth){
-                        $monthRwsp = $cm + 1;
-                        echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($litSettings->LOCALE === LitLocale::LATIN ? strtoupper( $months[ (int)$festivity->date->format('n') ] ) : strtoupper( $monthFmt->format( $festivity->date->format('U') ) ) ) . '</div></td>';
-                        $newMonth = false;
-                    }
-                    if ($ev == 0) {
-                        $rwsp = $cc + 1;
-                        $dateString = "";
-                        switch ($litSettings->LOCALE) {
-                            case LitLocale::LATIN:
-                                $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
-                                $dayOfTheWeekLatin = $daysOfTheWeek[$dayOfTheWeek];
-                                $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
-                                $monthLatin = $months[$month];
-                                $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
-                                break;
-                            case LitLocale::ENGLISH:
-                                $dateString = $festivity->date->format('D, F jS, Y'); // G:i:s e') . "offset = " . $festivity->hourOffset;
-                                break;
-                            default:
-                                $dateString = $dateFmt->format( $festivity->date->format('U') );
-                        }
-                        echo '<td rowspan="' . $rwsp . '" class="dateEntry">' . $dateString . '</td>';
-                    }
-                    $currentCycle = property_exists($festivity, "liturgicalYear") && $festivity->liturgicalYear !== null && $festivity->liturgicalYear !== "" ? " (" . $festivity->liturgicalYear . ")" : "";
-                    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivity->common . '</i></td>';
-                    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($keyname === 'AllSouls' ? _( "COMMEMORATION" ) : ($festivity->displayGrade !== "" ? $festivity->displayGrade : $litGrade->i18n( $festivity->grade ) ) ) . '</td>';
-                    echo '</tr>';
+                    buildHTML( $festivity, $LitCal, $newMonth, $cc, $cm, $keyname, $litSettings->LOCALE, $ev );
                     $keyindex++;
                 }
                 $keyindex--;
             } else {
-                // LET'S DO SOME MORE MANIPULATION ON THE FESTIVITY->COMMON STRINGS AND THE FESTIVITY->COLOR...
-                $festivity->common = $litCommon->C( $festivity->common );
-
-                //We will apply the color for the single festivity only to it's own table cells
-                $possibleColors = explode(",", $festivity->color);
-                $CSScolor = $possibleColors[0];
-                $festivityColorString = "";
-                if(count($possibleColors) === 1){
-                    $festivityColorString = _( $possibleColors[0] );
-                } else if (count($possibleColors) > 1){
-                    $possibleColors = array_map(function($txt) use ($litSettings){
-                        return _( $txt );
-                    }, $possibleColors);
-                    $festivityColorString = implode("</i> " . _( "or" ) . " <i>", $possibleColors);
-                }
-                echo '<tr style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : '') . '">';
-                if($newMonth){
-                    $monthRwsp = $cm +1;
-                    echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ( $litSettings->LOCALE === LitLocale::LATIN ? strtoupper( $months[ (int)$festivity->date->format('n') ] ) : strtoupper( $monthFmt->format( $festivity->date->format('U') ) ) ) . '</div></td>';
-                    $newMonth = false;
-                }
-                $dateString = "";
-                switch ($litSettings->LOCALE) {
-                    case LitLocale::LATIN:
-                        $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
-                        $dayOfTheWeekLatin = $daysOfTheWeek[ $dayOfTheWeek ];
-                        $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
-                        $monthLatin = $months[ $month ];
-                        $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
-                        break;
-                    case LitLocale::ENGLISH:
-                        $dateString = $festivity->date->format('D, F jS, Y'); //  G:i:s e') . "offset = " . $festivity->hourOffset;
-                        break;
-                    default:
-                        $dateString = $dateFmt->format( $festivity->date->format('U') );
-                }
-                $displayGrade = "";
-                if($keyname === 'AllSouls'){
-                    $displayGrade = _( "COMMEMORATION" );
-                }
-                else if((int)$festivity->date->format('N') !== 7){
-                    $displayGrade = $litGrade->i18n( $festivity->grade );
-                }
-                echo '<td class="dateEntry">' . $dateString . '</td>';
-                $currentCycle = property_exists($festivity, "liturgicalYear") && $festivity->liturgicalYear !== null && $festivity->liturgicalYear !== "" ? " (" . $festivity->liturgicalYear . ")" : "";
-                echo '<td>' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivity->common . '</i></td>';
-                echo '<td>' . $displayGrade . '</td>';
-                echo '</tr>';
+                buildHTML( $festivity, $LitCal, $newMonth, $cc, $cm, $keyname, $litSettings->LOCALE, null );
             }
         }
 
