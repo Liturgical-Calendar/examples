@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-15 18:13+0000\n"
+"POT-Creation-Date: 2022-01-16 10:38+0000\n"
 "PO-Revision-Date: 2021-12-21 22:07+0100\n"
 "Last-Translator: Ubuntu <priest@johnromanodorazio.com>\n"
 "Language-Team: French\n"
@@ -16,6 +16,83 @@ msgstr ""
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: php/index.php:100 php/index.php:149
+msgid "Generate Roman Calendar"
+msgstr ""
+
+#: php/index.php:121
+msgid "Liturgical Calendar Calculation for a Given Year"
+msgstr ""
+
+#: php/index.php:122
+#, php-format
+msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
+msgstr ""
+
+#: php/index.php:130
+msgid ""
+"You are requesting a year prior to 1970: it is not possible to request years "
+"prior to 1970."
+msgstr ""
+
+#: php/index.php:136
+msgid "Customize options for generating the Roman Calendar"
+msgstr ""
+
+#: php/index.php:138 php/index.php:157
+msgid "YEAR"
+msgstr ""
+
+#: php/index.php:139 php/index.php:157
+msgid "EPIPHANY"
+msgstr ""
+
+#: php/index.php:140 php/index.php:157
+msgid "ASCENSION"
+msgstr ""
+
+#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
+#: php/index.php:144 php/index.php:220 php/index.php:269
+#: php/includes/enums/LitCommon.php:270
+msgid "or"
+msgstr ""
+
+#: php/index.php:156
+msgid "Configurations being used to generate this calendar:"
+msgstr ""
+
+#: php/index.php:158
+msgid "NATION"
+msgstr ""
+
+#: php/index.php:158
+msgid "DIOCESE"
+msgstr ""
+
+#: php/index.php:163
+msgid "Month"
+msgstr ""
+
+#: php/index.php:163
+msgid "Date in Gregorian Calendar"
+msgstr ""
+
+#: php/index.php:163
+msgid "General Roman Calendar Festivity"
+msgstr ""
+
+#: php/index.php:163
+msgid "Grade of the Festivity"
+msgstr ""
+
+#: php/index.php:250 php/index.php:294
+msgid "COMMEMORATION"
+msgstr ""
+
+#: php/index.php:313
+msgid "Information about the current calculation of the Liturgical Year"
+msgstr ""
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:23
@@ -237,11 +314,6 @@ msgstr ""
 
 #: php/includes/enums/LitCommon.php:266
 msgid "From the Common"
-msgstr ""
-
-#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/includes/enums/LitCommon.php:270
-msgid "or"
 msgstr ""
 
 #. translators: liturgical rank. Keep lowercase
