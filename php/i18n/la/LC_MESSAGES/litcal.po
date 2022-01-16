@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-15 18:13+0000\n"
-"PO-Revision-Date: 2022-01-16 00:04+0000\n"
+"POT-Creation-Date: 2022-01-16 11:47+0000\n"
+"PO-Revision-Date: 2022-01-16 11:47+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/la/>\n"
@@ -18,6 +18,78 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.10.1\n"
+
+#: php/index.php:93 php/index.php:147
+msgid "Generate Roman Calendar"
+msgstr "Calendarium Romanum Generare"
+
+#: php/index.php:114
+msgid "Liturgical Calendar Calculation for a Given Year"
+msgstr "Computus Calendarii Liturgici pro anno dedi"
+
+#: php/index.php:115
+#, php-format
+msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
+msgstr "Repraesentatio HTML elaborata cum PHP utendo petitionem cURL ad %s"
+
+#: php/index.php:123
+msgid ""
+"You are requesting a year prior to 1970: it is not possible to request years "
+"prior to 1970."
+msgstr "Rogavisti annum ante 1970: non potest rogare annos ante annum 1970."
+
+#: php/index.php:129
+msgid "Customize options for generating the Roman Calendar"
+msgstr "Eligere optiones per generationem Calendarii Romani"
+
+#: php/index.php:131 php/index.php:155
+msgid "YEAR"
+msgstr "ANNUM"
+
+#: php/index.php:132 php/index.php:155
+msgid "EPIPHANY"
+msgstr "EPIPHANIA"
+
+#: php/index.php:133 php/index.php:155
+msgid "ASCENSION"
+msgstr "ASCENSIO"
+
+#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
+#: php/index.php:142 php/includes/enums/LitCommon.php:270
+msgid "or"
+msgstr "vel"
+
+#: php/index.php:154
+msgid "Configurations being used to generate this calendar:"
+msgstr "Optiones electuus ut generare hic calendarium:"
+
+#: php/index.php:156
+msgid "NATION"
+msgstr "GENS"
+
+#: php/index.php:156
+msgid "DIOCESE"
+msgstr "DIŒCESIS"
+
+#: php/index.php:161
+msgid "Month"
+msgstr "Mensis"
+
+#: php/index.php:161
+msgid "Date in Gregorian Calendar"
+msgstr "Dies in Calendario Gregoriano"
+
+#: php/index.php:161
+msgid "General Roman Calendar Festivity"
+msgstr "Festivitas in Calendario Romano Generale"
+
+#: php/index.php:161
+msgid "Grade of the Festivity"
+msgstr "Gradum Festivitatis"
+
+#: php/index.php:210
+msgid "Information about the current calculation of the Liturgical Year"
+msgstr "Notitiæ de computatione præsente Anni Liturgici"
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:23
@@ -240,11 +312,6 @@ msgstr ""
 #: php/includes/enums/LitCommon.php:266
 msgid "From the Common"
 msgstr "De Commune"
-
-#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/includes/enums/LitCommon.php:270
-msgid "or"
-msgstr "vel"
 
 #. translators: liturgical rank. Keep lowercase
 #: php/includes/enums/LitGrade.php:88 php/includes/enums/LitGrade.php:127

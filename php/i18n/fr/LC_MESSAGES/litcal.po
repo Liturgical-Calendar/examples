@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-15 18:13+0000\n"
+"POT-Creation-Date: 2022-01-16 11:47+0000\n"
 "PO-Revision-Date: 2021-12-21 22:07+0100\n"
 "Last-Translator: Ubuntu <priest@johnromanodorazio.com>\n"
 "Language-Team: French\n"
@@ -16,6 +16,78 @@ msgstr ""
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: php/index.php:93 php/index.php:147
+msgid "Generate Roman Calendar"
+msgstr ""
+
+#: php/index.php:114
+msgid "Liturgical Calendar Calculation for a Given Year"
+msgstr ""
+
+#: php/index.php:115
+#, php-format
+msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
+msgstr ""
+
+#: php/index.php:123
+msgid ""
+"You are requesting a year prior to 1970: it is not possible to request years "
+"prior to 1970."
+msgstr ""
+
+#: php/index.php:129
+msgid "Customize options for generating the Roman Calendar"
+msgstr ""
+
+#: php/index.php:131 php/index.php:155
+msgid "YEAR"
+msgstr ""
+
+#: php/index.php:132 php/index.php:155
+msgid "EPIPHANY"
+msgstr ""
+
+#: php/index.php:133 php/index.php:155
+msgid "ASCENSION"
+msgstr ""
+
+#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
+#: php/index.php:142 php/includes/enums/LitCommon.php:270
+msgid "or"
+msgstr ""
+
+#: php/index.php:154
+msgid "Configurations being used to generate this calendar:"
+msgstr ""
+
+#: php/index.php:156
+msgid "NATION"
+msgstr ""
+
+#: php/index.php:156
+msgid "DIOCESE"
+msgstr ""
+
+#: php/index.php:161
+msgid "Month"
+msgstr ""
+
+#: php/index.php:161
+msgid "Date in Gregorian Calendar"
+msgstr ""
+
+#: php/index.php:161
+msgid "General Roman Calendar Festivity"
+msgstr ""
+
+#: php/index.php:161
+msgid "Grade of the Festivity"
+msgstr ""
+
+#: php/index.php:210
+msgid "Information about the current calculation of the Liturgical Year"
+msgstr ""
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:23
@@ -237,11 +309,6 @@ msgstr ""
 
 #: php/includes/enums/LitCommon.php:266
 msgid "From the Common"
-msgstr ""
-
-#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/includes/enums/LitCommon.php:270
-msgid "or"
 msgstr ""
 
 #. translators: liturgical rank. Keep lowercase
