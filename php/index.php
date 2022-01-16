@@ -34,15 +34,15 @@ $dateFmt  = IntlDateFormatter::create($litSettings->LOCALE, IntlDateFormatter::F
 $litCommon = new LitCommon( $litSettings->LOCALE );
 $litGrade = new LitGrade( $litSettings->LOCALE );
 
-$nationalPresetOptions = '<option value="">---</option>';
-$diocesanPresetOptions = '<option value="">---</option>';
+$nationalCalendarOptions = '<option value="">---</option>';
+$diocesanCalendarOptions = '<option value="">---</option>';
 
 $MetaData = retrieveMetadata();
 if( $MetaData !== null ) {
     $litSettings->setMetaData( $MetaData );
     $nations = getNationsIndex( $MetaData );
-    $nationalPresetOptions = buildNationOptions( $nations, $litSettings->NationalCalendar );
-    $diocesanPresetOptions = buildDioceseOptions( $MetaData, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar );
+    $nationalCalendarOptions = buildNationOptions( $nations, $litSettings->NationalCalendar );
+    $diocesanCalendarOptions = buildDioceseOptions( $MetaData, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar );
 }
 
 $SUNDAY_CYCLE = ["A", "B", "C"];
@@ -97,7 +97,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
 <!doctype html>
 
 <head>
-    <title><?php echo __("Generate Roman Calendar", $litSettings->LOCALE) ?></title>
+    <title><?php echo _("Generate Roman Calendar" ) ?></title>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff" />
@@ -118,8 +118,8 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
 
     <?php
 
-    echo '<h1 style="text-align:center;">' . __("Liturgical Calendar Calculation for a Given Year", $litSettings->LOCALE) . ' (' . $litSettings->YEAR . ')</h1>';
-    echo '<h2 style="text-align:center;">' . sprintf(__("HTML presentation elaborated by PHP using a CURL request to a %s", $litSettings->LOCALE), "<a href=\"" . LITCAL_API_URL ."\">PHP engine</a>") . '</h2>';
+    echo '<h1 style="text-align:center;">' . _( "Liturgical Calendar Calculation for a Given Year" ) . ' (' . $litSettings->YEAR . ')</h1>';
+    echo '<h2 style="text-align:center;">' . sprintf(_( "HTML presentation elaborated by PHP using a CURL request to a %s" ), "<a href=\"" . LITCAL_API_URL ."\">PHP engine</a>") . '</h2>';
 
     if($litSettings->YEAR > 9999){
         $litSettings->YEAR = 9999;
@@ -127,40 +127,40 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     
     if ($litSettings->YEAR < 1970) {
         echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">';
-        echo __('You are requesting a year prior to 1970: it is not possible to request years prior to 1970.', $litSettings->LOCALE);
+        echo _( 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.' );
         echo '</div>';
     }
 
 
     echo '<form method="GET">';
-    echo '<fieldset style="margin-bottom:6px;"><legend>' . __('Customize options for generating the Roman Calendar',$litSettings->LOCALE) . '</legend>';
+    echo '<fieldset style="margin-bottom:6px;"><legend>' . _( 'Customize options for generating the Roman Calendar' ) . '</legend>';
     echo '<table style="width:100%;"><tr>';
-    echo '<td><label>' . __('YEAR', $litSettings->LOCALE) . ': <input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->YEAR . '" /></label></td>';
-    echo '<td><label>' . __('EPIPHANY', $litSettings->LOCALE) . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " SELECTED" : "") . '>January 6</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "") . '>Sunday between January 2 and January 8</option></select></label></td>';
-    echo '<td><label>' . __('ASCENSION', $litSettings->LOCALE) . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
+    echo '<td><label>' . _( 'YEAR' ) . ': <input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->YEAR . '" /></label></td>';
+    echo '<td><label>' . _( 'EPIPHANY' ) . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " SELECTED" : "") . '>January 6</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "") . '>Sunday between January 2 and January 8</option></select></label></td>';
+    echo '<td><label>' . _( 'ASCENSION' ) . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
     echo '<td><label>CORPUS CHRISTI (CORPUS DOMINI): <select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
     echo '<td><label>LOCALE: <select name="locale" id="locale"><option value=LitLocale::ENGLISH ' . ($litSettings->LOCALE === LitLocale::ENGLISH ? " SELECTED" : "") . '>EN</option><option value="IT" ' . ($litSettings->LOCALE === "IT" ? " SELECTED" : "") . '>IT</option><option value=LitLocale::LATIN ' . ($litSettings->LOCALE === LitLocale::LATIN ? " SELECTED" : "") . '>LA</option></select></label></td>';
     echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . __('or', $litSettings->LOCALE) . '</i><br /><i>Scegli il Calendario desiderato dall\'elenco</i></td>';
+    echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _( 'or' ) . '</i><br /><i>Scegli il Calendario desiderato dall\'elenco</i></td>';
     echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;"><label>NATION: <select id="nationalcalendar" name="nationalcalendar">' . $nationalPresetOptions . '</select></label>';
-    echo '<label style="margin-left: 18px;">DIOCESE: <select id="diocesancalendar" name="diocesancalendar"' . ($litSettings->NationalCalendar === '' ? ' DISABLED' : '') . '>' . $diocesanPresetOptions . '</select></label></td>';
+    echo '<td colspan="5" style="text-align:center;"><label>NATION: <select id="nationalcalendar" name="nationalcalendar">' . $nationalCalendarOptions . '</select></label>';
+    echo '<label style="margin-left: 18px;">DIOCESE: <select id="diocesancalendar" name="diocesancalendar"' . ($litSettings->NationalCalendar === '' ? ' DISABLED' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
     echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(__("Generate Roman Calendar", $litSettings->LOCALE)) . '" /></td>';
+    echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(_( "Generate Roman Calendar" )) . '" /></td>';
     echo '</tr></table>';
     echo '</fieldset>';
     echo '</form>';
 
     echo '<div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">';
 
-    echo '<h3>' . __('Configurations being used to generate this calendar:', $litSettings->LOCALE) . '</h3>';
-    echo '<span>' . __('YEAR', $litSettings->LOCALE) . ' = ' . $litSettings->YEAR . ', ' . __('EPIPHANY', $litSettings->LOCALE) . ' = ' . $litSettings->Epiphany . ', ' . __('ASCENSION', $litSettings->LOCALE) . ' = ' . $litSettings->Ascension . ', CORPUS CHRISTI = ' . $litSettings->CorpusChristi . ', LOCALE = ' . $litSettings->LOCALE . '</span>';
-    echo '<br /><span>' . __('NATION', $litSettings->LOCALE) . ' = ' . $litSettings->NationalCalendar . ', ' . __('DIOCESE', $litSettings->LOCALE) . ' = ' . $litSettings->DiocesanCalendar . '</span>';
+    echo '<h3>' . _( 'Configurations being used to generate this calendar:' ) . '</h3>';
+    echo '<span>' . _( 'YEAR' ) . ' = ' . $litSettings->YEAR . ', ' . _('EPIPHANY' ) . ' = ' . $litSettings->Epiphany . ', ' . _('ASCENSION' ) . ' = ' . $litSettings->Ascension . ', CORPUS CHRISTI = ' . $litSettings->CorpusChristi . ', LOCALE = ' . $litSettings->LOCALE . '</span>';
+    echo '<br /><span>' . _( 'NATION' ) . ' = ' . $litSettings->NationalCalendar . ', ' . _('DIOCESE' ) . ' = ' . $litSettings->DiocesanCalendar . '</span>';
     echo '</div>';
 
     if ($litSettings->YEAR >= 1970) {
         echo '<table id="LitCalTable">';
-        echo '<thead><tr><th>' . __("Month", $litSettings->LOCALE) . '</th><th>' . __("Date in Gregorian Calendar", $litSettings->LOCALE) . '</th><th>' . __("General Roman Calendar Festivity", $litSettings->LOCALE) . '</th><th>' . __("Grade of the Festivity", $litSettings->LOCALE) . '</th></tr></thead>';
+        echo '<thead><tr><th>' . _( "Month" ) . '</th><th>' . _( "Date in Gregorian Calendar" ) . '</th><th>' . _( "General Roman Calendar Festivity" ) . '</th><th>' . _( "Grade of the Festivity" ) . '</th></tr></thead>';
         echo '<tbody>';
 
 
@@ -212,12 +212,12 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                     $CSScolor = $possibleColors[0];
                     $festivityColorString = "";
                     if(count($possibleColors) === 1){
-                        $festivityColorString = __($possibleColors[0],$litSettings->LOCALE);
+                        $festivityColorString = _( $possibleColors[0] );
                     } else if (count($possibleColors) > 1){
                         $possibleColors = array_map(function($txt) use ($litSettings){
-                            return __($txt,$litSettings->LOCALE);
+                            return _( $txt );
                         },$possibleColors);
-                        $festivityColorString = implode("</i> " . __("or",$litSettings->LOCALE) . " <i>",$possibleColors);
+                        $festivityColorString = implode("</i> " . _( "or" ) . " <i>", $possibleColors);
                     }
 
                     echo '<tr style="background-color:' . $SeasonColor . ';' . (in_array($SeasonColor, $highContrast) ? 'color:white;' : '') . '">';
@@ -247,7 +247,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                     }
                     $currentCycle = property_exists($festivity, "liturgicalYear") && $festivity->liturgicalYear !== null && $festivity->liturgicalYear !== "" ? " (" . $festivity->liturgicalYear . ")" : "";
                     echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivity->common . '</i></td>';
-                    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($keyname === 'AllSouls' ? __("COMMEMORATION",$litSettings->LOCALE) : ($festivity->displayGrade !== "" ? $festivity->displayGrade : $litGrade->i18n( $festivity->grade ) ) ) . '</td>';
+                    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($keyname === 'AllSouls' ? _( "COMMEMORATION" ) : ($festivity->displayGrade !== "" ? $festivity->displayGrade : $litGrade->i18n( $festivity->grade ) ) ) . '</td>';
                     echo '</tr>';
                     $keyindex++;
                 }
@@ -261,12 +261,12 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                 $CSScolor = $possibleColors[0];
                 $festivityColorString = "";
                 if(count($possibleColors) === 1){
-                    $festivityColorString = __($possibleColors[0],$litSettings->LOCALE);
+                    $festivityColorString = _( $possibleColors[0] );
                 } else if (count($possibleColors) > 1){
                     $possibleColors = array_map(function($txt) use ($litSettings){
-                        return __($txt,$litSettings->LOCALE);
-                    },$possibleColors);
-                    $festivityColorString = implode("</i> " . __("or",$litSettings->LOCALE) . " <i>",$possibleColors);
+                        return _( $txt );
+                    }, $possibleColors);
+                    $festivityColorString = implode("</i> " . _( "or" ) . " <i>", $possibleColors);
                 }
                 echo '<tr style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : '') . '">';
                 if($newMonth){
@@ -291,7 +291,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
                 }
                 $displayGrade = "";
                 if($keyname === 'AllSouls'){
-                    $displayGrade = __("COMMEMORATION",$litSettings->LOCALE);
+                    $displayGrade = _( "COMMEMORATION" );
                 }
                 else if((int)$festivity->date->format('N') !== 7){
                     $displayGrade = $litGrade->i18n( $festivity->grade );
@@ -310,7 +310,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     }
 
     if (isset($LitCalData["Messages"]) && is_array($LitCalData["Messages"]) && count($LitCalData["Messages"]) > 0 ) {
-        echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . __("Information about the current calculation of the Liturgical Year",$litSettings->LOCALE) . '</th></tr></thead>';
+        echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . _( "Information about the current calculation of the Liturgical Year" ) . '</th></tr></thead>';
         echo '<tbody>';
         foreach($LitCalData["Messages"] as $idx => $message){
             echo "<tr><td>{$idx}</td><td>{$message}</td></tr>";
