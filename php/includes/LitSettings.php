@@ -25,8 +25,6 @@ class LitSettings {
         "DIOCESANCALENDAR"
     ];
 
-    const SUPPORTED_NATIONAL_PRESETS = [ "ITALY", "USA", "VATICAN" ];
-
     //If we can get more data from 1582 (year of the Gregorian reform) to 1969
     // perhaps we can lower the limit to the year of the Gregorian reform
     //For now we'll just deal with the Liturgical Calendar from the Editio Typica 1970
@@ -69,10 +67,10 @@ class LitSettings {
                         $this->LOCALE           = LitLocale::isValid( strtoupper( $value ) )        ? strtoupper( $value ) : LitLocale::LATIN;
                         break;
                     case "NATIONALCALENDAR":
-                        $this->NationalCalendar         = in_array( strtoupper( $value ), self::SUPPORTED_NATIONAL_PRESETS ) ? strtoupper( $value ) : null;
+                        $this->NationalCalendar = $value !== "" ? strtoupper( $value ) : null;
                         break;
                     case "DIOCESANCALENDAR":
-                        $this->DiocesanCalendar         = $value !== "" ? strtoupper( $value ) : null;
+                        $this->DiocesanCalendar = $value !== "" ? strtoupper( $value ) : null;
                 }
             }
         }
@@ -155,7 +153,7 @@ class LitSettings {
     public function setMetaData( array $MetaData ) {
         $this->MetaData = $MetaData;
         if( $this->DiocesanCalendar !== null ) {
-            $this->NationalCalendar = $this->MetaData[$this->DiocesanCalendar]["nation"];
+            $this->NationalCalendar = $this->MetaData["DiocesanCalendars"][$this->DiocesanCalendar]["nation"];
             $this->updateSettingsByNation();
         }
     }

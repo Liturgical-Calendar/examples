@@ -151,9 +151,10 @@ let messages = null,
     <h2 style="text-align:center;">${templateStr}</h2>
     <div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">
     <h3>${__('Configurations being used to generate this calendar')}:</h3>
-    <span>${__('YEAR')} = ${$Settings.year}, ${__('EPIPHANY')} = ${$Settings.epiphany}, ${__('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpuschristi}, LOCALE = ${$Settings.locale}</span>
+    <span>${__('YEAR')} = ${$Settings.year}, ${__('EPIPHANY')} = ${$Settings.epiphany}, ${__('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpuschristi}, LOCALE = ${$Settings.locale}, NATIONALCALENDAR = ${$Settings.nationalcalendar}, DIOCESANCALENDAR = ${$Settings.diocesancalendar}</span>
     </div>`,
             $tbheader = `<tr><th>${__("Month")}</th><th>${__("Date in Gregorian Calendar")}</th><th>${__("General Roman Calendar Festivity")}</th><th>${__("Grade of the Festivity")}</th></tr>`,
+            //TODO: gather supported Nations directly from the LitCalMetadata.php API
             $settingsDialog = `<div id="settingsWrapper"><form id="calSettingsForm"><table id="calSettings">
 <tr><td colspan="2"><label>${__('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
 <tr><td><label>${__('LOCALE')}: </td><td><select name="locale" id="locale"><option value="en" ${($Settings.locale === "en" ? " SELECTED" : "")}>ENGLISH</option><option value="it" ${($Settings.locale === "it" ? " SELECTED" : "")}>ITALIANO</option><option value="la" ${($Settings.locale === "la" ? " SELECTED" : "")}>LATINO</option></select></label></td><td>${__('NATIONAL PRESET')}: </td><td><select id="nationalcalendar" name="nationalcalendar"><option value=""></option><option value="VATICAN" ${($Settings.nationalcalendar === "VATICAN" ? " SELECTED" : "")}>${__('Vatican')}</option><option value="ITALY" ${($Settings.nationalcalendar === "ITALY" ? " SELECTED" : "")}>${__('Italy')}</option><option value="USA" ${($Settings.nationalcalendar === "USA" ? " SELECTED" : "")}>USA</option></select></td></tr>
@@ -265,11 +266,12 @@ let messages = null,
             $('#diocesancalendar').prop('disabled', true);
         } else {
             let $DiocesesList;
-            if(Object.keys($index).length > 0){
-                $DiocesesList = Object.filter($index, key => key.nation === val);
+            if(Object.keys($index.DiocesanCalendars).length > 0){
+                $DiocesesList = Object.filter($index.DiocesanCalendars, key => key.nation === val);
             }
             if(Object.keys($DiocesesList).length > 0) {
                 $('#diocesancalendar').prop('disabled', false);
+                $('#diocesancalendar').append('<option value="">---</option>');
                 for(const [key, value] of Object.entries($DiocesesList)){
                     $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
                 }
@@ -288,7 +290,7 @@ jQuery.ajax({
     success: data => {
         console.log('retrieved data from index file:');
         console.log(data);
-        $index = data;
+        $index = data.LitCalMetadata;
     }
 });
 
@@ -384,6 +386,6 @@ $(document).ready(() => {
         handleDiocesesList( $(ev.currentTarget).val() );
     });
 
-    $(document).on('change', '#diocesancalendar', () => { $Settings.diocesancalendar = $(ev.currentTarget).val(); });
+    $(document).on('change', '#diocesancalendar', ev => { $Settings.diocesancalendar = $(ev.currentTarget).val(); });
 
 });

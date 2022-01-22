@@ -68,7 +68,7 @@ function retrieveMetadata() {
         $metadata = json_decode( $metadataRaw, true );
     }
     curl_close( $ch );
-    return $metadata;
+    return $metadata["LitCalMetadata"];
 }
 
 function sendAPIRequest( $queryData ) {
@@ -106,16 +106,12 @@ function sendAPIRequest( $queryData ) {
 function getNationsIndex( $MetaData ) {
     $nations = [];
     if( $MetaData !== null ) {
-        $nations = array_column($MetaData, "nation");
+        $nations = array_column($MetaData["DiocesanCalendars"], "nation");
     }
-    if( !in_array( "VATICAN", $nations ) ) {
-        array_push( $nations, "VATICAN" );
-    }
-    if( !in_array( "ITALY", $nations ) ) {
-        array_push( $nations, "ITALY" );
-    }
-    if( !in_array( "USA", $nations ) ) {
-        array_push( $nations, "USA" );
+    foreach( array_keys($MetaData["NationalCalendars"]) as $key ) {
+        if( !in_array( $key, $nations ) ) {
+            array_push( $nations, $key );
+        }
     }
     return array_unique( $nations, SORT_STRING );
 }
@@ -123,7 +119,7 @@ function getNationsIndex( $MetaData ) {
 function buildDioceseOptions( $MetaData, $NATION, $DIOCESE ) {
     $options = '<option value=""></option>';
     if( $MetaData !== null ) {
-        foreach( $MetaData as $key => $value ){
+        foreach( $MetaData["DiocesanCalendars"] as $key => $value ){
             if( $value['nation'] === $NATION ) {
                 $options .= "<option value='{$key}'" . ( $DIOCESE === $key ? ' SELECTED' : '' ) . ">{$value['diocese']}</option>";
             }

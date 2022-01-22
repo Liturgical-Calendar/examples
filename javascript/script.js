@@ -306,6 +306,7 @@ let today = new Date(),
                 </div>`,
             tbheader = `
                 <tr><th>${i18next.t("Month")}</th><th>${i18next.t("Date-Gregorian-Calendar")}</th><th>${i18next.t("General-Roman-Calendar-Festivity")}</th><th>${i18next.t("Grade-of-the-Festivity")}</th></tr>`,
+            //TODO: gather supported Nations directly from the LitCalMetadata.php API
             settingsDialog = `<div id="settingsWrapper"><form id="calSettingsForm"><table id="calSettings">
                 <tr><td colspan="2"><label>${i18next.t('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
                 <tr><td><label>LOCALE: </td><td><select name="locale" id="locale"><option value="EN" ${($Settings.locale === "EN" ? " SELECTED" : "")}>ENGLISH</option><option value="IT" ${($Settings.locale === "IT" ? " SELECTED" : "")}>ITALIANO</option><option value="LA" ${($Settings.locale === "LA" ? " SELECTED" : "")}>LATINO</option></select></label></td><td>${i18next.t('National-Calendar')}: </td><td><select id="nationalcalendar" name="nationalcalendar"><option value=""></option><option value="VATICAN" ${($Settings.nationalcalendar === "VATICAN" ? " SELECTED" : "")}>${i18next.t('Vatican')}</option><option value="ITALY" ${($Settings.nationalcalendar === "ITALY" ? " SELECTED" : "")}>${i18next.t('Italy')}</option><option value="USA" ${($Settings.nationalcalendar === "USA" ? " SELECTED" : "")}>USA</option></select></td></tr>
@@ -362,7 +363,6 @@ let today = new Date(),
         }
 
     },
-    $index = {},
     $DiocesesUSA,
     $DiocesesItaly;
 
@@ -375,9 +375,9 @@ let today = new Date(),
         success: data => {
             console.log('retrieved data from index file:');
             console.log(data);
-            $index = data;
-            $DiocesesUSA = Object.filter($index, key => key.nation == "USA");
-            $DiocesesItaly = Object.filter($index, key => key.nation == "ITALY");
+            const { DiocesanCalendars } = data.LitCalMetadata;
+            $DiocesesUSA = Object.filter(DiocesanCalendars, key => key.nation == "USA");
+            $DiocesesItaly = Object.filter(DiocesanCalendars, key => key.nation == "ITALY");
         }
     });
 
