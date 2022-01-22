@@ -29,7 +29,9 @@ jobs:
         run: |
           sudo apt-get install -y gettext
           xgettext --from-code=UTF-8 --add-comments='translators:' --keyword="pgettext:1c,2" -o php/i18n/litcal.pot php/index.php php/includes/enums/LitColor.php php/includes/enums/LitCommon.php php/includes/enums/LitGrade.php
+          echo "::set-output name=POT_LINES_CHANGED::$(git diff -U0 | grep '^[+|-][^+|-]' | grep -Ev '^[+-]"POT-Creation-Date' | tee >(wc -l))"
       - name: Push changes  # push the output folder to your repo
+        if: ${{ steps.update_pot.outputs.POT_LINES_CHANGED > 0 }}
         uses: actions-x/commit@v4
         with:
           # The committer's email address
