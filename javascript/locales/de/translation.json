@@ -23,7 +23,7 @@
     "YEAR": "",
     "EPIPHANY": "",
     "ASCENSION": "",
-    "Month": "",
+    "Month": "Monat",
     "Date-Gregorian-Calendar": "",
     "General-Roman-Calendar-Festivity": "",
     "Grade-of-the-Festivity": "",
@@ -42,5 +42,6 @@
     "FEAST-OF-THE-LORD": "",
     "SOLEMNITY": "",
     "HIGHER-RANKING-SOLEMNITY": "",
-    "January-6": ""
+    "January-6": "",
+    "Day": "Tag"
 }
