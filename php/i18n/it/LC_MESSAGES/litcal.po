@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-13 11:59+0000\n"
+"POT-Creation-Date: 2022-02-13 12:35+0000\n"
 "PO-Revision-Date: 2022-01-30 15:15+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
@@ -95,27 +95,27 @@ msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informazioni sull'attuale calcolo dell'Anno Liturgico"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:23
+#: php/includes/enums/LitColor.php:26
 msgid "green"
 msgstr "verde"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:26
+#: php/includes/enums/LitColor.php:29
 msgid "purple"
 msgstr "viola"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:29
+#: php/includes/enums/LitColor.php:32
 msgid "white"
 msgstr "bianco"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:32
+#: php/includes/enums/LitColor.php:35
 msgid "red"
 msgstr "rosso"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:35
+#: php/includes/enums/LitColor.php:38
 msgid "pink"
 msgstr "rosa"
 
