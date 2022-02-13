@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 16:06+0000\n"
+"POT-Creation-Date: 2022-02-13 11:59+0000\n"
 "PO-Revision-Date: 2022-01-23 12:48+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
@@ -55,7 +55,7 @@ msgid "ASCENSION"
 msgstr ""
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:142 php/includes/enums/LitCommon.php:270
+#: php/index.php:142 php/includes/enums/LitCommon.php:274
 msgid "or"
 msgstr ""
 
@@ -309,7 +309,7 @@ msgctxt "(SING_MASC)"
 msgid "of"
 msgstr ""
 
-#: php/includes/enums/LitCommon.php:266
+#: php/includes/enums/LitCommon.php:270
 msgid "From the Common"
 msgstr ""
 
