@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-22 16:06+0000\n"
-"PO-Revision-Date: 2022-01-23 12:48+0000\n"
+"POT-Creation-Date: 2022-02-13 12:35+0000\n"
+"PO-Revision-Date: 2022-02-16 09:56+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/fr/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 
 #: php/index.php:114
 msgid "Liturgical Calendar Calculation for a Given Year"
-msgstr ""
+msgstr "Calcul du calendrier liturgique pour une année donnée"
 
 #: php/index.php:115
 #, php-format
@@ -55,7 +55,7 @@ msgid "ASCENSION"
 msgstr ""
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:142 php/includes/enums/LitCommon.php:270
+#: php/index.php:142 php/includes/enums/LitCommon.php:274
 msgid "or"
 msgstr ""
 
@@ -92,27 +92,27 @@ msgid "Information about the current calculation of the Liturgical Year"
 msgstr ""
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:23
+#: php/includes/enums/LitColor.php:26
 msgid "green"
 msgstr ""
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:26
+#: php/includes/enums/LitColor.php:29
 msgid "purple"
 msgstr ""
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:29
+#: php/includes/enums/LitColor.php:32
 msgid "white"
 msgstr ""
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:32
+#: php/includes/enums/LitColor.php:35
 msgid "red"
 msgstr ""
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:35
+#: php/includes/enums/LitColor.php:38
 msgid "pink"
 msgstr ""
 
@@ -309,7 +309,7 @@ msgctxt "(SING_MASC)"
 msgid "of"
 msgstr ""
 
-#: php/includes/enums/LitCommon.php:266
+#: php/includes/enums/LitCommon.php:270
 msgid "From the Common"
 msgstr ""
 
@@ -336,19 +336,19 @@ msgstr ""
 #. translators: liturgical rank. Keep UPPERCASE
 #: php/includes/enums/LitGrade.php:108
 msgid "FEAST"
-msgstr ""
+msgstr "FÊTE"
 
 #. translators: liturgical rank. Keep UPPERCASE
 #: php/includes/enums/LitGrade.php:113
 msgid "FEAST OF THE LORD"
-msgstr ""
+msgstr "FÊTE DU SEIGNEUR"
 
 #. translators: liturgical rank. Keep UPPERCASE
 #: php/includes/enums/LitGrade.php:118
 msgid "SOLEMNITY"
-msgstr ""
+msgstr "SOLENNITÉ"
 
 #. translators: liturgical rank. Keep lowercase
 #: php/includes/enums/LitGrade.php:123
 msgid "celebration with precedence over solemnities"
-msgstr ""
+msgstr "célébration qui prime sur les solennités"
