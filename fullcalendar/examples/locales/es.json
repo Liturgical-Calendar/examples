@@ -47,7 +47,7 @@
     "pink": "",
     "Customize options for generating the Roman Calendar": "",
     "Generate Roman Calendar": "",
-    "Liturgical Calendar Calculation for a Given Year": "",
+    "Liturgical Calendar Calculation for a Given Year": "Cálculo del Calendario Litúrgico para un año dado",
     "HTML presentation elaborated by JAVASCRIPT using an AJAX request to a %s": "",
     "You are requesting a year prior to 1970: it is not possible to request years prior to 1970.": "",
     "Configurations being used to generate this calendar": "",
@@ -72,7 +72,7 @@
     "Commemoration": "",
     "Optional memorial": "",
     "Memorial": "",
-    "FEAST": "",
+    "FEAST": "FIESTA",
     "FEAST OF THE LORD": "FIESTA DEL SEÑOR",
     "SOLEMNITY": "SOLEMNIDAD",
     "celebration with precedence over solemnities": ""
