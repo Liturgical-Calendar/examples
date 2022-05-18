@@ -19,7 +19,10 @@ class LitColor {
         return empty( array_diff( $values, self::$values ) );
     }
 
-    public static function i18n( string $value, string $locale ) : string {
+    public static function i18n( string|array $value, string $locale ) : string|array {
+        if( is_array( $value ) ) {
+            return array_map( function($item) use($locale) { return self::i18n( $item, $locale ); }, $value );
+        }
         switch( $value ) {
             case self::GREEN:
                 /**translators: context = liturgical color */

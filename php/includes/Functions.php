@@ -167,7 +167,7 @@ function getSeasonColor( $festivity, $LitCal ) {
 
 function processColors( $festivity, $locale ) {
     //We will apply the color for the single festivity only to it's own table cells
-    $possibleColors = explode(",", $festivity->color);
+    $possibleColors = is_string( $festivity->color ) ? explode(",", $festivity->color) : $festivity->color;
     $CSScolor = $possibleColors[0];
     $festivityColorString = "";
     if(count($possibleColors) === 1){
@@ -229,7 +229,8 @@ function buildHTML( $festivity, $LitCal, &$newMonth, $cc, $cm, $keyname, $locale
         echo '<td class="dateEntry" rowspan="' . ($cc + 1) . '">' . $dateString . '</td>';
     }
     $currentCycle = property_exists($festivity, "liturgicalYear") && $festivity->liturgicalYear !== null && $festivity->liturgicalYear !== "" ? " (" . $festivity->liturgicalYear . ")" : "";
-    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivity->common . '</i></td>';
+    $festivityCommonStr = is_array( $festivity->common ) ? implode( ', ', $festivity->common ) : $festivity->common;
+    echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . $festivityColorString . '</i><br /><i>' . $festivityCommonStr . '</i></td>';
     echo '<td style="background-color:' . $CSScolor . ';' . (in_array($CSScolor, $highContrast) ? 'color:white;' : 'color:black;') . '">' . $displayGrade . '</td>';
     echo '</tr>';
 

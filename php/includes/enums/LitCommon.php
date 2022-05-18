@@ -235,8 +235,11 @@ class LitCommon {
         return empty( array_diff( $values, self::$values ) );
     }
 
-    public function i18n( string $value ) : string {
-        if( self::isValid( $value ) ) {
+    public function i18n( string|array $value ) : string|array {
+        if( is_array( $value ) && self::areValid( $value ) ) {
+            return array_map( [ $this, 'i18n' ], $value );
+        }
+        if( is_string( $value ) && self::isValid( $value ) ) {
             if( $this->locale === "la" ) {
                 return self::LATIN[ $value ];
             } else{
@@ -246,7 +249,10 @@ class LitCommon {
         return $value;
     }
 
-    public function getPossessive( string $value ) : string {
+    public function getPossessive( string|array $value ) : string|array {
+        if( is_array( $value ) ) {
+            return array_map( [ $this, 'getPossessive' ], $value );
+        }
         return $this->locale === "la" ? "" : self::POSSESSIVE( $value );
     }
 
@@ -254,7 +260,10 @@ class LitCommon {
      * Function C
      * Returns a translated human readable string of the Common or the Proper
      */
-    public function C( string $common="" ) : string {
+    public function C( string|array $common="" ) : string|array {
+        if( is_array( $common ) ) {
+            return array_map( [ $this, 'C' ], $common );
+        }
         if ($common !== "") {
             if( $common === LitCommon::PROPRIO ) {
                 $common = $this->i18n( $common );

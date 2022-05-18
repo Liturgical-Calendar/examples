@@ -33,11 +33,11 @@ i18next.use(i18nextHttpBackend).init({
 });
 
 const translCommon = common => {
-    if( common === '' ) return common;
-    if( common === 'Proper' ) {
+    if( common.length === 0 ) return '';
+    if( common.includes( 'Proper' ) ) {
         return i18next.t('Proper');
     } else {
-        $commons = common.split(",");
+        $commons = common; //.split(",");
         $commons = $commons.map($txt => {
             let $common = $txt.split(":");
             let commonGeneralKey = $common[0].replaceAll(' ', '-');
@@ -128,7 +128,7 @@ let today = new Date(),
         return seasonColor;
     },
     processColors = festivity => {
-        let possibleColors =  festivity.color.split(",");
+        let possibleColors = festivity.color; //.split(",");
         let CSSColor = possibleColors[0];
         let festivityColorString;
         if(possibleColors.length === 1){
