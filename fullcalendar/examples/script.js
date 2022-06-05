@@ -55,7 +55,7 @@ let messages = null,
             let keyname = LitCalKeys[keyindex];
             let festivity = LitCal[keyname];
             let dy = (festivity.date.getDay() === 0 ? 7 : festivity.date.getDay()); // get the day of the week
-            let possibleColors = festivity.color.split(",");
+            let possibleColors = festivity.color; //.split(",")
             let CSScolor = possibleColors[0];
             let textColor = (CSScolor === 'white' || CSScolor === 'pink' ? 'black' : 'white');
             let festivityGrade = '';
@@ -193,9 +193,9 @@ let messages = null,
         }
         return key;
     },
-    _C = $common => {
-        if ($common !== "" && $common !== "Proper") {
-            let $commons = $common.split(",");
+    _C = $commons => {
+        let $common = '';
+        if ($commons.length && !$commons.includes( "Proper" ) ) {
             $commons = $commons.map($txt => {
                 let $commonArr = $txt.split(":");
                 let $commonGeneral = __($commonArr[0]);
@@ -224,36 +224,33 @@ let messages = null,
                 return __("From the Common") + " " + __($commonKey) + " " + $commonGeneral + ($commonSpecific != "" ? ": " + $commonSpecific : "");
             });
             $common = $commons.join("; " + __("or") + " ");
-        } else if ($common == "Proper") {
+        } else if ($commons.length && $commons.includes( "Proper" ) ) {
             $common = __("Proper");
         }
         return $common;
     },
-    _CC = ($colorstr, html) => {
+    _CC = ($colors, html) => {
         if (html === true) {
-            if ($colorstr.indexOf(',') !== -1) {
-                console.log($colorstr);
-                let $colors = $colorstr.split(",");
-                $colors = $colors.map($txt => {
+            let $highlightColor = $colors.includes( 'pink' ) ? 'text-shadow: 0 0 2px #000;' : '';
+            if( $colors.length > 1 ) {
+                let $colorstr = $colors.map($txt => {
                     let $clr = $txt === 'white' ? 'gray' : $txt;
                     return '<span style="color:' + $clr + ';">' + __($txt) + '</span>';
                 });
-                return $colors.join(" " + __("or") + " ");
+                return $colorstr.join(" " + __("or") + " ");
             }
             else {
-                let $highlightColor = $colorstr === 'pink' ? 'text-shadow: 0 0 2px #000;' : '';
-                return '<span style="color:' + ($colorstr === 'white' ? 'gray' : $colorstr) + ';' + $highlightColor + '">' + __($colorstr) + '</span>';
+                return '<span style="color:' + ($colors.includes( 'white' ) ? 'gray' : $colors[0]) + ';' + $highlightColor + '">' + __($colors[0]) + '</span>';
             }
+
         }
         else {
-            if ($colorstr.indexOf(',') !== -1) {
-                console.log($colorstr);
-                let $colors = $colorstr.split(",");
-                $colors = $colors.map( $txt => __($txt) );
-                return $colors.join(" " + __("or") + " ");
+            if( $colors.length > 1 ) {
+                let $colorstr = $colors.map( $txt => __($txt) );
+                return $colorstr.join(" " + __("or") + " ");
             }
             else {
-                return __($colorstr);
+                return __($colors[0]);
             }
         }
     },
