@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-13 12:35+0000\n"
-"PO-Revision-Date: 2022-01-30 15:15+0000\n"
+"POT-Creation-Date: 2022-10-11 10:38+0000\n"
+"PO-Revision-Date: 2022-10-11 10:44+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #: php/index.php:93 php/index.php:147
 msgid "Generate Roman Calendar"
@@ -58,7 +58,7 @@ msgid "ASCENSION"
 msgstr "ASCENSIONE"
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:142 php/includes/enums/LitCommon.php:274
+#: php/index.php:142 php/includes/enums/LitCommon.php:283
 msgid "or"
 msgstr "oppure"
 
@@ -95,27 +95,27 @@ msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informazioni sull'attuale calcolo dell'Anno Liturgico"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:26
+#: php/includes/enums/LitColor.php:29
 msgid "green"
 msgstr "verde"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:29
+#: php/includes/enums/LitColor.php:32
 msgid "purple"
 msgstr "viola"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:32
+#: php/includes/enums/LitColor.php:35
 msgid "white"
 msgstr "bianco"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:35
+#: php/includes/enums/LitColor.php:38
 msgid "red"
 msgstr "rosso"
 
 #. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:38
+#: php/includes/enums/LitColor.php:41
 msgid "pink"
 msgstr "rosa"
 
@@ -291,7 +291,7 @@ msgstr "Per le sante"
 #. translators: (singular feminine) glue between "From the Common" and the actual common. Latin: leave empty!
 #: php/includes/enums/LitCommon.php:170 php/includes/enums/LitCommon.php:182
 msgctxt "(SING_FEMM)"
-msgid "of"
+msgid "of the"
 msgstr "della"
 
 #. translators: (plural feminine) glue between "From the Common" and the actual common. Latin: leave empty!
@@ -309,49 +309,49 @@ msgstr "dei"
 #. translators: (singular masculine) glue between "From the Common" and the actual common. Latin: leave empty!
 #: php/includes/enums/LitCommon.php:185
 msgctxt "(SING_MASC)"
-msgid "of"
+msgid "of the"
 msgstr "del"
 
-#: php/includes/enums/LitCommon.php:270
+#: php/includes/enums/LitCommon.php:279
 msgid "From the Common"
 msgstr "Dal Comune"
 
-#. translators: liturgical rank. Keep lowercase
-#: php/includes/enums/LitGrade.php:88 php/includes/enums/LitGrade.php:127
+#: php/includes/enums/LitGrade.php:98
 msgid "weekday"
 msgstr "feria"
 
-#. translators: liturgical rank. Keep Capitalized
-#: php/includes/enums/LitGrade.php:93
+#: php/includes/enums/LitGrade.php:101
 msgid "Commemoration"
 msgstr "Commemorazione"
 
-#. translators: liturgical rank. Keep Capitalized
-#: php/includes/enums/LitGrade.php:98
+#: php/includes/enums/LitGrade.php:104
 msgid "Optional memorial"
 msgstr "Memoria facoltativa"
 
-#. translators: liturgical rank. Keep Capitalized
-#: php/includes/enums/LitGrade.php:103
+#: php/includes/enums/LitGrade.php:107
 msgid "Memorial"
 msgstr "Memoria"
 
-#. translators: liturgical rank. Keep UPPERCASE
-#: php/includes/enums/LitGrade.php:108
+#: php/includes/enums/LitGrade.php:110
 msgid "FEAST"
 msgstr "FESTA"
 
-#. translators: liturgical rank. Keep UPPERCASE
 #: php/includes/enums/LitGrade.php:113
 msgid "FEAST OF THE LORD"
 msgstr "FESTA DEL SIGNORE"
 
-#. translators: liturgical rank. Keep UPPERCASE
-#: php/includes/enums/LitGrade.php:118
+#: php/includes/enums/LitGrade.php:116
 msgid "SOLEMNITY"
 msgstr "SOLENNITÀ"
 
-#. translators: liturgical rank. Keep lowercase
-#: php/includes/enums/LitGrade.php:123
+#: php/includes/enums/LitGrade.php:119
 msgid "celebration with precedence over solemnities"
 msgstr "celebrazione con precedenza sulle solennità"
+
+#~ msgctxt "(SING_FEMM)"
+#~ msgid "of"
+#~ msgstr "della"
+
+#~ msgctxt "(SING_MASC)"
+#~ msgid "of"
+#~ msgstr "del"
