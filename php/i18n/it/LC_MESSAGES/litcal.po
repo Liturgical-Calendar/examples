@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-11 10:38+0000\n"
-"PO-Revision-Date: 2022-01-30 15:15+0000\n"
+"PO-Revision-Date: 2022-10-11 10:44+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #: php/index.php:93 php/index.php:147
 msgid "Generate Roman Calendar"
@@ -292,7 +292,7 @@ msgstr "Per le sante"
 #: php/includes/enums/LitCommon.php:170 php/includes/enums/LitCommon.php:182
 msgctxt "(SING_FEMM)"
 msgid "of the"
-msgstr ""
+msgstr "della"
 
 #. translators: (plural feminine) glue between "From the Common" and the actual common. Latin: leave empty!
 #: php/includes/enums/LitCommon.php:173
@@ -310,7 +310,7 @@ msgstr "dei"
 #: php/includes/enums/LitCommon.php:185
 msgctxt "(SING_MASC)"
 msgid "of the"
-msgstr ""
+msgstr "del"
 
 #: php/includes/enums/LitCommon.php:279
 msgid "From the Common"
