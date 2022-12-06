@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-11 10:38+0000\n"
-"PO-Revision-Date: 2022-02-16 09:56+0000\n"
+"PO-Revision-Date: 2022-12-06 18:59+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #: php/index.php:93 php/index.php:147
 msgid "Generate Roman Calendar"
@@ -323,11 +323,11 @@ msgstr ""
 
 #: php/includes/enums/LitGrade.php:104
 msgid "Optional memorial"
-msgstr ""
+msgstr "Mémoire optionnelle"
 
 #: php/includes/enums/LitGrade.php:107
 msgid "Memorial"
-msgstr ""
+msgstr "Mémoire"
 
 #: php/includes/enums/LitGrade.php:110
 msgid "FEAST"
