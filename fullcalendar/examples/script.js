@@ -11,15 +11,15 @@ const stagingURL = isStaging ? '-staging' : '';
 const endpointV = isStaging ? 'dev' : 'v3';
 const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalEngine.php`;
 const metadataURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalMetadata.php`;
-const supportedUILocales = [ 'de', 'en', 'es', 'fr', 'it', 'la', 'pt' ];
+const supportedUILocales = [ 'de', 'en', 'es', 'fr', 'it', 'la', 'pt', 'nl' ];
 
 let messages = null,
     loadMessages = (locale,callback) => {
         console.log('retrieving messages with locale = ' + locale);
-        if( supportedUILocales.includes(locale) === false ) {
+        if( supportedUILocales.includes(locale.split('_')[0]) === false ) {
             locale = 'en';
         }
-        $.getJSON( `locales/${locale}.json`, data => {
+        $.getJSON( `locales/${locale.split('_')[0]}.json`, data => {
             messages = data;
             callback();
         }).fail(() => { console.log("there was an error retrieving local messages..."); });
