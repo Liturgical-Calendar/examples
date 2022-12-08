@@ -1098,8 +1098,6 @@ let today = new Date(),
 
         handleDiocesesList();
     },
-    $DiocesesUSA,
-    $DiocesesItaly,
     handleDiocesesList = val => {
         $('#diocesancalendar').empty();
         if( val === "VATICAN" || val === "" ) {
@@ -1148,7 +1146,7 @@ $(document).on("submit", "#calSettingsForm", event => {
 $(document).on('change','#nationalcalendar', ev => {
     const currentSelectedNation = $(ev.currentTarget).val();
     $Settings.nationalcalendar = currentSelectedNation;
-
+    let nationalCalSettingLocale = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Locale;
     switch( currentSelectedNation ) {
         case "VATICAN":
             $Settings.locale = 'la';
@@ -1168,7 +1166,6 @@ $(document).on('change','#nationalcalendar', ev => {
             $('#calSettingsForm :input').prop('disabled', false);
             break;
         default:
-            let nationalCalSettingLocale = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Locale;
             $Settings.locale        = nationalCalSettingLocale.includes('_') ? nationalCalSettingLocale : nationalCalSettingLocale.toLowerCase();
             $Settings.epiphany      = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Epiphany;
             $Settings.ascension     = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Ascension;
@@ -1216,9 +1213,6 @@ i18next.use(i18nextHttpBackend).init({
                 console.log('retrieved data from index file:');
                 console.log(data);
                 $index = data.LitCalMetadata;
-                const { DiocesanCalendars } = $index;
-                $DiocesesUSA = Object.filter(DiocesanCalendars, key => key.nation == "USA");
-                $DiocesesItaly = Object.filter(DiocesanCalendars, key => key.nation == "ITALY");
                 createHeader();
                 $('#settingsWrapper').dialog("open");
             }
