@@ -161,14 +161,10 @@ let messages = null,
     <span>${__('YEAR')} = ${$Settings.year}, ${__('EPIPHANY')} = ${$Settings.epiphany}, ${__('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpuschristi}, LOCALE = ${$Settings.locale}, NATIONALCALENDAR = ${$Settings.nationalcalendar}, DIOCESANCALENDAR = ${$Settings.diocesancalendar}</span>
     </div>`,
             $tbheader = `<tr><th>${__("Month")}</th><th>${__("Date in Gregorian Calendar")}</th><th>${__("General Roman Calendar Festivity")}</th><th>${__("Grade of the Festivity")}</th></tr>`,
-            //TODO: gather supported Nations directly from the LitCalMetadata.php API
             $nationalCalendarSelect = `<select id="nationalcalendar" name="nationalcalendar"><option value=""></option>`;
             for( const key of Object.keys($index.NationalCalendars) ) {
                 $nationalCalendarSelect += `<option value="${key}" ${($Settings.nationalcalendar === key ? " SELECTED" : "")}>${key}</option>`;
             }
-            //$nationalCalendarSelect += `<option value="VATICAN" ${($Settings.nationalcalendar === "VATICAN" ? " SELECTED" : "")}>${__('Vatican')}</option>
-                //<option value="ITALY" ${($Settings.nationalcalendar === "ITALY" ? " SELECTED" : "")}>${__('Italy')}</option>
-                //<option value="USA" ${($Settings.nationalcalendar === "USA" ? " SELECTED" : "")}>USA</option>`;
             $nationalCalendarSelect += `</select>`;
             const $localesSelect = `<select class="form-control" name="locale" id="locale">
                 <option value="af">Afrikaans</option>
@@ -923,9 +919,6 @@ let messages = null,
                 <option value="zu">Zulu</option>
                 <option value="zu_ZA">Zulu (South Africa)</option>
                 </select>`;
-                //<select name="locale" id="locale"><option value="en" ${($Settings.locale === "en" ? " SELECTED" : "")}>ENGLISH</option>
-                //<option value="it" ${($Settings.locale === "it" ? " SELECTED" : "")}>ITALIANO</option>
-                //<option value="la" ${($Settings.locale === "la" ? " SELECTED" : "")}>LATINO</option></select>
         let $settingsDialog = `<div id="settingsWrapper"><form id="calSettingsForm"><table id="calSettings">
 <tr><td colspan="2"><label>${__('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
 <tr><td><label>${__('LOCALE')}: </td><td>${$localesSelect}</label></td><td>${__('NATIONAL PRESET')}: </td><td>${$nationalCalendarSelect}</td></tr>
@@ -953,6 +946,14 @@ let messages = null,
             hide: {
                 effect: 'fade',
                 duration: 500
+            },
+            open: () => {
+                $('#locale').val( $Settings.locale );
+                if( $Settings.nationalcalendar === '' ) {
+                    $('#calSettingsForm :input').prop('disabled', false);
+                } else {
+                    $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
+                }
             },
             autoOpen: false
         });
@@ -1065,6 +1066,68 @@ jQuery.ajax({
     }
 });
 
+$(document).on('click', '#openSettings', () => {
+    $('#settingsWrapper').dialog("open");
+});
+
+$(document).on("submit", '#calSettingsForm', event => {
+    event.preventDefault();
+    let formValues = $(event.currentTarget).serializeArray();
+    for (let obj of formValues) {
+        $Settings[obj.name] = obj.value;
+    }
+    console.log('$Settings = ');
+    console.log($Settings);
+    $('#settingsWrapper').dialog("close");
+    Cookies.set( 'litCalSettings', JSON.stringify($Settings), { secure: true } );
+    if( $Settings.locale !== 'en' ){
+        loadMessages( $Settings.locale, genLitCal);
+    } else {
+        messages = null;
+        genLitCal();
+    }
+    return false;
+});
+
+
+$(document).on('change', '#nationalcalendar', ev => {
+    const currentSelectedNation = $(ev.currentTarget).val();
+    $Settings.nationalcalendar = currentSelectedNation;
+    switch( currentSelectedNation ) {
+        case "VATICAN":
+            $Settings.locale = 'la';
+            $Settings.epiphany = 'JAN6';
+            $Settings.ascension = 'THURSDAY';
+            $Settings.corpuschristi = 'THURSDAY';
+            $Settings.diocesancalendar = '';
+            $('#locale').val($Settings.locale);
+            $('#epiphany').val($Settings.epiphany);
+            $('#ascension').val($Settings.ascension);
+            $('#corpuschristi').val($Settings.corpuschristi);
+            $('#diocesancalendar').val($Settings.diocesancalendar);
+
+            $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
+            break;
+        case "":
+            $('#calSettingsForm :input').prop('disabled', false);
+            break;
+        default:
+            let nationalCalSettingLocale = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Locale;
+            $Settings.locale        = nationalCalSettingLocale.includes('_') ? nationalCalSettingLocale : nationalCalSettingLocale.toLowerCase();
+            $Settings.epiphany      = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Epiphany;
+            $Settings.ascension     = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Ascension;
+            $Settings.corpuschristi = $index.NationalCalendarsMetadata[currentSelectedNation].settings.CorpusChristi;
+            $('#locale').val($Settings.locale);
+            $('#epiphany').val($Settings.epiphany);
+            $('#ascension').val($Settings.ascension);
+            $('#corpuschristi').val($Settings.corpuschristi);
+            $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
+    }
+    handleDiocesesList( currentSelectedNation );
+});
+
+$(document).on('change', '#diocesancalendar', ev => { $Settings.diocesancalendar = $(ev.currentTarget).val(); });
+
 
 $(document).ready(() => {
     console.log('document is ready');
@@ -1078,75 +1141,8 @@ $(document).ready(() => {
 
     $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
 
-    $(document).on('click', '#openSettings', () => {
-        $('#locale').val( $Settings.locale );
-        if( $Settings.nationalcalendar === '' ) {
-            $('#calSettingsForm :input').prop('disabled', false);
-        } else {
-            $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
-        }
-        $('#settingsWrapper').dialog("open");
-    });
-
-    $(document).on("submit", '#calSettingsForm', event => {
-        event.preventDefault();
-        let formValues = $(event.currentTarget).serializeArray();
-        for (let obj of formValues) {
-            $Settings[obj.name] = obj.value;
-        }
-        console.log('$Settings = ');
-        console.log($Settings);
-        $('#settingsWrapper').dialog("close");
-        Cookies.set( 'litCalSettings', JSON.stringify($Settings), { secure: true } );
-        if( $Settings.locale !== 'en' ){
-            loadMessages( $Settings.locale, genLitCal);
-        } else {
-            messages = null;
-            genLitCal();
-        }
-        return false;
-    });
-
     if ($('#nationalcalendar').val() == "" || $('#nationalcalendar').val() == "VATICAN" ) {
         $('#diocesancalendar').prop('disabled', true);
     }
-
-    $(document).on('change', '#nationalcalendar', ev => {
-        const currentSelectedNation = $(ev.currentTarget).val();
-        $Settings.nationalcalendar = currentSelectedNation;
-        switch( currentSelectedNation ) {
-            case "VATICAN":
-                $Settings.locale = 'la';
-                $Settings.epiphany = 'JAN6';
-                $Settings.ascension = 'THURSDAY';
-                $Settings.corpuschristi = 'THURSDAY';
-                $Settings.diocesancalendar = '';
-                $('#locale').val($Settings.locale);
-                $('#epiphany').val($Settings.epiphany);
-                $('#ascension').val($Settings.ascension);
-                $('#corpuschristi').val($Settings.corpuschristi);
-                $('#diocesancalendar').val($Settings.diocesancalendar);
-
-                $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
-                break;
-            case "":
-                $('#calSettingsForm :input').prop('disabled', false);
-                break;
-            default:
-                let nationalCalSettingLocale = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Locale;
-                $Settings.locale        = nationalCalSettingLocale.includes('_') ? nationalCalSettingLocale : nationalCalSettingLocale.toLowerCase();
-                $Settings.epiphany      = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Epiphany;
-                $Settings.ascension     = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Ascension;
-                $Settings.corpuschristi = $index.NationalCalendarsMetadata[currentSelectedNation].settings.CorpusChristi;
-                $('#locale').val($Settings.locale);
-                $('#epiphany').val($Settings.epiphany);
-                $('#ascension').val($Settings.ascension);
-                $('#corpuschristi').val($Settings.corpuschristi);
-                $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
-        }
-        handleDiocesesList( currentSelectedNation );
-    });
-
-    $(document).on('change', '#diocesancalendar', ev => { $Settings.diocesancalendar = $(ev.currentTarget).val(); });
 
 });
