@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-09 01:20+0000\n"
-"PO-Revision-Date: 2022-02-16 09:56+0000\n"
+"PO-Revision-Date: 2022-12-09 01:24+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/la/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #: php/index.php:96 php/index.php:158
 msgid "Generate Roman Calendar"
@@ -56,7 +56,7 @@ msgstr "EPIPHANIA"
 
 #: php/index.php:143
 msgid "January 6"
-msgstr ""
+msgstr "6 Ianuarii"
 
 #: php/index.php:143
 msgid "Sunday between January 2 and January 8"
@@ -68,11 +68,11 @@ msgstr "ASCENSIO"
 
 #: php/index.php:144 php/index.php:145
 msgid "Thursday"
-msgstr ""
+msgstr "Feria V"
 
 #: php/index.php:144 php/index.php:145
 msgid "Sunday"
-msgstr ""
+msgstr "Dominica"
 
 #: php/index.php:145
 msgid "CORPUS CHRISTI"
@@ -80,7 +80,7 @@ msgstr ""
 
 #: php/index.php:146
 msgid "LOCALE"
-msgstr ""
+msgstr "LINGUA"
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
 #: php/index.php:153 php/includes/enums/LitCommon.php:283
