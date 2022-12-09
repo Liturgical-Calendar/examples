@@ -118,14 +118,16 @@ function getNationsIndex( $MetaData ) {
 
 function buildDioceseOptions( $MetaData, $NATION, $DIOCESE ) {
     $options = '<option value=""></option>';
+    $i = 0;
     if( $MetaData !== null ) {
         foreach( $MetaData["DiocesanCalendars"] as $key => $value ){
             if( $value['nation'] === $NATION ) {
                 $options .= "<option value='{$key}'" . ( $DIOCESE === $key ? ' SELECTED' : '' ) . ">{$value['diocese']}</option>";
+                ++$i;
             }
         }
     }
-    return $options;
+    return [$options, $i ];
 }
 
 function buildNationOptions( $nations, $NATION ) {

@@ -65,6 +65,9 @@ class LitSettings {
                         break;
                     case "LOCALE":
                         $this->LOCALE           = LitLocale::isValid( $value )        ? $value : LitLocale::LATIN;
+                        if( strpos($this->LOCALE, '_') === false ) {
+                            $this->LOCALE = strtolower( $this->LOCALE );
+                        }
                         break;
                     case "NATIONALCALENDAR":
                         $this->NationalCalendar = $value !== "" ? strtoupper( $value ) : null;
@@ -90,6 +93,9 @@ class LitSettings {
         else {
             $this->LOCALE = LitLocale::LATIN;
         }
+        if( strpos($this->LOCALE, '_') === false ) {
+            $this->LOCALE = strtolower( $this->LOCALE );
+        }
 
         $this->SetVars( $DATA );
 
@@ -114,6 +120,9 @@ class LitSettings {
                 $this->Ascension        = $NationalCalendarMetadata["settings"]["Ascension"];
                 $this->CorpusChristi    = $NationalCalendarMetadata["settings"]["CorpusChristi"];
                 $this->LOCALE           = $NationalCalendarMetadata["settings"]["Locale"];
+                if( strpos($this->LOCALE, '_') === false ) {
+                    $this->LOCALE = strtolower( $this->LOCALE );
+                }
                 break;
         }
         $baseLocale = strtolower( explode( '_', $this->LOCALE )[0] );
