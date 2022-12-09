@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 01:35+0000\n"
+"POT-Creation-Date: 2022-12-09 20:09+0000\n"
 "PO-Revision-Date: 2022-12-09 01:24+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
@@ -74,11 +74,11 @@ msgstr "Feria V"
 msgid "Sunday"
 msgstr "Dominica"
 
-#: php/index.php:149
+#: php/index.php:149 php/index.php:170
 msgid "CORPUS CHRISTI"
 msgstr ""
 
-#: php/index.php:150
+#: php/index.php:150 php/index.php:170
 msgid "LOCALE"
 msgstr "LINGUA"
 
@@ -91,17 +91,17 @@ msgstr "vel"
 msgid "Choose the desired calendar from the list"
 msgstr ""
 
-#: php/index.php:169
-msgid "Configurations being used to generate this calendar:"
-msgstr "Optiones electuus ut generare hic calendarium:"
-
-#: php/index.php:171
+#: php/index.php:159 php/index.php:171
 msgid "NATION"
 msgstr "GENS"
 
-#: php/index.php:171
+#: php/index.php:160 php/index.php:171
 msgid "DIOCESE"
 msgstr "DIŒCESIS"
+
+#: php/index.php:169
+msgid "Configurations being used to generate this calendar:"
+msgstr "Optiones electuus ut generare hic calendarium:"
 
 #: php/index.php:176
 msgid "Month"
