@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 01:35+0000\n"
+"POT-Creation-Date: 2022-12-09 20:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,11 +72,11 @@ msgstr ""
 msgid "Sunday"
 msgstr ""
 
-#: php/index.php:149
+#: php/index.php:149 php/index.php:170
 msgid "CORPUS CHRISTI"
 msgstr ""
 
-#: php/index.php:150
+#: php/index.php:150 php/index.php:170
 msgid "LOCALE"
 msgstr ""
 
@@ -89,16 +89,16 @@ msgstr ""
 msgid "Choose the desired calendar from the list"
 msgstr ""
 
-#: php/index.php:169
-msgid "Configurations being used to generate this calendar:"
-msgstr ""
-
-#: php/index.php:171
+#: php/index.php:159 php/index.php:171
 msgid "NATION"
 msgstr ""
 
-#: php/index.php:171
+#: php/index.php:160 php/index.php:171
 msgid "DIOCESE"
+msgstr ""
+
+#: php/index.php:169
+msgid "Configurations being used to generate this calendar:"
 msgstr ""
 
 #: php/index.php:176
