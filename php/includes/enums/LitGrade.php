@@ -137,7 +137,7 @@ class LitGrade {
         if( !self::isValid( $value ) ) {
             $value = self::WEEKDAY;
         }
-        $grade = $this->locale === 'LA' ? self::latinGrade[ $value ] : self::translateGrade( $value );
+        $grade = $this->locale === 'la' ? self::latinGrade[ $value ] : self::translateGrade( $value );
         return $html ? $tags[0] . $grade . $tags[1] : $grade;
     }
 }
