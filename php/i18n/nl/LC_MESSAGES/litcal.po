@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 10:38+0000\n"
+"POT-Creation-Date: 2022-12-09 00:53+0000\n"
 "PO-Revision-Date: 2022-12-08 23:50+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
@@ -18,78 +18,79 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.12.1\n"
 
-#: php/index.php:93 php/index.php:147
+#: php/index.php:96 php/index.php:158
 msgid "Generate Roman Calendar"
 msgstr "Genereer de Romeinse kalender"
 
-#: php/index.php:114
+#: php/index.php:117
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Berekening van de liturgische kalender voor een bepaald jaar"
 
-#: php/index.php:115
+#: php/index.php:118
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML-presentatie uitgewerkt door PHP met behulp van een CURL-verzoek naar "
 "een %s"
 
-#: php/index.php:123
+#: php/index.php:126
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 "U hebt een jaar vóór 1970 aangevraagd: U kunt geen jaren vóór 1970 aanvragen."
 
-#: php/index.php:129
+#: php/index.php:140
 msgid "Customize options for generating the Roman Calendar"
-msgstr "Configureer de instellingen voor het genereren van de Romeinse kalender"
+msgstr ""
+"Configureer de instellingen voor het genereren van de Romeinse kalender"
 
-#: php/index.php:131 php/index.php:155
+#: php/index.php:142 php/index.php:166
 msgid "YEAR"
 msgstr "JAAR"
 
-#: php/index.php:132 php/index.php:155
+#: php/index.php:143 php/index.php:166
 msgid "EPIPHANY"
 msgstr "OPENBARING"
 
-#: php/index.php:133 php/index.php:155
+#: php/index.php:144 php/index.php:166
 msgid "ASCENSION"
 msgstr "HEMELVAART"
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:142 php/includes/enums/LitCommon.php:283
+#: php/index.php:153 php/includes/enums/LitCommon.php:283
 msgid "or"
 msgstr "of"
 
-#: php/index.php:154
+#: php/index.php:165
 msgid "Configurations being used to generate this calendar:"
 msgstr "De instellingen die zijn gebruikt om deze agenda te genereren:"
 
-#: php/index.php:156
+#: php/index.php:167
 msgid "NATION"
 msgstr "NATIE"
 
-#: php/index.php:156
+#: php/index.php:167
 msgid "DIOCESE"
 msgstr "BISDOM"
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "Month"
 msgstr "Maand"
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "Date in Gregorian Calendar"
 msgstr "Datum in de Gregoriaanse kalender"
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "General Roman Calendar Festivity"
 msgstr "Feestdagen van de universele Romeinse kalender"
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "Grade of the Festivity"
 msgstr "Graad van de Viering"
 
-#: php/index.php:210
+#: php/index.php:221
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informatie over de huidige berekening van het liturgisch jaar"
 
