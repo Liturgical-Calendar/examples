@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 10:38+0000\n"
+"POT-Creation-Date: 2022-12-09 01:20+0000\n"
 "PO-Revision-Date: 2022-12-06 18:59+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
@@ -19,75 +19,107 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.12.1\n"
 
-#: php/index.php:93 php/index.php:147
+#: php/index.php:96 php/index.php:158
 msgid "Generate Roman Calendar"
 msgstr ""
 
-#: php/index.php:114
+#: php/index.php:113
+msgid "Go back"
+msgstr ""
+
+#: php/index.php:117
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Calcul du calendrier liturgique pour une année donnée"
 
-#: php/index.php:115
+#: php/index.php:118
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 
-#: php/index.php:123
+#: php/index.php:126
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 
-#: php/index.php:129
+#: php/index.php:140
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 
-#: php/index.php:131 php/index.php:155
+#: php/index.php:142 php/index.php:166
 msgid "YEAR"
 msgstr ""
 
-#: php/index.php:132 php/index.php:155
+#: php/index.php:143 php/index.php:166
 msgid "EPIPHANY"
 msgstr ""
 
-#: php/index.php:133 php/index.php:155
+#: php/index.php:143
+msgid "January 6"
+msgstr ""
+
+#: php/index.php:143
+msgid "Sunday between January 2 and January 8"
+msgstr ""
+
+#: php/index.php:144 php/index.php:166
 msgid "ASCENSION"
 msgstr ""
 
+#: php/index.php:144 php/index.php:145
+msgid "Thursday"
+msgstr ""
+
+#: php/index.php:144 php/index.php:145
+msgid "Sunday"
+msgstr ""
+
+#: php/index.php:145
+msgid "CORPUS CHRISTI"
+msgstr ""
+
+#: php/index.php:146
+msgid "LOCALE"
+msgstr ""
+
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:142 php/includes/enums/LitCommon.php:283
+#: php/index.php:153 php/includes/enums/LitCommon.php:283
 msgid "or"
 msgstr ""
 
-#: php/index.php:154
+#: php/index.php:153
+msgid "Choose the desired calendar from the list"
+msgstr ""
+
+#: php/index.php:165
 msgid "Configurations being used to generate this calendar:"
 msgstr ""
 
-#: php/index.php:156
+#: php/index.php:167
 msgid "NATION"
 msgstr ""
 
-#: php/index.php:156
+#: php/index.php:167
 msgid "DIOCESE"
 msgstr ""
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "Month"
 msgstr "Mois"
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "Date in Gregorian Calendar"
 msgstr ""
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "General Roman Calendar Festivity"
 msgstr ""
 
-#: php/index.php:161
+#: php/index.php:172
 msgid "Grade of the Festivity"
 msgstr ""
 
-#: php/index.php:210
+#: php/index.php:221
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr ""
 
