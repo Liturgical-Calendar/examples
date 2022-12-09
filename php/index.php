@@ -35,7 +35,7 @@ if( $MetaData !== null ) {
     $litSettings->setMetaData( $MetaData, $stagingURL );
     $nations = getNationsIndex( $MetaData );
     $nationalCalendarOptions = buildNationOptions( $nations, $litSettings->NationalCalendar );
-    $diocesanCalendarOptions = buildDioceseOptions( $MetaData, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar );
+    [$diocesanCalendarOptions, $diocesesCount] = buildDioceseOptions( $MetaData, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar );
 } else {
     echo "There was an error retrieving the Metadata!";
     die();
@@ -110,7 +110,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
 </head>
 
 <body>
-    <div><a class="backNav" href="https://litcal<?php echo $stagingURL; ?>.johnromanodorazio.com/usage.php">↩      Go back      ↩</a></div>
+    <div><a class="backNav" href="https://litcal<?php echo $stagingURL; ?>.johnromanodorazio.com/usage.php">↩      <?php echo _("Go back") ?>      ↩</a></div>
 
     <?php
 
@@ -140,20 +140,20 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     echo '<fieldset style="margin-bottom:6px;"><legend>' . _( 'Customize options for generating the Roman Calendar' ) . '</legend>';
     echo '<table style="width:100%;"><tr>';
     echo '<td><label>' . _( 'YEAR' ) . ': <input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->YEAR . '" /></label></td>';
-    echo '<td><label>' . _( 'EPIPHANY' ) . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " SELECTED" : "") . '>January 6</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "") . '>Sunday between January 2 and January 8</option></select></label></td>';
-    echo '<td><label>' . _( 'ASCENSION' ) . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
-    echo '<td><label>CORPUS CHRISTI (CORPUS DOMINI): <select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
-    echo '<td><label>LOCALE: ';
+    echo '<td><label>' . _( 'EPIPHANY' ) . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " SELECTED" : "") . '>'. _('January 6') . '</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "") . '>' . _('Sunday between January 2 and January 8') . '</option></select></label></td>';
+    echo '<td><label>' . _( 'ASCENSION' ) . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " SELECTED" : "") . '>'. _('Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " SELECTED" : "") . '>' . _('Sunday') . '</option></select></label></td>';
+    echo '<td><label>' . _( 'CORPUS CHRISTI' ) . ': <select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " SELECTED" : "") . '>' . _('Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " SELECTED" : "") . '>' . _('Sunday') . '</option></select></label></td>';
+    echo '<td><input type="hidden" value="' . $litSettings->LOCALE . '" /><label>' . _('LOCALE') . ': ';
     echo '<select name="locale" id="locale">';
     foreach( $AllAvailableLocales as $locale => $displayName ) {
         echo "<option value=\"$locale\" title=\"" . $displayName[1] . "\"" . ($litSettings->LOCALE === $locale ? ' SELECTED' : '') . ">" . $displayName[0] . "</option>";
     }
     echo '</select></label></td>';
     echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _( 'or' ) . '</i><br /><i>Scegli il Calendario desiderato dall\'elenco</i></td>';
+    echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _( 'or' ) . '</i><br /><i>' . _("Choose the desired calendar from the list") . '</i></td>';
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;"><label>NATION: <select id="nationalcalendar" name="nationalcalendar">' . $nationalCalendarOptions . '</select></label>';
-    echo '<label style="margin-left: 18px;">DIOCESE: <select id="diocesancalendar" name="diocesancalendar"' . ($litSettings->NationalCalendar === '' ? ' DISABLED' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
+    echo '<label style="margin-left: 18px;">DIOCESE: <select id="diocesancalendar" name="diocesancalendar"' . ($diocesesCount < 1 ? ' DISABLED' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(_( "Generate Roman Calendar" )) . '" /></td>';
     echo '</tr></table>';
