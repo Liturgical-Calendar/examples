@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 01:20+0000\n"
+"POT-Creation-Date: 2022-12-09 20:09+0000\n"
 "PO-Revision-Date: 2022-12-09 01:24+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.12.1\n"
 
-#: php/index.php:96 php/index.php:158
+#: php/index.php:96 php/index.php:162
 msgid "Generate Roman Calendar"
 msgstr "Calendarium Romanum Generare"
 
@@ -42,84 +42,84 @@ msgid ""
 "prior to 1970."
 msgstr "Rogavisti annum ante 1970: non potest rogare annos ante annum 1970."
 
-#: php/index.php:140
+#: php/index.php:144
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Eligere optiones per generationem Calendarii Romani"
 
-#: php/index.php:142 php/index.php:166
+#: php/index.php:146 php/index.php:170
 msgid "YEAR"
 msgstr "ANNUM"
 
-#: php/index.php:143 php/index.php:166
+#: php/index.php:147 php/index.php:170
 msgid "EPIPHANY"
 msgstr "EPIPHANIA"
 
-#: php/index.php:143
+#: php/index.php:147
 msgid "January 6"
 msgstr "6 Ianuarii"
 
-#: php/index.php:143
+#: php/index.php:147
 msgid "Sunday between January 2 and January 8"
 msgstr ""
 
-#: php/index.php:144 php/index.php:166
+#: php/index.php:148 php/index.php:170
 msgid "ASCENSION"
 msgstr "ASCENSIO"
 
-#: php/index.php:144 php/index.php:145
+#: php/index.php:148 php/index.php:149
 msgid "Thursday"
 msgstr "Feria V"
 
-#: php/index.php:144 php/index.php:145
+#: php/index.php:148 php/index.php:149
 msgid "Sunday"
 msgstr "Dominica"
 
-#: php/index.php:145
+#: php/index.php:149 php/index.php:170
 msgid "CORPUS CHRISTI"
 msgstr ""
 
-#: php/index.php:146
+#: php/index.php:150 php/index.php:170
 msgid "LOCALE"
 msgstr "LINGUA"
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:153 php/includes/enums/LitCommon.php:283
+#: php/index.php:157 php/includes/enums/LitCommon.php:283
 msgid "or"
 msgstr "vel"
 
-#: php/index.php:153
+#: php/index.php:157
 msgid "Choose the desired calendar from the list"
 msgstr ""
 
-#: php/index.php:165
-msgid "Configurations being used to generate this calendar:"
-msgstr "Optiones electuus ut generare hic calendarium:"
-
-#: php/index.php:167
+#: php/index.php:159 php/index.php:171
 msgid "NATION"
 msgstr "GENS"
 
-#: php/index.php:167
+#: php/index.php:160 php/index.php:171
 msgid "DIOCESE"
 msgstr "DIŒCESIS"
 
-#: php/index.php:172
+#: php/index.php:169
+msgid "Configurations being used to generate this calendar:"
+msgstr "Optiones electuus ut generare hic calendarium:"
+
+#: php/index.php:176
 msgid "Month"
 msgstr "Mensis"
 
-#: php/index.php:172
+#: php/index.php:176
 msgid "Date in Gregorian Calendar"
 msgstr "Dies in Calendario Gregoriano"
 
-#: php/index.php:172
+#: php/index.php:176
 msgid "General Roman Calendar Festivity"
 msgstr "Festivitas in Calendario Romano Generale"
 
-#: php/index.php:172
+#: php/index.php:176
 msgid "Grade of the Festivity"
 msgstr "Gradum Festivitatis"
 
-#: php/index.php:221
+#: php/index.php:225
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Notitiæ de computatione præsente Anni Liturgici"
 
