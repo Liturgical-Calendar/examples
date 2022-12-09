@@ -156,8 +156,8 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _( 'or' ) . '</i><br /><i>' . _("Choose the desired calendar from the list") . '</i></td>';
     echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;"><label>NATION: <select id="nationalcalendar" name="nationalcalendar">' . $nationalCalendarOptions . '</select></label>';
-    echo '<label style="margin-left: 18px;">DIOCESE: <select id="diocesancalendar" name="diocesancalendar"' . ($diocesesCount < 1 ? ' DISABLED' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
+    echo '<td colspan="5" style="text-align:center;"><label>' . _('NATION') . ': <select id="nationalcalendar" name="nationalcalendar">' . $nationalCalendarOptions . '</select></label>';
+    echo '<label style="margin-left: 18px;">' . _('DIOCESE') . ': <select id="diocesancalendar" name="diocesancalendar"' . ($diocesesCount < 1 ? ' DISABLED' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(_( "Generate Roman Calendar" )) . '" /></td>';
     echo '</tr></table>';
@@ -167,7 +167,7 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     echo '<div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">';
 
     echo '<h3>' . _( 'Configurations being used to generate this calendar:' ) . '</h3>';
-    echo '<span>' . _( 'YEAR' ) . ' = ' . $litSettings->YEAR . ', ' . _('EPIPHANY' ) . ' = ' . $litSettings->Epiphany . ', ' . _('ASCENSION' ) . ' = ' . $litSettings->Ascension . ', CORPUS CHRISTI = ' . $litSettings->CorpusChristi . ', LOCALE = ' . $litSettings->LOCALE . '</span>';
+    echo '<span>' . _( 'YEAR' ) . ' = ' . $litSettings->YEAR . ', ' . _('EPIPHANY' ) . ' = ' . $litSettings->Epiphany . ', ' . _('ASCENSION' ) . ' = ' . $litSettings->Ascension . ', ' . _('CORPUS CHRISTI') . ' = ' . $litSettings->CorpusChristi . ', ' . _('LOCALE') . ' = ' . $litSettings->LOCALE . '</span>';
     echo '<br /><span>' . _( 'NATION' ) . ' = ' . $litSettings->NationalCalendar . ', ' . _('DIOCESE' ) . ' = ' . $litSettings->DiocesanCalendar . '</span>';
     echo '</div>';
 
