@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-09 01:20+0000\n"
-"PO-Revision-Date: 2022-10-11 10:44+0000\n"
+"PO-Revision-Date: 2022-12-09 01:24+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/it/>\n"
@@ -25,7 +25,7 @@ msgstr "Genera il Calendario Romano"
 
 #: php/index.php:113
 msgid "Go back"
-msgstr ""
+msgstr "Torna indietro"
 
 #: php/index.php:117
 msgid "Liturgical Calendar Calculation for a Given Year"
@@ -59,11 +59,11 @@ msgstr "EPIFANIA"
 
 #: php/index.php:143
 msgid "January 6"
-msgstr ""
+msgstr "6 Gennaio"
 
 #: php/index.php:143
 msgid "Sunday between January 2 and January 8"
-msgstr ""
+msgstr "Domenica tra il 2 gennaio e l'8 gennaio"
 
 #: php/index.php:144 php/index.php:166
 msgid "ASCENSION"
@@ -71,19 +71,19 @@ msgstr "ASCENSIONE"
 
 #: php/index.php:144 php/index.php:145
 msgid "Thursday"
-msgstr ""
+msgstr "Giovedì"
 
 #: php/index.php:144 php/index.php:145
 msgid "Sunday"
-msgstr ""
+msgstr "Domenica"
 
 #: php/index.php:145
 msgid "CORPUS CHRISTI"
-msgstr ""
+msgstr "CORPUS DOMINI"
 
 #: php/index.php:146
 msgid "LOCALE"
-msgstr ""
+msgstr "LINGUA"
 
 #. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
 #: php/index.php:153 php/includes/enums/LitCommon.php:283
@@ -92,7 +92,7 @@ msgstr "oppure"
 
 #: php/index.php:153
 msgid "Choose the desired calendar from the list"
-msgstr ""
+msgstr "Scegli il calendario desiderato dalla lista"
 
 #: php/index.php:165
 msgid "Configurations being used to generate this calendar:"
