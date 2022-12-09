@@ -25,17 +25,20 @@ $endpointV = $isStaging ? "dev" : "v3";
 define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalEngine.php");
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalMetadata.php");
 
-$litSettings = new LitSettings( $_GET, $stagingURL );
+$litSettings = new LitSettings( $_GET );
 
 $nationalCalendarOptions = '<option value="">---</option>';
 $diocesanCalendarOptions = '<option value="">---</option>';
 
 $MetaData = retrieveMetadata();
 if( $MetaData !== null ) {
-    $litSettings->setMetaData( $MetaData );
+    $litSettings->setMetaData( $MetaData, $stagingURL );
     $nations = getNationsIndex( $MetaData );
     $nationalCalendarOptions = buildNationOptions( $nations, $litSettings->NationalCalendar );
     $diocesanCalendarOptions = buildDioceseOptions( $MetaData, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar );
+} else {
+    echo "There was an error retrieving the Metadata!";
+    die();
 }
 
 $SUNDAY_CYCLE = ["A", "B", "C"];
@@ -123,8 +126,16 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
         echo _( 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.' );
         echo '</div>';
     }
-
-
+    $c = new Collator($litSettings->LOCALE);
+    $AllAvailableLocales = array_filter(ResourceBundle::getLocales(''), function ($value) {
+        return strpos($value, 'POSIX') === false;
+    });
+    $AllAvailableLocales = array_reduce($AllAvailableLocales, function($carry, $item) use($litSettings) {
+        $carry[$item] = [ Locale::getDisplayName($item, $litSettings->LOCALE), Locale::getDisplayName($item, 'en') ];
+        return $carry;
+    },[]);
+    $AllAvailableLocales['la'] = [ 'Latin', 'Latin' ];
+    $c->asort($AllAvailableLocales);
     echo '<form method="GET">';
     echo '<fieldset style="margin-bottom:6px;"><legend>' . _( 'Customize options for generating the Roman Calendar' ) . '</legend>';
     echo '<table style="width:100%;"><tr>';
@@ -134,9 +145,9 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
     echo '<td><label>CORPUS CHRISTI (CORPUS DOMINI): <select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " SELECTED" : "") . '>Thursday</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " SELECTED" : "") . '>Sunday</option></select></label></td>';
     echo '<td><label>LOCALE: ';
     echo '<select name="locale" id="locale">';
-    echo '<option value="' . LitLocale::ENGLISH . '" ' . ($litSettings->LOCALE === LitLocale::ENGLISH ? " SELECTED" : "") . '>' . LitLocale::ENGLISH . '</option>';
-    echo '<option value="' . LitLocale::ITALIAN . '" ' . ($litSettings->LOCALE === LitLocale::ITALIAN ? " SELECTED" : "") . '>' . LitLocale::ITALIAN . '</option>';
-    echo '<option value="' . LitLocale::LATIN . '" ' . ($litSettings->LOCALE === LitLocale::LATIN ? " SELECTED" : "") . '>' . LitLocale::LATIN. '</option>';
+    foreach( $AllAvailableLocales as $locale => $displayName ) {
+        echo "<option value=\"$locale\" title=\"" . $displayName[1] . "\"" . ($litSettings->LOCALE === $locale ? ' SELECTED' : '') . ">" . $displayName[0] . "</option>";
+    }
     echo '</select></label></td>';
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _( 'or' ) . '</i><br /><i>Scegli il Calendario desiderato dall\'elenco</i></td>';

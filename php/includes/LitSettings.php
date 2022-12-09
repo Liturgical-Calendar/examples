@@ -10,7 +10,7 @@ class LitSettings {
     public string $Epiphany         = Epiphany::JAN6;
     public string $Ascension        = Ascension::THURSDAY;
     public string $CorpusChristi    = CorpusChristi::THURSDAY;
-    public string $LOCALE           = LitLocale::LATIN;
+    public ?string $LOCALE           = null;
     public ?string $NationalCalendar = null;
     public ?string $DiocesanCalendar = null;
     private array $MetaData         = [];
@@ -64,7 +64,7 @@ class LitSettings {
                         $this->CorpusChristi    = CorpusChristi::isValid( strtoupper( $value ) )    ? strtoupper( $value ) : CorpusChristi::THURSDAY;
                         break;
                     case "LOCALE":
-                        $this->LOCALE           = LitLocale::isValid( strtoupper( $value ) )        ? strtoupper( $value ) : LitLocale::LATIN;
+                        $this->LOCALE           = LitLocale::isValid( $value )        ? $value : LitLocale::LATIN;
                         break;
                     case "NATIONALCALENDAR":
                         $this->NationalCalendar = $value !== "" ? strtoupper( $value ) : null;
@@ -76,7 +76,7 @@ class LitSettings {
         }
     }
   
-    public function __construct( array $DATA, string $stagingURL ) {
+    public function __construct( array $DATA ) {
 
         //set a few default values
         $this->YEAR = (int)date("Y");
@@ -88,31 +88,50 @@ class LitSettings {
             $this->LOCALE = Locale::acceptFromHttp( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
         }
         else {
-            $this->LOCALE = LitLocale::ENGLISH;
+            $this->LOCALE = LitLocale::LATIN;
         }
 
         $this->SetVars( $DATA );
 
-        if( $this->NationalCalendar !== null ) {
+        /*if( $this->NationalCalendar !== null ) {
             $this->updateSettingsByNation();
-        }
+        }*/
 
-        //we only need the two letter ISO code, not the national extension
-        if( strpos( $this->LOCALE, "_" ) ) {
-            $this->LOCALE = explode( "_", $this->LOCALE )[0];
-        } else if ( strpos( $this->LOCALE, "-" ) ) {
-            $this->LOCALE = explode( "-", $this->LOCALE )[0];
+    }
+
+    private function updateSettingsByNation( string $stagingURL ) {
+        $NationalCalendarMetadata = $this->NationalCalendar !== null ? $this->MetaData["NationalCalendarsMetadata"][$this->NationalCalendar] : null;
+        switch( $this->NationalCalendar ) {
+            case "VATICAN":
+            case null:
+                $this->Epiphany         = Epiphany::JAN6;
+                $this->Ascension        = Ascension::THURSDAY;
+                $this->CorpusChristi    = CorpusChristi::THURSDAY;
+                $this->LOCALE           = LitLocale::LATIN;
+                break;
+            default:
+                $this->Epiphany         = $NationalCalendarMetadata["settings"]["Epiphany"];
+                $this->Ascension        = $NationalCalendarMetadata["settings"]["Ascension"];
+                $this->CorpusChristi    = $NationalCalendarMetadata["settings"]["CorpusChristi"];
+                $this->LOCALE           = $NationalCalendarMetadata["settings"]["Locale"];
+                break;
         }
+        $baseLocale = strtolower( explode( '_', $this->LOCALE )[0] );
         $localeArray = [
-            strtolower( $this->LOCALE ) . '_' . strtoupper( $this->LOCALE ) . '.utf8',
-            strtolower( $this->LOCALE ) . '_' . strtoupper( $this->LOCALE ) . '.UTF-8',
-            strtolower( $this->LOCALE ) . '_' . strtoupper( $this->LOCALE ),
-            strtolower( $this->LOCALE )
+            $this->LOCALE . '.utf8',
+            $this->LOCALE . '.UTF-8',
+            $this->LOCALE,
+            $baseLocale . '_' . strtoupper( $baseLocale ) . '.utf8',
+            $baseLocale . '_' . strtoupper( $baseLocale ) . '.UTF-8',
+            $baseLocale . '_' . strtoupper( $baseLocale ),
+            $baseLocale . '.utf8',
+            $baseLocale . '.UTF-8',
+            $baseLocale
         ];
-        ini_set('date.timezone', 'Europe/Vatican');
         setlocale( LC_ALL, $localeArray );
         bindtextdomain("litcal", "i18n");
         textdomain("litcal");
+        ini_set('date.timezone', 'Europe/Vatican');
         if( !isset( $_COOKIE["currentLocale"] ) || $_COOKIE["currentLocale"] !== $this->LOCALE ) {
             setcookie(
                 "currentLocale",                                //name
@@ -127,35 +146,12 @@ class LitSettings {
 
     }
 
-    private function updateSettingsByNation() {
-        switch( $this->NationalCalendar ) {
-            case "VATICAN":
-                $this->Epiphany         = Epiphany::JAN6;
-                $this->Ascension        = Ascension::THURSDAY;
-                $this->CorpusChristi    = CorpusChristi::THURSDAY;
-                $this->LOCALE           = LitLocale::LATIN;
-                break;
-            case "ITALY":
-                $this->Epiphany         = Epiphany::JAN6;
-                $this->Ascension        = Ascension::SUNDAY;
-                $this->CorpusChristi    = CorpusChristi::SUNDAY;
-                $this->LOCALE           = LitLocale::ITALIAN;
-                break;
-            case "USA":
-                $this->Epiphany         = Epiphany::SUNDAY_JAN2_JAN8;
-                $this->Ascension        = Ascension::SUNDAY;
-                $this->CorpusChristi    = CorpusChristi::SUNDAY;
-                $this->LOCALE           = LitLocale::ENGLISH;
-                break;
-        }
-    }
-
-    public function setMetaData( array $MetaData ) {
+    public function setMetaData( array $MetaData, string $stagingURL ) {
         $this->MetaData = $MetaData;
         if( $this->DiocesanCalendar !== null ) {
             $this->NationalCalendar = $this->MetaData["DiocesanCalendars"][$this->DiocesanCalendar]["nation"];
-            $this->updateSettingsByNation();
         }
+        $this->updateSettingsByNation( $stagingURL );
     }
 
 }

@@ -68,7 +68,7 @@ function retrieveMetadata() {
         $metadata = json_decode( $metadataRaw, true );
     }
     curl_close( $ch );
-    return $metadata["LitCalMetadata"];
+    return $metadata !== null ? $metadata["LitCalMetadata"] : null;
 }
 
 function sendAPIRequest( $queryData ) {
@@ -208,7 +208,7 @@ function buildHTML( $festivity, $LitCal, &$newMonth, $cc, $cm, $keyname, $locale
     else if((int)$festivity->date->format('N') !== 7){
         $displayGrade = $litGrade->i18n( $festivity->grade );
     }
-    switch ($locale) {
+    switch ( explode('_', $locale)[0] ) {
         case LitLocale::LATIN:
             $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
             $dayOfTheWeekLatin = $daysOfTheWeek[$dayOfTheWeek];
@@ -216,7 +216,7 @@ function buildHTML( $festivity, $LitCal, &$newMonth, $cc, $cm, $keyname, $locale
             $monthLatin = $months[$month];
             $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
             break;
-        case LitLocale::ENGLISH:
+        case 'en':
             $dateString = $festivity->date->format('D, F jS, Y'); // G:i:s e') . "offset = " . $festivity->hourOffset;
             break;
         default:
