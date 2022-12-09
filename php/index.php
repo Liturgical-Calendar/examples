@@ -126,12 +126,16 @@ if ($litSettings->YEAR >= 1970 && $litSettings->YEAR <= 9999) {
         echo _( 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.' );
         echo '</div>';
     }
-    $c = new Collator($litSettings->LOCALE);
+    $c = $litSettings->LOCALE === 'la' ? new Collator('en') : new Collator($litSettings->LOCALE);
     $AllAvailableLocales = array_filter(ResourceBundle::getLocales(''), function ($value) {
         return strpos($value, 'POSIX') === false;
     });
     $AllAvailableLocales = array_reduce($AllAvailableLocales, function($carry, $item) use($litSettings) {
-        $carry[$item] = [ Locale::getDisplayName($item, $litSettings->LOCALE), Locale::getDisplayName($item, 'en') ];
+        if( $litSettings->LOCALE === 'la' ) {
+            $carry[$item] = [ Locale::getDisplayName($item, 'en'), Locale::getDisplayName($item, 'en') ];
+        } else {
+            $carry[$item] = [ Locale::getDisplayName($item, $litSettings->LOCALE), Locale::getDisplayName($item, 'en') ];
+        }
         return $carry;
     },[]);
     $AllAvailableLocales['la'] = [ 'Latin', 'Latin' ];

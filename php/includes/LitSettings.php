@@ -106,7 +106,7 @@ class LitSettings {
     }
 
     private function updateSettingsByNation( string $stagingURL ) {
-        $NationalCalendarMetadata = $this->NationalCalendar !== null ? $this->MetaData["NationalCalendarsMetadata"][$this->NationalCalendar] : null;
+        $NationalCalendarMetadata = $this->NationalCalendar !== null && $this->NationalCalendar !== "VATICAN" ? $this->MetaData["NationalCalendarsMetadata"][$this->NationalCalendar] : null;
         switch( $this->NationalCalendar ) {
             case "VATICAN":
             case null:
