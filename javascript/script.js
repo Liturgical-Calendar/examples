@@ -161,7 +161,6 @@ let today = new Date(),
             data: $Settings,
             url: endpointURL,
             success: LitCalData => {
-                console.log(LitCalData);
                 $GRADE = [
                     i18next.t("FERIA"),
                     i18next.t("COMMEMORATION"),
@@ -285,7 +284,7 @@ let today = new Date(),
         return festivity_date_str;
     },
     buildHeaderAndDialog = () => {
-        let templateStr = i18next.t('HTML-presentation').replace('%s',`<a href="${endpointURL}">PHP engine</a>`),
+        let templateStr = i18next.t('HTML-presentation').replace('%s',`<a id="endpointURL" href="${endpointURL}?${jQuery.param($Settings)}">PHP engine</a>`),
             header = `
                 <h1 style="text-align:center;">${i18next.t('LitCal-Calculation')} (${$Settings.year})</h1>
                 <h2 style="text-align:center;">${templateStr}</h2>

@@ -152,7 +152,7 @@ let messages = null,
         $('#settingsWrapper').dialog("destroy").remove();
         $('header').empty();
         let templateStr = __('HTML presentation elaborated by JAVASCRIPT using an AJAX request to a %s');
-        templateStr = templateStr.replace('%s', `<a href="${endpointURL}">PHP engine</a>`);
+        templateStr = templateStr.replace('%s', `<a id="endpointURL" href="${endpointURL}?${jQuery.param($Settings)}">PHP engine</a>`);
         let $header = `
     <h1 style="text-align:center;">${__('Liturgical Calendar Calculation for a Given Year')} (${$Settings.year})</h1>
     <h2 style="text-align:center;">${templateStr}</h2>
