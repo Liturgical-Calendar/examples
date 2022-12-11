@@ -959,7 +959,6 @@ let messages = null,
             autoOpen: false
         });
 
-        handleDiocesesList( $Settings.nationalcalendar );
     },
     __ = key => {
         if ( messages !== null && typeof messages === 'object') {
@@ -1046,7 +1045,7 @@ let messages = null,
                 $('#diocesancalendar').prop('disabled', false);
                 $('#diocesancalendar').append('<option value="">---</option>');
                 for(const [key, value] of Object.entries($DiocesesList)){
-                    $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
+                    $('#diocesancalendar').append(`<option value="${key}"${$Settings.hasOwnProperty('diocesancalendar') && $Settings.diocesancalendar === key ? ' selected' : ''}>${value.diocese}</option>`);
                 }
             } else {
                 $('#diocesancalendar').prop('disabled', true);

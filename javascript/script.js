@@ -1091,11 +1091,12 @@ let today = new Date(),
                 } else {
                     $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
                 }
+                if( $Settings.hasOwnProperty('nationalcalendar') && $Settings.nationalcalendar !== '' ){
+                    handleDiocesesList( $Settings.nationalcalendar );
+                }
             },
             autoOpen: false
         });
-
-        handleDiocesesList();
     },
     handleDiocesesList = val => {
         $('#diocesancalendar').empty();
@@ -1110,7 +1111,7 @@ let today = new Date(),
                 $('#diocesancalendar').prop('disabled', false);
                 $('#diocesancalendar').append('<option value="">---</option>');
                 for(const [key, value] of Object.entries($DiocesesList)){
-                    $('#diocesancalendar').append('<option value="' + key + '">' + value.diocese + '</option>');
+                    $('#diocesancalendar').append(`<option value="${key}"${$Settings.hasOwnProperty('diocesancalendar') && $Settings.diocesancalendar === key ? ' selected' : ''}>${value.diocese}</option>`);
                 }
             } else {
                 $('#diocesancalendar').prop('disabled', true);
@@ -1136,6 +1137,7 @@ $(document).on("submit", "#calSettingsForm", event => {
 
     console.log('$Settings = ');
     console.log($Settings);
+    Cookies.set( 'litCalSettings', JSON.stringify($Settings), { secure: true } );
 
     $('#settingsWrapper').dialog("close");
     genLitCal();
@@ -1201,7 +1203,12 @@ i18next.use(i18nextHttpBackend).init({
     $(document).ready(() => {
         document.title = i18next.t("Generate-Roman-Calendar");
         $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
-
+        if( typeof Cookies.get( 'litCalSettings' ) !== 'undefined' ) {
+            $Settings = JSON.parse( Cookies.get( 'litCalSettings' ) );
+        } else {
+            Cookies.set( 'litCalSettings', JSON.stringify($Settings), { secure: true } );
+        }
+    
         jQuery.ajax({
             url: metadataURL,
             dataType: 'json',
@@ -1217,10 +1224,6 @@ i18next.use(i18nextHttpBackend).init({
             }
         });
         $('#generateLitCal').button();
-    
-        if($('#nationalcalendar').val() !== "ITALY"){
-            $('#diocesancalendar').prop('disabled',true);
-        }
 
     });
 });
