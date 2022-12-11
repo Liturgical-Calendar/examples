@@ -954,6 +954,7 @@ let messages = null,
                 } else {
                     $('#calSettingsForm :input').not('#nationalcalendar').not('#year').not('#generateLitCal').prop('disabled', true);
                 }
+                handleDiocesesList( $Settings.nationalcalendar );
             },
             autoOpen: false
         });
@@ -1053,7 +1054,7 @@ let messages = null,
         }
     };
 
-jQuery.ajax({
+let metadataAjaxRequest = jQuery.ajax({
     url: metadataURL,
     dataType: 'json',
     statusCode: {
@@ -1140,9 +1141,5 @@ $(document).ready(() => {
     loadMessages( $Settings.locale, genLitCal);
 
     $('.backNav').attr('href',`https://litcal${stagingURL}.johnromanodorazio.com/usage.php`);
-
-    if ($('#nationalcalendar').val() == "" || $('#nationalcalendar').val() == "VATICAN" ) {
-        $('#diocesancalendar').prop('disabled', true);
-    }
 
 });
