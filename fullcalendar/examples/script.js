@@ -1093,7 +1093,7 @@ $(document).on("submit", '#calSettingsForm', event => {
 $(document).on('change', '#nationalcalendar', ev => {
     const currentSelectedNation = $(ev.currentTarget).val();
     $Settings.nationalcalendar = currentSelectedNation;
-    let nationalCalSettingLocale = $index.NationalCalendarsMetadata[currentSelectedNation].settings.Locale;
+    let nationalCalSettingLocale = $index.NationalCalendarsMetadata.hasOwnProperty(currentSelectedNation) ? $index.NationalCalendarsMetadata[currentSelectedNation].settings.Locale : 'la';
     switch( currentSelectedNation ) {
         case "VATICAN":
             $Settings.locale = 'la';
