@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-09 20:09+0000\n"
-"PO-Revision-Date: 2022-12-06 18:59+0000\n"
+"PO-Revision-Date: 2022-12-20 00:17+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/fr/>\n"
@@ -126,22 +126,22 @@ msgstr ""
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:29
 msgid "green"
-msgstr ""
+msgstr "vert"
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:32
 msgid "purple"
-msgstr ""
+msgstr "violet"
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:35
 msgid "white"
-msgstr ""
+msgstr "blanc"
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:38
 msgid "red"
-msgstr ""
+msgstr "rouge"
 
 #. translators: context = liturgical color
 #: php/includes/enums/LitColor.php:41
@@ -165,7 +165,7 @@ msgstr ""
 #. translators: context = from the Common of nn
 #: php/includes/enums/LitCommon.php:62
 msgid "Martyrs"
-msgstr ""
+msgstr "Martyrs"
 
 #. translators: context = from the Common of nn
 #: php/includes/enums/LitCommon.php:64
@@ -180,7 +180,7 @@ msgstr ""
 #. translators: context = from the Common of nn
 #: php/includes/enums/LitCommon.php:68
 msgid "Virgins"
-msgstr ""
+msgstr "Vierges"
 
 #. translators: context = from the Common of nn
 #: php/includes/enums/LitCommon.php:70
@@ -321,25 +321,25 @@ msgstr ""
 #: php/includes/enums/LitCommon.php:170 php/includes/enums/LitCommon.php:182
 msgctxt "(SING_FEMM)"
 msgid "of the"
-msgstr ""
+msgstr "de la"
 
 #. translators: (plural feminine) glue between "From the Common" and the actual common. Latin: leave empty!
 #: php/includes/enums/LitCommon.php:173
 msgctxt "(PLUR_FEMM)"
 msgid "of"
-msgstr ""
+msgstr "des"
 
 #. translators: (plural masculine) glue between "From the Common" and the actual common. Latin: leave empty!
 #: php/includes/enums/LitCommon.php:179
 msgctxt "(PLUR_MASC)"
 msgid "of"
-msgstr ""
+msgstr "des"
 
 #. translators: (singular masculine) glue between "From the Common" and the actual common. Latin: leave empty!
 #: php/includes/enums/LitCommon.php:185
 msgctxt "(SING_MASC)"
 msgid "of the"
-msgstr ""
+msgstr "du"
 
 #: php/includes/enums/LitCommon.php:279
 msgid "From the Common"
