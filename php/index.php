@@ -22,8 +22,8 @@ include_once( 'includes/StatusCodes.php' );
 $isStaging = ( strpos( $_SERVER['HTTP_HOST'], "-staging" ) !== false );
 $stagingURL = $isStaging ? "-staging" : "";
 $endpointV = $isStaging ? "dev" : "v3";
-define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalEngine.php");
-define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/LitCalMetadata.php");
+define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/");
+define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/metadata/");
 
 $litSettings = new LitSettings( $_GET );
 

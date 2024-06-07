@@ -9,8 +9,8 @@ const thirdLevelDomain = window.location.hostname.split('.')[0];
 const isStaging = ( thirdLevelDomain.includes( '-staging' ) || window.location.pathname.includes( '-staging' ) );
 const stagingURL = isStaging ? '-staging' : '';
 const endpointV = isStaging ? 'dev' : 'v3';
-const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalEngine.php`;
-const metadataURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/LitCalMetadata.php`;
+const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/`;
+const metadataURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/metadata/`;
 const supportedUILocales = [ 'de', 'en', 'es', 'fr', 'it', 'la', 'pt', 'nl' ];
 
 let messages = null,
