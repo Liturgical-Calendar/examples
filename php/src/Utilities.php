@@ -140,7 +140,7 @@ class Utilities
             "epiphany"       => $litSettings->Epiphany,
             "ascension"      => $litSettings->Ascension,
             "corpus_christi" => $litSettings->CorpusChristi,
-            "locale"         => $litSettings->LOCALE
+            "locale"         => $litSettings->Locale
         ];
         if ($litSettings->NationalCalendar !== null) {
             $queryData["national_calendar"] = $litSettings->NationalCalendar;
