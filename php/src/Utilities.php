@@ -139,6 +139,7 @@ class Utilities
             $countryName = \Locale::getDisplayRegion("-{$nationVal}", $locale);
             $options .= "<option value='{$nationVal}'" . ($nationVal === $NATION ? ' selected' : '') . ">$countryName</option>";
         }
+        $options .= "<!-- current selected nation is {$NATION} -->";
         return $options;
     }
 
