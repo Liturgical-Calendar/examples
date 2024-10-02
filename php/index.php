@@ -65,16 +65,7 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
 
     foreach ($LitCal as $key => $value) {
         // retransform each entry from an associative array to a Festivity class object
-        $LitCal[$key] = new Festivity(
-            $LitCal[$key]["name"],
-            $LitCal[$key]["date"],
-            $LitCal[$key]["color"],
-            $LitCal[$key]["type"],
-            $LitCal[$key]["grade"],
-            $LitCal[$key]["common"],
-            $LitCal[$key]["liturgical_year"] ?? '',
-            $LitCal[$key]["display_grade"]
-        );
+        $LitCal[$key] = new Festivity($LitCal[$key]);
     }
 }
 
@@ -120,19 +111,19 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
         echo _('You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
         echo '</div>';
     }
-    $c = $litSettings->Locale === 'la' ? new Collator('en') : new Collator($litSettings->Locale);
+    $c = $litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA' ? new Collator('en') : new Collator($litSettings->Locale);
     $AllAvailableLocales = array_filter(ResourceBundle::getLocales(''), function ($value) {
         return strpos($value, 'POSIX') === false;
     });
     $AllAvailableLocales = array_reduce($AllAvailableLocales, function ($carry, $item) use ($litSettings) {
-        if ($litSettings->Locale === 'la') {
+        if ($litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA') {
             $carry[$item] = [ Locale::getDisplayName($item, 'en'), Locale::getDisplayName($item, 'en') ];
         } else {
             $carry[$item] = [ Locale::getDisplayName($item, $litSettings->Locale), Locale::getDisplayName($item, 'en') ];
         }
         return $carry;
     }, []);
-    $AllAvailableLocales['la'] = [ 'Latin', 'Latin' ];
+    $AllAvailableLocales['la_VA'] = [ 'Latin', 'Latin' ];
     $c->asort($AllAvailableLocales);
     echo '<form method="GET">';
     echo '<fieldset style="margin-bottom:6px;"><legend>' . _('Customize options for generating the Roman Calendar') . '</legend>';
