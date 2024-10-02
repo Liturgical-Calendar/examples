@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 20:09+0000\n"
+"POT-Creation-Date: 2024-10-02 18:21+0000\n"
 "PO-Revision-Date: 2022-12-09 01:24+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
@@ -19,25 +19,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.12.1\n"
 
-#: php/index.php:96 php/index.php:162
+#: php/index.php:81 php/index.php:147
 msgid "Generate Roman Calendar"
 msgstr "Genera il Calendario Romano"
 
-#: php/index.php:113
+#: php/index.php:98
 msgid "Go back"
 msgstr "Torna indietro"
 
-#: php/index.php:117
+#: php/index.php:102
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Calcolo del Calendario Liturgico per un dato anno"
 
-#: php/index.php:118
+#: php/index.php:103
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "Presentazione HTML elaborata da PHP con l'utilizzo di una richiesta cURL a %s"
 
-#: php/index.php:126
+#: php/index.php:111
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
@@ -45,340 +45,245 @@ msgstr ""
 "Hai richiesto un anno precedente al 1970: non è possibile richiedere anni "
 "prima del 1970."
 
-#: php/index.php:144
+#: php/index.php:129
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Configurare le impostazioni per la generazione del Calendario Romano"
 
-#: php/index.php:146 php/index.php:170
+#: php/index.php:131 php/index.php:155
 msgid "YEAR"
 msgstr "ANNO"
 
-#: php/index.php:147 php/index.php:170
+#: php/index.php:132 php/index.php:155
 msgid "EPIPHANY"
 msgstr "EPIFANIA"
 
-#: php/index.php:147
+#: php/index.php:132
 msgid "January 6"
 msgstr "6 Gennaio"
 
-#: php/index.php:147
+#: php/index.php:132
 msgid "Sunday between January 2 and January 8"
 msgstr "Domenica tra il 2 gennaio e l'8 gennaio"
 
-#: php/index.php:148 php/index.php:170
+#: php/index.php:133 php/index.php:155
 msgid "ASCENSION"
 msgstr "ASCENSIONE"
 
-#: php/index.php:148 php/index.php:149
+#: php/index.php:133 php/index.php:134
 msgid "Thursday"
 msgstr "Giovedì"
 
-#: php/index.php:148 php/index.php:149
+#: php/index.php:133 php/index.php:134
 msgid "Sunday"
 msgstr "Domenica"
 
-#: php/index.php:149 php/index.php:170
+#: php/index.php:134 php/index.php:155
 msgid "CORPUS CHRISTI"
 msgstr "CORPUS DOMINI"
 
-#: php/index.php:150 php/index.php:170
+#: php/index.php:135 php/index.php:155
 msgid "LOCALE"
 msgstr "LINGUA"
 
-#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:157 php/includes/enums/LitCommon.php:283
+#: php/index.php:142 php/src/Utilities.php:200
 msgid "or"
 msgstr "oppure"
 
-#: php/index.php:157
+#: php/index.php:142
 msgid "Choose the desired calendar from the list"
 msgstr "Scegli il calendario desiderato dalla lista"
 
-#: php/index.php:159 php/index.php:171
+#: php/index.php:144 php/index.php:156
 msgid "NATION"
 msgstr "NAZIONE"
 
-#: php/index.php:160 php/index.php:171
+#: php/index.php:145 php/index.php:156
 msgid "DIOCESE"
 msgstr "DIOCESI"
 
-#: php/index.php:169
+#: php/index.php:154
 msgid "Configurations being used to generate this calendar:"
 msgstr "Le impostazioni utilizzate per generare questo calendario:"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Month"
 msgstr "Mese"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Date in Gregorian Calendar"
 msgstr "Data nel Calendario Gregoriano"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "General Roman Calendar Festivity"
 msgstr "Festività del Calendario Romano Universale"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Grade of the Festivity"
 msgstr "Grado della Festività"
 
-#: php/index.php:225
+#: php/index.php:209
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informazioni sull'attuale calcolo dell'Anno Liturgico"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:29
-msgid "green"
-msgstr "verde"
+#~ msgid "green"
+#~ msgstr "verde"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:32
-msgid "purple"
-msgstr "viola"
+#~ msgid "purple"
+#~ msgstr "viola"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:35
-msgid "white"
-msgstr "bianco"
+#~ msgid "white"
+#~ msgstr "bianco"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:38
-msgid "red"
-msgstr "rosso"
+#~ msgid "red"
+#~ msgstr "rosso"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:41
-msgid "pink"
-msgstr "rosa"
+#~ msgid "pink"
+#~ msgstr "rosa"
 
-#: php/includes/enums/LitCommon.php:56
-msgid "Proper"
-msgstr "Proprio"
+#~ msgid "Proper"
+#~ msgstr "Proprio"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:58
-msgid "Dedication of a Church"
-msgstr "Dedicazione di una Chiesa"
+#~ msgid "Dedication of a Church"
+#~ msgstr "Dedicazione di una Chiesa"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:60
-msgid "Blessed Virgin Mary"
-msgstr "Beata Vergine Maria"
+#~ msgid "Blessed Virgin Mary"
+#~ msgstr "Beata Vergine Maria"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:62
-msgid "Martyrs"
-msgstr "Martiri"
+#~ msgid "Martyrs"
+#~ msgstr "Martiri"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:64
-msgid "Pastors"
-msgstr "Pastori"
+#~ msgid "Pastors"
+#~ msgstr "Pastori"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:66
-msgid "Doctors"
-msgstr "Dottori della Chiesa"
+#~ msgid "Doctors"
+#~ msgstr "Dottori della Chiesa"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:68
-msgid "Virgins"
-msgstr "Vergini"
+#~ msgid "Virgins"
+#~ msgstr "Vergini"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:70
-msgid "Holy Men and Women"
-msgstr "Santi e delle Sante"
+#~ msgid "Holy Men and Women"
+#~ msgstr "Santi e delle Sante"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:73
-msgid "For One Martyr"
-msgstr "Per un martire"
+#~ msgid "For One Martyr"
+#~ msgstr "Per un martire"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:75
-msgid "For Several Martyrs"
-msgstr "Per più martiri"
+#~ msgid "For Several Martyrs"
+#~ msgstr "Per più martiri"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:77
-msgid "For Missionary Martyrs"
-msgstr "Per i martiri missionari"
+#~ msgid "For Missionary Martyrs"
+#~ msgstr "Per i martiri missionari"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:79
-msgid "For One Missionary Martyr"
-msgstr "Per un martire missionario"
+#~ msgid "For One Missionary Martyr"
+#~ msgstr "Per un martire missionario"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:81
-msgid "For Several Missionary Martyrs"
-msgstr "Per più martiri missionari"
+#~ msgid "For Several Missionary Martyrs"
+#~ msgstr "Per più martiri missionari"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:83
-msgid "For a Virgin Martyr"
-msgstr "Per una vergine martire"
+#~ msgid "For a Virgin Martyr"
+#~ msgstr "Per una vergine martire"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:85
-msgid "For a Holy Woman Martyr"
-msgstr "Per una santa martire"
+#~ msgid "For a Holy Woman Martyr"
+#~ msgstr "Per una santa martire"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:87
-msgid "For a Pope"
-msgstr "Per un papa"
+#~ msgid "For a Pope"
+#~ msgstr "Per un papa"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:89
-msgid "For a Bishop"
-msgstr "Per un vescovo"
+#~ msgid "For a Bishop"
+#~ msgstr "Per un vescovo"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:91
-msgid "For One Pastor"
-msgstr "Per un pastore"
+#~ msgid "For One Pastor"
+#~ msgstr "Per un pastore"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:93
-msgid "For Several Pastors"
-msgstr "Per più pastori"
+#~ msgid "For Several Pastors"
+#~ msgstr "Per più pastori"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:95
-msgid "For Founders of a Church"
-msgstr "Per i fondatori delle chiese"
+#~ msgid "For Founders of a Church"
+#~ msgstr "Per i fondatori delle chiese"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:97
-msgid "For One Founder"
-msgstr "Per un fondatore"
+#~ msgid "For One Founder"
+#~ msgstr "Per un fondatore"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:99
-msgid "For Several Founders"
-msgstr "Per più fondatori"
+#~ msgid "For Several Founders"
+#~ msgstr "Per più fondatori"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:101
-msgid "For Missionaries"
-msgstr "Per i missionari"
+#~ msgid "For Missionaries"
+#~ msgstr "Per i missionari"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:103
-msgid "For One Virgin"
-msgstr "Per una vergine"
+#~ msgid "For One Virgin"
+#~ msgstr "Per una vergine"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:105
-msgid "For Several Virgins"
-msgstr "Per più vergini"
+#~ msgid "For Several Virgins"
+#~ msgstr "Per più vergini"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:107
-msgid "For Several Saints"
-msgstr "Per più santi"
+#~ msgid "For Several Saints"
+#~ msgstr "Per più santi"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:109
-msgid "For One Saint"
-msgstr "Per un santo"
+#~ msgid "For One Saint"
+#~ msgstr "Per un santo"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:111
-msgid "For an Abbot"
-msgstr "Per un abate"
+#~ msgid "For an Abbot"
+#~ msgstr "Per un abate"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:113
-msgid "For a Monk"
-msgstr "Per un monaco"
+#~ msgid "For a Monk"
+#~ msgstr "Per un monaco"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:115
-msgid "For a Nun"
-msgstr "Per una monaca"
+#~ msgid "For a Nun"
+#~ msgstr "Per una monaca"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:117
-msgid "For Religious"
-msgstr "Per i religiosi"
+#~ msgid "For Religious"
+#~ msgstr "Per i religiosi"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:119
-msgid "For Those Who Practiced Works of Mercy"
-msgstr "Per gli operatori di misericordia"
+#~ msgid "For Those Who Practiced Works of Mercy"
+#~ msgstr "Per gli operatori di misericordia"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:121
-msgid "For Educators"
-msgstr "Per gli educatori"
+#~ msgid "For Educators"
+#~ msgstr "Per gli educatori"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:123
-msgid "For Holy Women"
-msgstr "Per le sante"
+#~ msgid "For Holy Women"
+#~ msgstr "Per le sante"
 
-#. translators: (singular feminine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:170 php/includes/enums/LitCommon.php:182
-msgctxt "(SING_FEMM)"
-msgid "of the"
-msgstr "della"
+#~ msgctxt "(SING_FEMM)"
+#~ msgid "of the"
+#~ msgstr "della"
 
-#. translators: (plural feminine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:173
-msgctxt "(PLUR_FEMM)"
-msgid "of"
-msgstr "delle"
+#~ msgctxt "(PLUR_FEMM)"
+#~ msgid "of"
+#~ msgstr "delle"
 
-#. translators: (plural masculine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:179
-msgctxt "(PLUR_MASC)"
-msgid "of"
-msgstr "dei"
+#~ msgctxt "(PLUR_MASC)"
+#~ msgid "of"
+#~ msgstr "dei"
 
-#. translators: (singular masculine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:185
-msgctxt "(SING_MASC)"
-msgid "of the"
-msgstr "del"
+#~ msgctxt "(SING_MASC)"
+#~ msgid "of the"
+#~ msgstr "del"
 
-#: php/includes/enums/LitCommon.php:279
-msgid "From the Common"
-msgstr "Dal Comune"
+#~ msgid "From the Common"
+#~ msgstr "Dal Comune"
 
-#: php/includes/enums/LitGrade.php:98
-msgid "weekday"
-msgstr "feria"
+#~ msgid "weekday"
+#~ msgstr "feria"
 
-#: php/includes/enums/LitGrade.php:101
-msgid "Commemoration"
-msgstr "Commemorazione"
+#~ msgid "Commemoration"
+#~ msgstr "Commemorazione"
 
-#: php/includes/enums/LitGrade.php:104
-msgid "Optional memorial"
-msgstr "Memoria facoltativa"
+#~ msgid "Optional memorial"
+#~ msgstr "Memoria facoltativa"
 
-#: php/includes/enums/LitGrade.php:107
-msgid "Memorial"
-msgstr "Memoria"
+#~ msgid "Memorial"
+#~ msgstr "Memoria"
 
-#: php/includes/enums/LitGrade.php:110
-msgid "FEAST"
-msgstr "FESTA"
+#~ msgid "FEAST"
+#~ msgstr "FESTA"
 
-#: php/includes/enums/LitGrade.php:113
-msgid "FEAST OF THE LORD"
-msgstr "FESTA DEL SIGNORE"
+#~ msgid "FEAST OF THE LORD"
+#~ msgstr "FESTA DEL SIGNORE"
 
-#: php/includes/enums/LitGrade.php:116
-msgid "SOLEMNITY"
-msgstr "SOLENNITÀ"
+#~ msgid "SOLEMNITY"
+#~ msgstr "SOLENNITÀ"
 
-#: php/includes/enums/LitGrade.php:119
-msgid "celebration with precedence over solemnities"
-msgstr "celebrazione con precedenza sulle solennità"
+#~ msgid "celebration with precedence over solemnities"
+#~ msgstr "celebrazione con precedenza sulle solennità"
 
 #~ msgctxt "(SING_FEMM)"
 #~ msgid "of"

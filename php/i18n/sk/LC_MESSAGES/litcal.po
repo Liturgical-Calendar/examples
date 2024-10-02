@@ -1,286 +1,283 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# John R. D'Orazio <priest@johnromanodorazio.com>, 2022.
+# Milan Šalka <salka.milan@googlemail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-02 18:21+0000\n"
-"PO-Revision-Date: 2022-12-09 01:24+0000\n"
-"Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
-"Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
-"liturgical-calendar/php-example/nl/>\n"
-"Language: nl\n"
+"PO-Revision-Date: 2024-09-30 20:40+0000\n"
+"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
+"Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
+"liturgical-calendar/php-example/sk/>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: php/index.php:81 php/index.php:147
 msgid "Generate Roman Calendar"
-msgstr "Genereer de Romeinse kalender"
+msgstr "Generovať rímsky kalendár"
 
 #: php/index.php:98
 msgid "Go back"
-msgstr "Ga terug"
+msgstr "Vráť sa späť"
 
 #: php/index.php:102
 msgid "Liturgical Calendar Calculation for a Given Year"
-msgstr "Berekening van de liturgische kalender voor een bepaald jaar"
+msgstr "Výpočet liturgického kalendára pre daný rok"
 
 #: php/index.php:103
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
-"HTML-presentatie uitgewerkt door PHP met behulp van een CURL-verzoek naar "
-"een %s"
+"HTML prezentácia vypracovaná pomocou PHP s použitím CURL požiadavky na %s"
 
 #: php/index.php:111
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
-msgstr ""
-"U hebt een jaar vóór 1970 aangevraagd: U kunt geen jaren vóór 1970 aanvragen."
+msgstr "Žiadate rok pred rokom 1970: nie je možné žiadať roky pred rokom 1970."
 
 #: php/index.php:129
 msgid "Customize options for generating the Roman Calendar"
-msgstr ""
-"Configureer de instellingen voor het genereren van de Romeinse kalender"
+msgstr "Prispôsobte možnosti na vytvorenie Rímskeho kalendára"
 
 #: php/index.php:131 php/index.php:155
 msgid "YEAR"
-msgstr "JAAR"
+msgstr "ROK"
 
 #: php/index.php:132 php/index.php:155
 msgid "EPIPHANY"
-msgstr "OPENBARING"
+msgstr "Zjavenie Pána"
 
 #: php/index.php:132
 msgid "January 6"
-msgstr "6 januari"
+msgstr "6. januára"
 
 #: php/index.php:132
 msgid "Sunday between January 2 and January 8"
-msgstr "Zondag tussen 2 januari en 8 januari"
+msgstr "Nedeľa medzi 2. januárom a 8. januárom"
 
 #: php/index.php:133 php/index.php:155
 msgid "ASCENSION"
-msgstr "HEMELVAART"
+msgstr "Nanebovstúpenie"
 
 #: php/index.php:133 php/index.php:134
 msgid "Thursday"
-msgstr "Donderdag"
+msgstr "Štvrtok"
 
 #: php/index.php:133 php/index.php:134
 msgid "Sunday"
-msgstr "Zondag"
+msgstr "Nedeľa"
 
 #: php/index.php:134 php/index.php:155
 msgid "CORPUS CHRISTI"
-msgstr "SACRAMENTSDAG"
+msgstr "Sviatok Božieho Tela"
 
 #: php/index.php:135 php/index.php:155
 msgid "LOCALE"
-msgstr "TAAL"
+msgstr "MIESTO"
 
 #: php/index.php:142 php/src/Utilities.php:200
 msgid "or"
-msgstr "of"
+msgstr "alebo"
 
 #: php/index.php:142
 msgid "Choose the desired calendar from the list"
-msgstr "Kies de gewenste kalender uit de lijst"
+msgstr "Vyberte požadovaný kalendár zo zoznamu"
 
 #: php/index.php:144 php/index.php:156
 msgid "NATION"
-msgstr "NATIE"
+msgstr "NÁROD"
 
 #: php/index.php:145 php/index.php:156
 msgid "DIOCESE"
-msgstr "BISDOM"
+msgstr "DIECÉZA"
 
 #: php/index.php:154
 msgid "Configurations being used to generate this calendar:"
-msgstr "De instellingen die zijn gebruikt om deze agenda te genereren:"
+msgstr "Konfigurácie používané na vytvorenie tohto kalendára:"
 
 #: php/index.php:161
 msgid "Month"
-msgstr "Maand"
+msgstr "Mesiac"
 
 #: php/index.php:161
 msgid "Date in Gregorian Calendar"
-msgstr "Datum in de Gregoriaanse kalender"
+msgstr "Dátum v gregoriánskom kalendári"
 
 #: php/index.php:161
 msgid "General Roman Calendar Festivity"
-msgstr "Feestdagen van de universele Romeinse kalender"
+msgstr "Všeobecný rímsky kalendár Sviatok"
 
 #: php/index.php:161
 msgid "Grade of the Festivity"
-msgstr "Graad van de Viering"
+msgstr "Stupeň slávnosti"
 
 #: php/index.php:209
 msgid "Information about the current calculation of the Liturgical Year"
-msgstr "Informatie over de huidige berekening van het liturgisch jaar"
+msgstr "Informácie o aktuálnom výpočte liturgického roka"
 
 #~ msgid "green"
-#~ msgstr "groen"
+#~ msgstr "zelená"
 
 #~ msgid "purple"
-#~ msgstr "paars"
+#~ msgstr "fialová"
 
 #~ msgid "white"
-#~ msgstr "wit"
+#~ msgstr "biela"
 
 #~ msgid "red"
-#~ msgstr "rood"
+#~ msgstr "červená"
 
 #~ msgid "pink"
-#~ msgstr "roze"
+#~ msgstr "ružová"
 
 #~ msgid "Proper"
-#~ msgstr "Eigen"
+#~ msgstr "Správne"
 
 #~ msgid "Dedication of a Church"
-#~ msgstr "Kerkwijding"
+#~ msgstr "Posviacka kostola"
 
 #~ msgid "Blessed Virgin Mary"
-#~ msgstr "H. Maagd Maria"
+#~ msgstr "Blahoslavená Panna Mária"
 
 #~ msgid "Martyrs"
-#~ msgstr "Martelaren"
+#~ msgstr "Mučeníci"
 
 #~ msgid "Pastors"
-#~ msgstr "Herders"
+#~ msgstr "Pastori"
 
 #~ msgid "Doctors"
-#~ msgstr "Kerkleraren"
+#~ msgstr "Lekári"
 
 #~ msgid "Virgins"
-#~ msgstr "Maagden"
+#~ msgstr "Panny"
 
 #~ msgid "Holy Men and Women"
-#~ msgstr "Heilige mannen en vrouwen"
+#~ msgstr "Svätí muži a ženy"
 
 #~ msgid "For One Martyr"
-#~ msgstr "Voor een martelaar"
+#~ msgstr "Pre jedného mučeníka"
 
 #~ msgid "For Several Martyrs"
-#~ msgstr "Voor meer martelaren"
+#~ msgstr "Pre niekoľkých mučeníkov"
 
 #~ msgid "For Missionary Martyrs"
-#~ msgstr "Voor missionarissen-martelaren"
+#~ msgstr "Za misionárskych mučeníkov"
 
 #~ msgid "For One Missionary Martyr"
-#~ msgstr "Voor een missionaire martelaar"
+#~ msgstr "Za jedného misionárskeho mučeníka"
 
 #~ msgid "For Several Missionary Martyrs"
-#~ msgstr "Voor meer missionarissen-martelaren"
+#~ msgstr "Za niekoľkých misionárskych mučeníkov"
 
 #~ msgid "For a Virgin Martyr"
-#~ msgstr "Voor een maagd-martelares"
+#~ msgstr "Pre Pannu Martýrku"
 
 #~ msgid "For a Holy Woman Martyr"
-#~ msgstr "Voor een heilige martelares"
+#~ msgstr "Pre svätú ženu mučeníčku"
 
 #~ msgid "For a Pope"
-#~ msgstr "Voor een Paus"
+#~ msgstr "Pre pápeža"
 
 #~ msgid "For a Bishop"
-#~ msgstr "Voor een bisschop"
+#~ msgstr "Pre biskupa"
 
 #~ msgid "For One Pastor"
-#~ msgstr "Voor één priester"
+#~ msgstr "Pre jedného pastora"
 
 #~ msgid "For Several Pastors"
-#~ msgstr "Voor meerdere priesters"
+#~ msgstr "Pre niekoľkých pastierov"
 
 #~ msgid "For Founders of a Church"
-#~ msgstr "Voor stichters van een plaatselijke kerk"
+#~ msgstr "Pre zakladateľov Cirkvi"
 
 #~ msgid "For One Founder"
-#~ msgstr "Voor één stichter"
+#~ msgstr "Pre jedného zakladateľa"
 
 #~ msgid "For Several Founders"
-#~ msgstr "Voor meerdere stichters"
+#~ msgstr "Pre viacerých zakladateľov"
 
 #~ msgid "For Missionaries"
-#~ msgstr "Voor missionarissen"
+#~ msgstr "Pre misionárov"
 
 #~ msgid "For One Virgin"
-#~ msgstr "Voor één maagd"
+#~ msgstr "Pre jednu Pannu"
 
 #~ msgid "For Several Virgins"
-#~ msgstr "Voor meerdere maagden"
+#~ msgstr "Pre niekoľko panien"
 
 #~ msgid "For Several Saints"
-#~ msgstr "Voor meerdere heiligen"
+#~ msgstr "Pre niekoľkých svätých"
 
 #~ msgid "For One Saint"
-#~ msgstr "Voor één heilige"
+#~ msgstr "Pre jedného svätého"
 
 #~ msgid "For an Abbot"
-#~ msgstr "Voor een abt"
+#~ msgstr "Pre opáta"
 
 #~ msgid "For a Monk"
-#~ msgstr "Voor een monnik"
+#~ msgstr "Pre mnícha"
 
 #~ msgid "For a Nun"
-#~ msgstr "Voor een non"
+#~ msgstr "Pre mníšku"
 
 #~ msgid "For Religious"
-#~ msgstr "Voor kloosterlingen"
+#~ msgstr "Pre náboženské účely"
 
 #~ msgid "For Those Who Practiced Works of Mercy"
-#~ msgstr "Voor hen die werken van barmhartigheid hebben verricht"
+#~ msgstr "Pre tých, ktorí vykonávali skutky milosrdenstva"
 
 #~ msgid "For Educators"
-#~ msgstr "Voor opvoeders"
+#~ msgstr "Pre pedagógov"
 
 #~ msgid "For Holy Women"
-#~ msgstr "Voor heilige vrouwen"
+#~ msgstr "Pre sväté ženy"
 
 #~ msgctxt "(SING_FEMM)"
 #~ msgid "of the"
-#~ msgstr "voor de"
+#~ msgstr "z"
 
 #~ msgctxt "(PLUR_FEMM)"
 #~ msgid "of"
-#~ msgstr "voor"
+#~ msgstr "z"
 
 #~ msgctxt "(PLUR_MASC)"
 #~ msgid "of"
-#~ msgstr "voor"
+#~ msgstr "z"
 
 #~ msgctxt "(SING_MASC)"
 #~ msgid "of the"
-#~ msgstr "voor de"
+#~ msgstr "z"
 
 #~ msgid "From the Common"
-#~ msgstr "Gemeenschappelijke"
+#~ msgstr "Z bežného"
 
 #~ msgid "weekday"
-#~ msgstr "weekdag"
+#~ msgstr "pracovný deň"
 
 #~ msgid "Commemoration"
-#~ msgstr "Vrije gedachtenis"
+#~ msgstr "Spomienka"
 
 #~ msgid "Optional memorial"
-#~ msgstr "Vrije gedachtenis"
+#~ msgstr "Ľubovoľná spomienka"
 
 #~ msgid "Memorial"
-#~ msgstr "Gedachtenis"
+#~ msgstr "Pamätník"
 
 #~ msgid "FEAST"
-#~ msgstr "FEEST"
+#~ msgstr "SVIATOK"
 
 #~ msgid "FEAST OF THE LORD"
-#~ msgstr "FEEST VAN DE HEER"
+#~ msgstr "SVIATOK PÁNA"
 
 #~ msgid "SOLEMNITY"
-#~ msgstr "HOOGFEEST"
+#~ msgstr "SLÁVNOSŤ"
 
 #~ msgid "celebration with precedence over solemnities"
-#~ msgstr "viering met voorrang op hoogfesten"
+#~ msgstr "slávenie s prednosťou pred slávnosťami"
