@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 20:09+0000\n"
+"POT-Creation-Date: 2024-10-02 18:21+0000\n"
 "PO-Revision-Date: 2022-12-09 01:24+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
@@ -18,364 +18,269 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.12.1\n"
 
-#: php/index.php:96 php/index.php:162
+#: php/index.php:81 php/index.php:147
 msgid "Generate Roman Calendar"
 msgstr "Genereer de Romeinse kalender"
 
-#: php/index.php:113
+#: php/index.php:98
 msgid "Go back"
 msgstr "Ga terug"
 
-#: php/index.php:117
+#: php/index.php:102
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Berekening van de liturgische kalender voor een bepaald jaar"
 
-#: php/index.php:118
+#: php/index.php:103
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML-presentatie uitgewerkt door PHP met behulp van een CURL-verzoek naar "
 "een %s"
 
-#: php/index.php:126
+#: php/index.php:111
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 "U hebt een jaar vóór 1970 aangevraagd: U kunt geen jaren vóór 1970 aanvragen."
 
-#: php/index.php:144
+#: php/index.php:129
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 "Configureer de instellingen voor het genereren van de Romeinse kalender"
 
-#: php/index.php:146 php/index.php:170
+#: php/index.php:131 php/index.php:155
 msgid "YEAR"
 msgstr "JAAR"
 
-#: php/index.php:147 php/index.php:170
+#: php/index.php:132 php/index.php:155
 msgid "EPIPHANY"
 msgstr "OPENBARING"
 
-#: php/index.php:147
+#: php/index.php:132
 msgid "January 6"
 msgstr "6 januari"
 
-#: php/index.php:147
+#: php/index.php:132
 msgid "Sunday between January 2 and January 8"
 msgstr "Zondag tussen 2 januari en 8 januari"
 
-#: php/index.php:148 php/index.php:170
+#: php/index.php:133 php/index.php:155
 msgid "ASCENSION"
 msgstr "HEMELVAART"
 
-#: php/index.php:148 php/index.php:149
+#: php/index.php:133 php/index.php:134
 msgid "Thursday"
 msgstr "Donderdag"
 
-#: php/index.php:148 php/index.php:149
+#: php/index.php:133 php/index.php:134
 msgid "Sunday"
 msgstr "Zondag"
 
-#: php/index.php:149 php/index.php:170
+#: php/index.php:134 php/index.php:155
 msgid "CORPUS CHRISTI"
 msgstr "SACRAMENTSDAG"
 
-#: php/index.php:150 php/index.php:170
+#: php/index.php:135 php/index.php:155
 msgid "LOCALE"
 msgstr "TAAL"
 
-#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:157 php/includes/enums/LitCommon.php:283
+#: php/index.php:142 php/src/Utilities.php:200
 msgid "or"
 msgstr "of"
 
-#: php/index.php:157
+#: php/index.php:142
 msgid "Choose the desired calendar from the list"
 msgstr "Kies de gewenste kalender uit de lijst"
 
-#: php/index.php:159 php/index.php:171
+#: php/index.php:144 php/index.php:156
 msgid "NATION"
 msgstr "NATIE"
 
-#: php/index.php:160 php/index.php:171
+#: php/index.php:145 php/index.php:156
 msgid "DIOCESE"
 msgstr "BISDOM"
 
-#: php/index.php:169
+#: php/index.php:154
 msgid "Configurations being used to generate this calendar:"
 msgstr "De instellingen die zijn gebruikt om deze agenda te genereren:"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Month"
 msgstr "Maand"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Date in Gregorian Calendar"
 msgstr "Datum in de Gregoriaanse kalender"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "General Roman Calendar Festivity"
 msgstr "Feestdagen van de universele Romeinse kalender"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Grade of the Festivity"
 msgstr "Graad van de Viering"
 
-#: php/index.php:225
+#: php/index.php:209
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informatie over de huidige berekening van het liturgisch jaar"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:29
-msgid "green"
-msgstr "groen"
+#~ msgid "green"
+#~ msgstr "groen"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:32
-msgid "purple"
-msgstr "paars"
+#~ msgid "purple"
+#~ msgstr "paars"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:35
-msgid "white"
-msgstr "wit"
+#~ msgid "white"
+#~ msgstr "wit"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:38
-msgid "red"
-msgstr "rood"
+#~ msgid "red"
+#~ msgstr "rood"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:41
-msgid "pink"
-msgstr "roze"
+#~ msgid "pink"
+#~ msgstr "roze"
 
-#: php/includes/enums/LitCommon.php:56
-msgid "Proper"
-msgstr "Eigen"
+#~ msgid "Proper"
+#~ msgstr "Eigen"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:58
-msgid "Dedication of a Church"
-msgstr "Kerkwijding"
+#~ msgid "Dedication of a Church"
+#~ msgstr "Kerkwijding"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:60
-msgid "Blessed Virgin Mary"
-msgstr "H. Maagd Maria"
+#~ msgid "Blessed Virgin Mary"
+#~ msgstr "H. Maagd Maria"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:62
-msgid "Martyrs"
-msgstr "Martelaren"
+#~ msgid "Martyrs"
+#~ msgstr "Martelaren"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:64
-msgid "Pastors"
-msgstr "Herders"
+#~ msgid "Pastors"
+#~ msgstr "Herders"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:66
-msgid "Doctors"
-msgstr "Kerkleraren"
+#~ msgid "Doctors"
+#~ msgstr "Kerkleraren"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:68
-msgid "Virgins"
-msgstr "Maagden"
+#~ msgid "Virgins"
+#~ msgstr "Maagden"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:70
-msgid "Holy Men and Women"
-msgstr "Heilige mannen en vrouwen"
+#~ msgid "Holy Men and Women"
+#~ msgstr "Heilige mannen en vrouwen"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:73
-msgid "For One Martyr"
-msgstr "Voor een martelaar"
+#~ msgid "For One Martyr"
+#~ msgstr "Voor een martelaar"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:75
-msgid "For Several Martyrs"
-msgstr "Voor meer martelaren"
+#~ msgid "For Several Martyrs"
+#~ msgstr "Voor meer martelaren"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:77
-msgid "For Missionary Martyrs"
-msgstr "Voor missionarissen-martelaren"
+#~ msgid "For Missionary Martyrs"
+#~ msgstr "Voor missionarissen-martelaren"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:79
-msgid "For One Missionary Martyr"
-msgstr "Voor een missionaire martelaar"
+#~ msgid "For One Missionary Martyr"
+#~ msgstr "Voor een missionaire martelaar"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:81
-msgid "For Several Missionary Martyrs"
-msgstr "Voor meer missionarissen-martelaren"
+#~ msgid "For Several Missionary Martyrs"
+#~ msgstr "Voor meer missionarissen-martelaren"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:83
-msgid "For a Virgin Martyr"
-msgstr "Voor een maagd-martelares"
+#~ msgid "For a Virgin Martyr"
+#~ msgstr "Voor een maagd-martelares"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:85
-msgid "For a Holy Woman Martyr"
-msgstr "Voor een heilige martelares"
+#~ msgid "For a Holy Woman Martyr"
+#~ msgstr "Voor een heilige martelares"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:87
-msgid "For a Pope"
-msgstr "Voor een Paus"
+#~ msgid "For a Pope"
+#~ msgstr "Voor een Paus"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:89
-msgid "For a Bishop"
-msgstr "Voor een bisschop"
+#~ msgid "For a Bishop"
+#~ msgstr "Voor een bisschop"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:91
-msgid "For One Pastor"
-msgstr "Voor één priester"
+#~ msgid "For One Pastor"
+#~ msgstr "Voor één priester"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:93
-msgid "For Several Pastors"
-msgstr "Voor meerdere priesters"
+#~ msgid "For Several Pastors"
+#~ msgstr "Voor meerdere priesters"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:95
-msgid "For Founders of a Church"
-msgstr "Voor stichters van een plaatselijke kerk"
+#~ msgid "For Founders of a Church"
+#~ msgstr "Voor stichters van een plaatselijke kerk"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:97
-msgid "For One Founder"
-msgstr "Voor één stichter"
+#~ msgid "For One Founder"
+#~ msgstr "Voor één stichter"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:99
-msgid "For Several Founders"
-msgstr "Voor meerdere stichters"
+#~ msgid "For Several Founders"
+#~ msgstr "Voor meerdere stichters"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:101
-msgid "For Missionaries"
-msgstr "Voor missionarissen"
+#~ msgid "For Missionaries"
+#~ msgstr "Voor missionarissen"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:103
-msgid "For One Virgin"
-msgstr "Voor één maagd"
+#~ msgid "For One Virgin"
+#~ msgstr "Voor één maagd"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:105
-msgid "For Several Virgins"
-msgstr "Voor meerdere maagden"
+#~ msgid "For Several Virgins"
+#~ msgstr "Voor meerdere maagden"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:107
-msgid "For Several Saints"
-msgstr "Voor meerdere heiligen"
+#~ msgid "For Several Saints"
+#~ msgstr "Voor meerdere heiligen"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:109
-msgid "For One Saint"
-msgstr "Voor één heilige"
+#~ msgid "For One Saint"
+#~ msgstr "Voor één heilige"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:111
-msgid "For an Abbot"
-msgstr "Voor een abt"
+#~ msgid "For an Abbot"
+#~ msgstr "Voor een abt"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:113
-msgid "For a Monk"
-msgstr "Voor een monnik"
+#~ msgid "For a Monk"
+#~ msgstr "Voor een monnik"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:115
-msgid "For a Nun"
-msgstr "Voor een non"
+#~ msgid "For a Nun"
+#~ msgstr "Voor een non"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:117
-msgid "For Religious"
-msgstr "Voor kloosterlingen"
+#~ msgid "For Religious"
+#~ msgstr "Voor kloosterlingen"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:119
-msgid "For Those Who Practiced Works of Mercy"
-msgstr "Voor hen die werken van barmhartigheid hebben verricht"
+#~ msgid "For Those Who Practiced Works of Mercy"
+#~ msgstr "Voor hen die werken van barmhartigheid hebben verricht"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:121
-msgid "For Educators"
-msgstr "Voor opvoeders"
+#~ msgid "For Educators"
+#~ msgstr "Voor opvoeders"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:123
-msgid "For Holy Women"
-msgstr "Voor heilige vrouwen"
+#~ msgid "For Holy Women"
+#~ msgstr "Voor heilige vrouwen"
 
-#. translators: (singular feminine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:170 php/includes/enums/LitCommon.php:182
-msgctxt "(SING_FEMM)"
-msgid "of the"
-msgstr "voor de"
+#~ msgctxt "(SING_FEMM)"
+#~ msgid "of the"
+#~ msgstr "voor de"
 
-#. translators: (plural feminine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:173
-msgctxt "(PLUR_FEMM)"
-msgid "of"
-msgstr "voor"
+#~ msgctxt "(PLUR_FEMM)"
+#~ msgid "of"
+#~ msgstr "voor"
 
-#. translators: (plural masculine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:179
-msgctxt "(PLUR_MASC)"
-msgid "of"
-msgstr "voor"
+#~ msgctxt "(PLUR_MASC)"
+#~ msgid "of"
+#~ msgstr "voor"
 
-#. translators: (singular masculine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:185
-msgctxt "(SING_MASC)"
-msgid "of the"
-msgstr "voor de"
+#~ msgctxt "(SING_MASC)"
+#~ msgid "of the"
+#~ msgstr "voor de"
 
-#: php/includes/enums/LitCommon.php:279
-msgid "From the Common"
-msgstr "Gemeenschappelijke"
+#~ msgid "From the Common"
+#~ msgstr "Gemeenschappelijke"
 
-#: php/includes/enums/LitGrade.php:98
-msgid "weekday"
-msgstr "weekdag"
+#~ msgid "weekday"
+#~ msgstr "weekdag"
 
-#: php/includes/enums/LitGrade.php:101
-msgid "Commemoration"
-msgstr "Vrije gedachtenis"
+#~ msgid "Commemoration"
+#~ msgstr "Vrije gedachtenis"
 
-#: php/includes/enums/LitGrade.php:104
-msgid "Optional memorial"
-msgstr "Vrije gedachtenis"
+#~ msgid "Optional memorial"
+#~ msgstr "Vrije gedachtenis"
 
-#: php/includes/enums/LitGrade.php:107
-msgid "Memorial"
-msgstr "Gedachtenis"
+#~ msgid "Memorial"
+#~ msgstr "Gedachtenis"
 
-#: php/includes/enums/LitGrade.php:110
-msgid "FEAST"
-msgstr "FEEST"
+#~ msgid "FEAST"
+#~ msgstr "FEEST"
 
-#: php/includes/enums/LitGrade.php:113
-msgid "FEAST OF THE LORD"
-msgstr "FEEST VAN DE HEER"
+#~ msgid "FEAST OF THE LORD"
+#~ msgstr "FEEST VAN DE HEER"
 
-#: php/includes/enums/LitGrade.php:116
-msgid "SOLEMNITY"
-msgstr "HOOGFEEST"
+#~ msgid "SOLEMNITY"
+#~ msgstr "HOOGFEEST"
 
-#: php/includes/enums/LitGrade.php:119
-msgid "celebration with precedence over solemnities"
-msgstr "viering met voorrang op hoogfesten"
+#~ msgid "celebration with precedence over solemnities"
+#~ msgstr "viering met voorrang op hoogfesten"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 20:09+0000\n"
+"POT-Creation-Date: 2024-10-02 18:21+0000\n"
 "PO-Revision-Date: 2024-09-30 20:40+0000\n"
 "Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
 "Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
@@ -18,361 +18,266 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:96 php/index.php:162
+#: php/index.php:81 php/index.php:147
 msgid "Generate Roman Calendar"
 msgstr "Generovať rímsky kalendár"
 
-#: php/index.php:113
+#: php/index.php:98
 msgid "Go back"
 msgstr "Vráť sa späť"
 
-#: php/index.php:117
+#: php/index.php:102
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Výpočet liturgického kalendára pre daný rok"
 
-#: php/index.php:118
+#: php/index.php:103
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML prezentácia vypracovaná pomocou PHP s použitím CURL požiadavky na %s"
 
-#: php/index.php:126
+#: php/index.php:111
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr "Žiadate rok pred rokom 1970: nie je možné žiadať roky pred rokom 1970."
 
-#: php/index.php:144
+#: php/index.php:129
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Prispôsobte možnosti na vytvorenie Rímskeho kalendára"
 
-#: php/index.php:146 php/index.php:170
+#: php/index.php:131 php/index.php:155
 msgid "YEAR"
 msgstr "ROK"
 
-#: php/index.php:147 php/index.php:170
+#: php/index.php:132 php/index.php:155
 msgid "EPIPHANY"
 msgstr "Zjavenie Pána"
 
-#: php/index.php:147
+#: php/index.php:132
 msgid "January 6"
 msgstr "6. januára"
 
-#: php/index.php:147
+#: php/index.php:132
 msgid "Sunday between January 2 and January 8"
 msgstr "Nedeľa medzi 2. januárom a 8. januárom"
 
-#: php/index.php:148 php/index.php:170
+#: php/index.php:133 php/index.php:155
 msgid "ASCENSION"
 msgstr "Nanebovstúpenie"
 
-#: php/index.php:148 php/index.php:149
+#: php/index.php:133 php/index.php:134
 msgid "Thursday"
 msgstr "Štvrtok"
 
-#: php/index.php:148 php/index.php:149
+#: php/index.php:133 php/index.php:134
 msgid "Sunday"
 msgstr "Nedeľa"
 
-#: php/index.php:149 php/index.php:170
+#: php/index.php:134 php/index.php:155
 msgid "CORPUS CHRISTI"
 msgstr "Sviatok Božieho Tela"
 
-#: php/index.php:150 php/index.php:170
+#: php/index.php:135 php/index.php:155
 msgid "LOCALE"
 msgstr "MIESTO"
 
-#. translators: when there are multiple possible commons, this will be the glue "or from the common of..."
-#: php/index.php:157 php/includes/enums/LitCommon.php:283
+#: php/index.php:142 php/src/Utilities.php:200
 msgid "or"
 msgstr "alebo"
 
-#: php/index.php:157
+#: php/index.php:142
 msgid "Choose the desired calendar from the list"
 msgstr "Vyberte požadovaný kalendár zo zoznamu"
 
-#: php/index.php:159 php/index.php:171
+#: php/index.php:144 php/index.php:156
 msgid "NATION"
 msgstr "NÁROD"
 
-#: php/index.php:160 php/index.php:171
+#: php/index.php:145 php/index.php:156
 msgid "DIOCESE"
 msgstr "DIECÉZA"
 
-#: php/index.php:169
+#: php/index.php:154
 msgid "Configurations being used to generate this calendar:"
 msgstr "Konfigurácie používané na vytvorenie tohto kalendára:"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Month"
 msgstr "Mesiac"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Date in Gregorian Calendar"
 msgstr "Dátum v gregoriánskom kalendári"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "General Roman Calendar Festivity"
 msgstr "Všeobecný rímsky kalendár Sviatok"
 
-#: php/index.php:176
+#: php/index.php:161
 msgid "Grade of the Festivity"
 msgstr "Stupeň slávnosti"
 
-#: php/index.php:225
+#: php/index.php:209
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informácie o aktuálnom výpočte liturgického roka"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:29
-msgid "green"
-msgstr "zelená"
+#~ msgid "green"
+#~ msgstr "zelená"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:32
-msgid "purple"
-msgstr "fialová"
+#~ msgid "purple"
+#~ msgstr "fialová"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:35
-msgid "white"
-msgstr "biela"
+#~ msgid "white"
+#~ msgstr "biela"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:38
-msgid "red"
-msgstr "červená"
+#~ msgid "red"
+#~ msgstr "červená"
 
-#. translators: context = liturgical color
-#: php/includes/enums/LitColor.php:41
-msgid "pink"
-msgstr "ružová"
+#~ msgid "pink"
+#~ msgstr "ružová"
 
-#: php/includes/enums/LitCommon.php:56
-msgid "Proper"
-msgstr "Správne"
+#~ msgid "Proper"
+#~ msgstr "Správne"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:58
-msgid "Dedication of a Church"
-msgstr "Posviacka kostola"
+#~ msgid "Dedication of a Church"
+#~ msgstr "Posviacka kostola"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:60
-msgid "Blessed Virgin Mary"
-msgstr "Blahoslavená Panna Mária"
+#~ msgid "Blessed Virgin Mary"
+#~ msgstr "Blahoslavená Panna Mária"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:62
-msgid "Martyrs"
-msgstr "Mučeníci"
+#~ msgid "Martyrs"
+#~ msgstr "Mučeníci"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:64
-msgid "Pastors"
-msgstr "Pastori"
+#~ msgid "Pastors"
+#~ msgstr "Pastori"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:66
-msgid "Doctors"
-msgstr "Lekári"
+#~ msgid "Doctors"
+#~ msgstr "Lekári"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:68
-msgid "Virgins"
-msgstr "Panny"
+#~ msgid "Virgins"
+#~ msgstr "Panny"
 
-#. translators: context = from the Common of nn
-#: php/includes/enums/LitCommon.php:70
-msgid "Holy Men and Women"
-msgstr "Svätí muži a ženy"
+#~ msgid "Holy Men and Women"
+#~ msgstr "Svätí muži a ženy"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:73
-msgid "For One Martyr"
-msgstr "Pre jedného mučeníka"
+#~ msgid "For One Martyr"
+#~ msgstr "Pre jedného mučeníka"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:75
-msgid "For Several Martyrs"
-msgstr "Pre niekoľkých mučeníkov"
+#~ msgid "For Several Martyrs"
+#~ msgstr "Pre niekoľkých mučeníkov"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:77
-msgid "For Missionary Martyrs"
-msgstr "Za misionárskych mučeníkov"
+#~ msgid "For Missionary Martyrs"
+#~ msgstr "Za misionárskych mučeníkov"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:79
-msgid "For One Missionary Martyr"
-msgstr "Za jedného misionárskeho mučeníka"
+#~ msgid "For One Missionary Martyr"
+#~ msgstr "Za jedného misionárskeho mučeníka"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:81
-msgid "For Several Missionary Martyrs"
-msgstr "Za niekoľkých misionárskych mučeníkov"
+#~ msgid "For Several Missionary Martyrs"
+#~ msgstr "Za niekoľkých misionárskych mučeníkov"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:83
-msgid "For a Virgin Martyr"
-msgstr "Pre Pannu Martýrku"
+#~ msgid "For a Virgin Martyr"
+#~ msgstr "Pre Pannu Martýrku"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:85
-msgid "For a Holy Woman Martyr"
-msgstr "Pre svätú ženu mučeníčku"
+#~ msgid "For a Holy Woman Martyr"
+#~ msgstr "Pre svätú ženu mučeníčku"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:87
-msgid "For a Pope"
-msgstr "Pre pápeža"
+#~ msgid "For a Pope"
+#~ msgstr "Pre pápeža"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:89
-msgid "For a Bishop"
-msgstr "Pre biskupa"
+#~ msgid "For a Bishop"
+#~ msgstr "Pre biskupa"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:91
-msgid "For One Pastor"
-msgstr "Pre jedného pastora"
+#~ msgid "For One Pastor"
+#~ msgstr "Pre jedného pastora"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:93
-msgid "For Several Pastors"
-msgstr "Pre niekoľkých pastierov"
+#~ msgid "For Several Pastors"
+#~ msgstr "Pre niekoľkých pastierov"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:95
-msgid "For Founders of a Church"
-msgstr "Pre zakladateľov Cirkvi"
+#~ msgid "For Founders of a Church"
+#~ msgstr "Pre zakladateľov Cirkvi"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:97
-msgid "For One Founder"
-msgstr "Pre jedného zakladateľa"
+#~ msgid "For One Founder"
+#~ msgstr "Pre jedného zakladateľa"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:99
-msgid "For Several Founders"
-msgstr "Pre viacerých zakladateľov"
+#~ msgid "For Several Founders"
+#~ msgstr "Pre viacerých zakladateľov"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:101
-msgid "For Missionaries"
-msgstr "Pre misionárov"
+#~ msgid "For Missionaries"
+#~ msgstr "Pre misionárov"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:103
-msgid "For One Virgin"
-msgstr "Pre jednu Pannu"
+#~ msgid "For One Virgin"
+#~ msgstr "Pre jednu Pannu"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:105
-msgid "For Several Virgins"
-msgstr "Pre niekoľko panien"
+#~ msgid "For Several Virgins"
+#~ msgstr "Pre niekoľko panien"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:107
-msgid "For Several Saints"
-msgstr "Pre niekoľkých svätých"
+#~ msgid "For Several Saints"
+#~ msgstr "Pre niekoľkých svätých"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:109
-msgid "For One Saint"
-msgstr "Pre jedného svätého"
+#~ msgid "For One Saint"
+#~ msgstr "Pre jedného svätého"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:111
-msgid "For an Abbot"
-msgstr "Pre opáta"
+#~ msgid "For an Abbot"
+#~ msgstr "Pre opáta"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:113
-msgid "For a Monk"
-msgstr "Pre mnícha"
+#~ msgid "For a Monk"
+#~ msgstr "Pre mnícha"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:115
-msgid "For a Nun"
-msgstr "Pre mníšku"
+#~ msgid "For a Nun"
+#~ msgstr "Pre mníšku"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:117
-msgid "For Religious"
-msgstr "Pre náboženské účely"
+#~ msgid "For Religious"
+#~ msgstr "Pre náboženské účely"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:119
-msgid "For Those Who Practiced Works of Mercy"
-msgstr "Pre tých, ktorí vykonávali skutky milosrdenstva"
+#~ msgid "For Those Who Practiced Works of Mercy"
+#~ msgstr "Pre tých, ktorí vykonávali skutky milosrdenstva"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:121
-msgid "For Educators"
-msgstr "Pre pedagógov"
+#~ msgid "For Educators"
+#~ msgstr "Pre pedagógov"
 
-#. translators: context = from the Common of nn: nn
-#: php/includes/enums/LitCommon.php:123
-msgid "For Holy Women"
-msgstr "Pre sväté ženy"
+#~ msgid "For Holy Women"
+#~ msgstr "Pre sväté ženy"
 
-#. translators: (singular feminine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:170 php/includes/enums/LitCommon.php:182
-msgctxt "(SING_FEMM)"
-msgid "of the"
-msgstr "z"
+#~ msgctxt "(SING_FEMM)"
+#~ msgid "of the"
+#~ msgstr "z"
 
-#. translators: (plural feminine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:173
-msgctxt "(PLUR_FEMM)"
-msgid "of"
-msgstr "z"
+#~ msgctxt "(PLUR_FEMM)"
+#~ msgid "of"
+#~ msgstr "z"
 
-#. translators: (plural masculine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:179
-msgctxt "(PLUR_MASC)"
-msgid "of"
-msgstr "z"
+#~ msgctxt "(PLUR_MASC)"
+#~ msgid "of"
+#~ msgstr "z"
 
-#. translators: (singular masculine) glue between "From the Common" and the actual common. Latin: leave empty!
-#: php/includes/enums/LitCommon.php:185
-msgctxt "(SING_MASC)"
-msgid "of the"
-msgstr "z"
+#~ msgctxt "(SING_MASC)"
+#~ msgid "of the"
+#~ msgstr "z"
 
-#: php/includes/enums/LitCommon.php:279
-msgid "From the Common"
-msgstr "Z bežného"
+#~ msgid "From the Common"
+#~ msgstr "Z bežného"
 
-#: php/includes/enums/LitGrade.php:98
-msgid "weekday"
-msgstr "pracovný deň"
+#~ msgid "weekday"
+#~ msgstr "pracovný deň"
 
-#: php/includes/enums/LitGrade.php:101
-msgid "Commemoration"
-msgstr "Spomienka"
+#~ msgid "Commemoration"
+#~ msgstr "Spomienka"
 
-#: php/includes/enums/LitGrade.php:104
-msgid "Optional memorial"
-msgstr "Ľubovoľná spomienka"
+#~ msgid "Optional memorial"
+#~ msgstr "Ľubovoľná spomienka"
 
-#: php/includes/enums/LitGrade.php:107
-msgid "Memorial"
-msgstr "Pamätník"
+#~ msgid "Memorial"
+#~ msgstr "Pamätník"
 
-#: php/includes/enums/LitGrade.php:110
-msgid "FEAST"
-msgstr "SVIATOK"
+#~ msgid "FEAST"
+#~ msgstr "SVIATOK"
 
-#: php/includes/enums/LitGrade.php:113
-msgid "FEAST OF THE LORD"
-msgstr "SVIATOK PÁNA"
+#~ msgid "FEAST OF THE LORD"
+#~ msgstr "SVIATOK PÁNA"
 
-#: php/includes/enums/LitGrade.php:116
-msgid "SOLEMNITY"
-msgstr "SLÁVNOSŤ"
+#~ msgid "SOLEMNITY"
+#~ msgstr "SLÁVNOSŤ"
 
-#: php/includes/enums/LitGrade.php:119
-msgid "celebration with precedence over solemnities"
-msgstr "slávenie s prednosťou pred slávnosťami"
+#~ msgid "celebration with precedence over solemnities"
+#~ msgstr "slávenie s prednosťou pred slávnosťami"
