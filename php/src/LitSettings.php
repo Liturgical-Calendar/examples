@@ -161,7 +161,7 @@ class LitSettings
     {
         $this->MetaData = $MetaData;
         if ($this->DiocesanCalendar !== null) {
-            $this->NationalCalendar = $this->MetaData["diocesan_calendars"][$this->DiocesanCalendar]["nation"];
+            $this->NationalCalendar = array_values(array_filter($this->MetaData["diocesan_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar))[0]["nation"];
         }
         $this->updateSettingsByNation($stagingURL);
     }
