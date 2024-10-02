@@ -17,10 +17,10 @@ class Festivity
     public string $type;
     public int $grade;
     public string $grade_lcl;
-    public string $displayGrade;
+    public string $display_grade;
     public array $common;
     public string $common_lcl;
-    public string $liturgicalYear;
+    public string $liturgical_year;
 
     public function __construct(array $LitEvent)
     {
@@ -33,7 +33,7 @@ class Festivity
         $this->grade_lcl      = $LitEvent['grade_lcl'];
         $this->common         = $LitEvent['common'];
         $this->common_lcl     = $LitEvent['common_lcl'];
-        $this->liturgicalYear = $LitEvent['liturgical_year'] ?? '';
-        $this->displayGrade   = $LitEvent['display_grade'] ?? '';
+        $this->liturgical_year = $LitEvent['liturgical_year'] ?? '';
+        $this->display_grade   = $LitEvent['display_grade'] ?? '';
     }
 }
