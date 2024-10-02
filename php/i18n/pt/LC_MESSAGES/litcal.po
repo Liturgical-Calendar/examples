@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 18:21+0000\n"
+"POT-Creation-Date: 2024-10-02 19:15+0000\n"
 "PO-Revision-Date: 2024-10-02 18:49+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Portuguese <https://translate.johnromanodorazio.com/projects/"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:81 php/index.php:147
+#: php/index.php:81 php/index.php:148
 msgid "Generate Roman Calendar"
 msgstr "Gerar Calendário Romano"
 
@@ -51,11 +51,11 @@ msgstr ""
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Personalizar opções para gerar o Calendário Romano"
 
-#: php/index.php:131 php/index.php:155
+#: php/index.php:131 php/index.php:156
 msgid "YEAR"
 msgstr "ANO"
 
-#: php/index.php:132 php/index.php:155
+#: php/index.php:132 php/index.php:156
 msgid "EPIPHANY"
 msgstr "EPIFANIA"
 
@@ -67,7 +67,7 @@ msgstr "6 de janeiro"
 msgid "Sunday between January 2 and January 8"
 msgstr "Domingo entre 2 de janeiro e 8 de janeiro"
 
-#: php/index.php:133 php/index.php:155
+#: php/index.php:133 php/index.php:156
 msgid "ASCENSION"
 msgstr "ASCENSÃO"
 
@@ -79,51 +79,63 @@ msgstr "Quinta-feira"
 msgid "Sunday"
 msgstr "Domingo"
 
-#: php/index.php:134 php/index.php:155
+#: php/index.php:134 php/index.php:156
 msgid "CORPUS CHRISTI"
 msgstr "CORPUS CHRISTI"
 
-#: php/index.php:135 php/index.php:155
+#: php/index.php:135
+msgid "ETERNAL HIGH PRIEST"
+msgstr ""
+
+#: php/index.php:135
+msgid "False"
+msgstr ""
+
+#: php/index.php:135
+msgid "True"
+msgstr ""
+
+#: php/index.php:136 php/index.php:156
 msgid "LOCALE"
 msgstr "LOCAL"
 
-#: php/index.php:142 php/src/Utilities.php:200
+#: php/index.php:143 php/src/Utilities.php:209
 msgid "or"
 msgstr "ou"
 
-#: php/index.php:142
+#: php/index.php:143
 msgid "Choose the desired calendar from the list"
 msgstr "Escolha o calendário desejado da lista"
 
-#: php/index.php:144 php/index.php:156
+#: php/index.php:145 php/index.php:157
 msgid "NATION"
 msgstr "NAÇÃO"
 
-#: php/index.php:145 php/index.php:156
+#: php/index.php:146 php/index.php:157
 msgid "DIOCESE"
 msgstr "DIOCESE"
 
-#: php/index.php:154
+#: php/index.php:155
 msgid "Configurations being used to generate this calendar:"
 msgstr "Configurações sendo usadas para gerar este calendário:"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "Month"
 msgstr "Mês"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "Date in Gregorian Calendar"
 msgstr "Data no Calendário Gregoriano"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "General Roman Calendar Festivity"
 msgstr "Festa do Calendário Romano Geral"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "Grade of the Festivity"
 msgstr "Grau da Festividade"
 
-#: php/index.php:209
+#: php/index.php:210
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informações sobre o cálculo atual do Ano Litúrgico"
 

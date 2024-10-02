@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 18:21+0000\n"
+"POT-Creation-Date: 2024-10-02 19:15+0000\n"
 "PO-Revision-Date: 2022-12-09 01:24+0000\n"
 "Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.12.1\n"
 
-#: php/index.php:81 php/index.php:147
+#: php/index.php:81 php/index.php:148
 msgid "Generate Roman Calendar"
 msgstr "Genereer de Romeinse kalender"
 
@@ -49,11 +49,11 @@ msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 "Configureer de instellingen voor het genereren van de Romeinse kalender"
 
-#: php/index.php:131 php/index.php:155
+#: php/index.php:131 php/index.php:156
 msgid "YEAR"
 msgstr "JAAR"
 
-#: php/index.php:132 php/index.php:155
+#: php/index.php:132 php/index.php:156
 msgid "EPIPHANY"
 msgstr "OPENBARING"
 
@@ -65,7 +65,7 @@ msgstr "6 januari"
 msgid "Sunday between January 2 and January 8"
 msgstr "Zondag tussen 2 januari en 8 januari"
 
-#: php/index.php:133 php/index.php:155
+#: php/index.php:133 php/index.php:156
 msgid "ASCENSION"
 msgstr "HEMELVAART"
 
@@ -77,51 +77,63 @@ msgstr "Donderdag"
 msgid "Sunday"
 msgstr "Zondag"
 
-#: php/index.php:134 php/index.php:155
+#: php/index.php:134 php/index.php:156
 msgid "CORPUS CHRISTI"
 msgstr "SACRAMENTSDAG"
 
-#: php/index.php:135 php/index.php:155
+#: php/index.php:135
+msgid "ETERNAL HIGH PRIEST"
+msgstr ""
+
+#: php/index.php:135
+msgid "False"
+msgstr ""
+
+#: php/index.php:135
+msgid "True"
+msgstr ""
+
+#: php/index.php:136 php/index.php:156
 msgid "LOCALE"
 msgstr "TAAL"
 
-#: php/index.php:142 php/src/Utilities.php:200
+#: php/index.php:143 php/src/Utilities.php:209
 msgid "or"
 msgstr "of"
 
-#: php/index.php:142
+#: php/index.php:143
 msgid "Choose the desired calendar from the list"
 msgstr "Kies de gewenste kalender uit de lijst"
 
-#: php/index.php:144 php/index.php:156
+#: php/index.php:145 php/index.php:157
 msgid "NATION"
 msgstr "NATIE"
 
-#: php/index.php:145 php/index.php:156
+#: php/index.php:146 php/index.php:157
 msgid "DIOCESE"
 msgstr "BISDOM"
 
-#: php/index.php:154
+#: php/index.php:155
 msgid "Configurations being used to generate this calendar:"
 msgstr "De instellingen die zijn gebruikt om deze agenda te genereren:"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "Month"
 msgstr "Maand"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "Date in Gregorian Calendar"
 msgstr "Datum in de Gregoriaanse kalender"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "General Roman Calendar Festivity"
 msgstr "Feestdagen van de universele Romeinse kalender"
 
-#: php/index.php:161
+#: php/index.php:162
 msgid "Grade of the Festivity"
 msgstr "Graad van de Viering"
 
-#: php/index.php:209
+#: php/index.php:210
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informatie over de huidige berekening van het liturgisch jaar"
 
