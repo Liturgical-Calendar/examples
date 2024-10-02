@@ -20,7 +20,7 @@
     "HTML-presentation": "Présentation HTML élaborée par JAVASCRIPT utilisant une requête AJAX vers un %s",
     "LitCal-Calculation": "Calcul du calendrier liturgique pour une année donnée",
     "Configurations-used": "Configurations utilisées pour générer ce calendrier :",
-    "YEAR": "",
+    "YEAR": "ANNÉE",
     "EPIPHANY": "ÉPIPHANIE",
     "ASCENSION": "ASCENSION",
     "Month": "Mois",
