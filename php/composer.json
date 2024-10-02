@@ -21,5 +21,14 @@
             "email": "priest@johnromanodorazio.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "scripts": {
+        "post-install-cmd": [
+            "LiturgicalCalendar\\Examples\\Php\\Utilities::postInstall"
+        ],
+        "post-update-cmd": [
+            "LiturgicalCalendar\\Examples\\Php\\Utilities::postInstall"
+        ],
+        "test": "phpunit tests"
+    }
 }

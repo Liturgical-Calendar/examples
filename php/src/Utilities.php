@@ -201,4 +201,11 @@ class Utilities
         echo '<td style="background-color:' . $festivity->color[0] . ';' . (in_array($festivity->color[0], $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($festivity->display_grade !== '' ? $festivity->display_grade : $festivity->grade_lcl) . '</td>';
         echo '</tr>';
     }
+
+    public static function postInstall(): void
+    {
+        printf("\t\033[4m\033[1;44mCatholic Liturgical Calendar components\033[0m\n");
+        printf("\t\033[0;33mAd Majorem Dei Gloriam\033[0m\n");
+        printf("\t\033[0;36mOremus pro Pontifice nostro Francisco Dominus\n\tconservet eum et vivificet eum et beatum faciat eum in terra\n\tet non tradat eum in animam inimicorum ejus\033[0m\n");
+    }
 }
