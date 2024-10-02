@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # John R. D'Orazio <priest@johnromanodorazio.com>, 2022.
+# Weblate Admin <admin@example.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-02 19:22+0000\n"
-"PO-Revision-Date: 2022-12-09 01:24+0000\n"
-"Last-Translator: John R. D'Orazio <priest@johnromanodorazio.com>\n"
+"PO-Revision-Date: 2024-10-02 19:34+0000\n"
+"Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/nl/>\n"
 "Language: nl\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: php/index.php:81 php/index.php:149
 msgid "Generate Roman Calendar"
@@ -83,15 +84,15 @@ msgstr "SACRAMENTSDAG"
 
 #: php/index.php:136
 msgid "ETERNAL HIGH PRIEST"
-msgstr ""
+msgstr "EEUWIGE HOGEPRIESTER"
 
 #: php/index.php:136
 msgid "False"
-msgstr ""
+msgstr "Onwaar"
 
 #: php/index.php:136
 msgid "True"
-msgstr ""
+msgstr "Waar"
 
 #: php/index.php:137 php/index.php:157
 msgid "LOCALE"
