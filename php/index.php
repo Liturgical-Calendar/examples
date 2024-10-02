@@ -72,7 +72,7 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
             $LitCal[$key]["type"],
             $LitCal[$key]["grade"],
             $LitCal[$key]["common"],
-            $LitCal[$key]["liturgical_year"] ?? null,
+            $LitCal[$key]["liturgical_year"] ?? '',
             $LitCal[$key]["display_grade"]
         );
     }
