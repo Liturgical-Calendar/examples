@@ -123,7 +123,8 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
         }
         return $carry;
     }, []);
-    $AllAvailableLocales['la_VA'] = [ 'Latin', 'Latin' ];
+    //$AllAvailableLocales['la'] = [ 'Latin', 'Latin' ];
+    $AllAvailableLocales['la_VA'] = [ 'Latin (Vatican)', 'Latin (Vatican)' ];
     $c->asort($AllAvailableLocales);
     echo '<form method="GET">';
     echo '<fieldset style="margin-bottom:6px;"><legend>' . _('Customize options for generating the Roman Calendar') . '</legend>';
