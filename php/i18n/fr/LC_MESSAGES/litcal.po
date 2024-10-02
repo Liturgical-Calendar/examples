@@ -4,13 +4,14 @@
 # Ubuntu <priest@johnromanodorazio.com>, 2021.
 # John R. D'Orazio <priest@johnromanodorazio.com>, 2022.
 # Weblate Admin <admin@example.com>, 2024.
+# OpenAI <noreply-mt-openai@weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-02 18:21+0000\n"
-"PO-Revision-Date: 2024-04-23 02:53+0000\n"
-"Last-Translator: Weblate Admin <admin@example.com>\n"
+"PO-Revision-Date: 2024-10-02 18:32+0000\n"
+"Last-Translator: OpenAI <noreply-mt-openai@weblate.org>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/fr/>\n"
 "Language: fr\n"
@@ -18,11 +19,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: php/index.php:81 php/index.php:147
 msgid "Generate Roman Calendar"
-msgstr ""
+msgstr "Générer le Calendrier Romain"
 
 #: php/index.php:98
 msgid "Go back"
@@ -36,20 +37,23 @@ msgstr "Calcul du calendrier liturgique pour une année donnée"
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
+"Présentation HTML élaborée par PHP en utilisant une requête CURL à un %s"
 
 #: php/index.php:111
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
+"Vous demandez une année antérieure à 1970 : il n'est pas possible de "
+"demander des années antérieures à 1970."
 
 #: php/index.php:129
 msgid "Customize options for generating the Roman Calendar"
-msgstr ""
+msgstr "Personnaliser les options pour générer le Calendrier Romain"
 
 #: php/index.php:131 php/index.php:155
 msgid "YEAR"
-msgstr ""
+msgstr "ANNÉE"
 
 #: php/index.php:132 php/index.php:155
 msgid "EPIPHANY"
@@ -69,11 +73,11 @@ msgstr "ASCENSION"
 
 #: php/index.php:133 php/index.php:134
 msgid "Thursday"
-msgstr ""
+msgstr "Jeudi"
 
 #: php/index.php:133 php/index.php:134
 msgid "Sunday"
-msgstr ""
+msgstr "Dimanche"
 
 #: php/index.php:134 php/index.php:155
 msgid "CORPUS CHRISTI"
@@ -85,23 +89,23 @@ msgstr "LANGUE"
 
 #: php/index.php:142 php/src/Utilities.php:200
 msgid "or"
-msgstr ""
+msgstr "ou"
 
 #: php/index.php:142
 msgid "Choose the desired calendar from the list"
-msgstr ""
+msgstr "Choisissez le calendrier souhaité dans la liste"
 
 #: php/index.php:144 php/index.php:156
 msgid "NATION"
-msgstr ""
+msgstr "NATION"
 
 #: php/index.php:145 php/index.php:156
 msgid "DIOCESE"
-msgstr ""
+msgstr "DIOCÈSE"
 
 #: php/index.php:154
 msgid "Configurations being used to generate this calendar:"
-msgstr ""
+msgstr "Configurations utilisées pour générer ce calendrier :"
 
 #: php/index.php:161
 msgid "Month"
@@ -109,19 +113,19 @@ msgstr "Mois"
 
 #: php/index.php:161
 msgid "Date in Gregorian Calendar"
-msgstr ""
+msgstr "Date dans le Calendrier Grégorien"
 
 #: php/index.php:161
 msgid "General Roman Calendar Festivity"
-msgstr ""
+msgstr "Fête du Calendrier Romain Général"
 
 #: php/index.php:161
 msgid "Grade of the Festivity"
-msgstr ""
+msgstr "Grade de la Fête"
 
 #: php/index.php:209
 msgid "Information about the current calculation of the Liturgical Year"
-msgstr ""
+msgstr "Informations sur le calcul actuel de l'Année Liturgique"
 
 #~ msgid "green"
 #~ msgstr "vert"
