@@ -1,0 +1,25 @@
+{
+    "name": "liturgical-calendar/examples",
+    "description": "HTML view of a Liturgical Calendar in PHP using the Liturgical Calendar API",
+    "type": "library",
+    "require": {
+        "liturgical-calendar/components": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.3"
+    },
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "LiturgicalCalendar\\Examples\\": "src/"
+        },
+        "files": ["src/pgettext.php"]
+    },
+    "authors": [
+        {
+            "name": "John R. D'Orazio",
+            "email": "priest@johnromanodorazio.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
