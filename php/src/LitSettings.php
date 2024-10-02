@@ -43,7 +43,6 @@ class LitSettings
     {
         //set values based on the GET global variable
         foreach ($DATA as $key => $value) {
-            $key = strtoupper($key);
             if (in_array($key, self::ALLOWED_PARAMS)) {
                 switch ($key) {
                     case "year":
