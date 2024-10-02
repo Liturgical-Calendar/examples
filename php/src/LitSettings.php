@@ -16,7 +16,7 @@ class LitSettings
     public ?string $Locale           = null;
     public ?string $NationalCalendar = null;
     public ?string $DiocesanCalendar = null;
-    private array $MetaData          = [];
+    private ?array $MetaData         = null;
 
     private const ALLOWED_PARAMS  = [
         "year",

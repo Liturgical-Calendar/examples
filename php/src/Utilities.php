@@ -173,12 +173,12 @@ class Utilities
         echo '<tr style="background-color:' . $SeasonColor . ';' . (in_array($SeasonColor, $highContrast) ? 'color:white;' : '') . '">';
         if ($newMonth) {
             $monthRwsp = $cm + 1;
-            echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($locale === LitLocale::LATIN ? strtoupper(self::MONTHS_LATIN[ (int)$festivity->date->format('n') ]) : strtoupper($monthFmt->format($festivity->date->format('U'))) ) . '</div></td>';
+            echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($locale === LitLocale::LATIN || $locale === LitLocale::LATIN_PRIMARY_LANGUAGE ? strtoupper(self::MONTHS_LATIN[ (int)$festivity->date->format('n') ]) : strtoupper($monthFmt->format($festivity->date->format('U'))) ) . '</div></td>';
             $newMonth = false;
         }
         $dateString = "";
         switch (explode('_', $locale)[0]) {
-            case LitLocale::LATIN:
+            case LitLocale::LATIN_PRIMARY_LANGUAGE:
                 $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
                 $dayOfTheWeekLatin = self::DAYS_OF_THE_WEEK_LATIN[$dayOfTheWeek];
                 $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
