@@ -81,7 +81,7 @@ class LitSettings
                         $this->DiocesanCalendar = $value !== ""                           ? strtoupper($value) : null;
                         break;
                     case "eternal_high_priest":
-                        $this->EternalHighPriest = filter_var($value, FILTER_VALIDATE_BOOLEAN | FILTER_NULL_ON_FAILURE);
+                        $this->EternalHighPriest = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                         break;
                 }
             }
