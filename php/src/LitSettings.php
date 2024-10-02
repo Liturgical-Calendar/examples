@@ -85,7 +85,6 @@ class LitSettings
 
     public function __construct(array $DATA)
     {
-
         //set a few default values
         $this->Year = (int)date("Y");
 
@@ -101,10 +100,6 @@ class LitSettings
         }
 
         $this->setVars($DATA);
-
-        /*if( $this->NationalCalendar !== null ) {
-            $this->updateSettingsByNation();
-        }*/
     }
 
     private function updateSettingsByNation(string $stagingURL)
