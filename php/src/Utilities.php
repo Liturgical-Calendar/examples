@@ -80,9 +80,18 @@ class Utilities
 
     public static function sendAPIRequest($queryData)
     {
+        $url = LITCAL_API_URL;
+        if (isset($queryData["diocesan_calendar"])) {
+            $url = LITCAL_API_URL . "/diocese/" . $queryData["diocesan_calendar"];
+            unset($queryData["diocesan_calendar"]);
+            unset($queryData["national_calendar"]);
+        } elseif (isset($queryData["national_calendar"])) {
+            $url = LITCAL_API_URL . "/nation/" . $queryData["national_calendar"];
+            unset($queryData["national_calendar"]);
+        }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, LITCAL_API_URL);
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($queryData));

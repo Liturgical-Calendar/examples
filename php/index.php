@@ -131,7 +131,8 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     echo '<td><label>' . _('YEAR') . ': <input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
     echo '<td><label>' . _('EPIPHANY') . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " selected" : "") . '>' . _('January 6') . '</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " selected" : "") . '>' . _('Sunday between January 2 and January 8') . '</option></select></label></td>';
     echo '<td><label>' . _('ASCENSION') . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " selected" : "") . '>' . _('Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " selected" : "") . '>' . _('Sunday') . '</option></select></label></td>';
-    echo '<td><label>' . _('CORPUS CHRISTI') . ': <select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " selected" : "") . '>' . _('Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " selected" : "") . '>' . _('Sunday') . '</option></select></label></td>';
+    echo '<td><label>' . _('CORPUS CHRISTI') . ': <select name="corpus_christi" id="corpus_christi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " selected" : "") . '>' . _('Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " selected" : "") . '>' . _('Sunday') . '</option></select></label></td>';
+    echo '<td><label>' . _('ETERNAL HIGH PRIEST') . ': <select name="eternal_high_priest" id="eternal_high_priest"><option value="0" ' . (false === $litSettings->EternalHighPriest ? " selected" : "") . '>' . _('False') . '</option><option value="1" ' . (true === $litSettings->EternalHighPriest ? " selected" : "") . '>' . _('True') . '</option></select></label></td>';
     echo '<td><input type="hidden" value="' . $litSettings->Locale . '" /><label>' . _('LOCALE') . ': ';
     echo '<select name="locale" id="locale">';
     foreach ($AllAvailableLocales as $locale => $displayName) {
@@ -141,8 +142,8 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _('or') . '</i><br /><i>' . _("Choose the desired calendar from the list") . '</i></td>';
     echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;"><label>' . _('NATION') . ': <select id="nationalcalendar" name="nationalcalendar">' . $nationalCalendarOptions . '</select></label>';
-    echo '<label style="margin-left: 18px;">' . _('DIOCESE') . ': <select id="diocesancalendar" name="diocesancalendar"' . ($diocesesCount < 1 ? ' DISABLED' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
+    echo '<td colspan="5" style="text-align:center;"><label>' . _('NATION') . ': <select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
+    echo '<label style="margin-left: 18px;">' . _('DIOCESE') . ': <select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
     echo '</tr><tr>';
     echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(_("Generate Roman Calendar")) . '" /></td>';
     echo '</tr></table>';

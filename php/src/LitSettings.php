@@ -13,6 +13,7 @@ class LitSettings
     public string $Epiphany          = Epiphany::JAN6;
     public string $Ascension         = Ascension::THURSDAY;
     public string $CorpusChristi     = CorpusChristi::THURSDAY;
+    public bool $EternalHighPriest   = false;
     public ?string $Locale           = null;
     public ?string $NationalCalendar = null;
     public ?string $DiocesanCalendar = null;
@@ -25,7 +26,8 @@ class LitSettings
         "corpus_christi",
         "locale",
         "national_calendar",
-        "diocesan_calendar"
+        "diocesan_calendar",
+        "eternal_high_priest"
     ];
 
     //If we can get more data from 1582 (year of the Gregorian reform) to 1969
@@ -78,6 +80,10 @@ class LitSettings
                         break;
                     case "diocesan_calendar":
                         $this->DiocesanCalendar = $value !== ""                           ? strtoupper($value) : null;
+                        break;
+                    case "eternal_high_priest":
+                        $this->EternalHighPriest = filter_var($value, FILTER_VALIDATE_BOOLEAN | FILTER_NULL_ON_FAILURE);
+                        break;
                 }
             }
         }
