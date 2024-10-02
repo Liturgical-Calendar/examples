@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 19:15+0000\n"
+"POT-Creation-Date: 2024-10-02 19:17+0000\n"
 "PO-Revision-Date: 2024-09-30 20:40+0000\n"
 "Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
 "Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:81 php/index.php:148
+#: php/index.php:81 php/index.php:149
 msgid "Generate Roman Calendar"
 msgstr "Generovať rímsky kalendár"
 
@@ -42,95 +42,95 @@ msgid ""
 "prior to 1970."
 msgstr "Žiadate rok pred rokom 1970: nie je možné žiadať roky pred rokom 1970."
 
-#: php/index.php:129
+#: php/index.php:130
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Prispôsobte možnosti na vytvorenie Rímskeho kalendára"
 
-#: php/index.php:131 php/index.php:156
+#: php/index.php:132 php/index.php:157
 msgid "YEAR"
 msgstr "ROK"
 
-#: php/index.php:132 php/index.php:156
+#: php/index.php:133 php/index.php:157
 msgid "EPIPHANY"
 msgstr "Zjavenie Pána"
 
-#: php/index.php:132
+#: php/index.php:133
 msgid "January 6"
 msgstr "6. januára"
 
-#: php/index.php:132
+#: php/index.php:133
 msgid "Sunday between January 2 and January 8"
 msgstr "Nedeľa medzi 2. januárom a 8. januárom"
 
-#: php/index.php:133 php/index.php:156
+#: php/index.php:134 php/index.php:157
 msgid "ASCENSION"
 msgstr "Nanebovstúpenie"
 
-#: php/index.php:133 php/index.php:134
+#: php/index.php:134 php/index.php:135
 msgid "Thursday"
 msgstr "Štvrtok"
 
-#: php/index.php:133 php/index.php:134
+#: php/index.php:134 php/index.php:135
 msgid "Sunday"
 msgstr "Nedeľa"
 
-#: php/index.php:134 php/index.php:156
+#: php/index.php:135 php/index.php:157
 msgid "CORPUS CHRISTI"
 msgstr "Sviatok Božieho Tela"
 
-#: php/index.php:135
+#: php/index.php:136
 msgid "ETERNAL HIGH PRIEST"
 msgstr ""
 
-#: php/index.php:135
+#: php/index.php:136
 msgid "False"
 msgstr ""
 
-#: php/index.php:135
+#: php/index.php:136
 msgid "True"
 msgstr ""
 
-#: php/index.php:136 php/index.php:156
+#: php/index.php:137 php/index.php:157
 msgid "LOCALE"
 msgstr "MIESTO"
 
-#: php/index.php:143 php/src/Utilities.php:209
+#: php/index.php:144 php/src/Utilities.php:209
 msgid "or"
 msgstr "alebo"
 
-#: php/index.php:143
+#: php/index.php:144
 msgid "Choose the desired calendar from the list"
 msgstr "Vyberte požadovaný kalendár zo zoznamu"
 
-#: php/index.php:145 php/index.php:157
+#: php/index.php:146 php/index.php:158
 msgid "NATION"
 msgstr "NÁROD"
 
-#: php/index.php:146 php/index.php:157
+#: php/index.php:147 php/index.php:158
 msgid "DIOCESE"
 msgstr "DIECÉZA"
 
-#: php/index.php:155
+#: php/index.php:156
 msgid "Configurations being used to generate this calendar:"
 msgstr "Konfigurácie používané na vytvorenie tohto kalendára:"
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "Month"
 msgstr "Mesiac"
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "Date in Gregorian Calendar"
 msgstr "Dátum v gregoriánskom kalendári"
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "General Roman Calendar Festivity"
 msgstr "Všeobecný rímsky kalendár Sviatok"
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "Grade of the Festivity"
 msgstr "Stupeň slávnosti"
 
-#: php/index.php:210
+#: php/index.php:211
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informácie o aktuálnom výpočte liturgického roka"
 
