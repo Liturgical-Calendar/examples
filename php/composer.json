@@ -11,7 +11,7 @@
     "license": "Apache-2.0",
     "autoload": {
         "psr-4": {
-            "LiturgicalCalendar\\Examples\\": "src/"
+            "LiturgicalCalendar\\Examples\\Php\\": "src/"
         },
         "files": ["src/pgettext.php"]
     },
