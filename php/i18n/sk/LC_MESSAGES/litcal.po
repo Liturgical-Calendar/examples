@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 19:17+0000\n"
+"POT-Creation-Date: 2024-10-02 19:22+0000\n"
 "PO-Revision-Date: 2024-09-30 20:40+0000\n"
 "Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
 "Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
@@ -94,7 +94,7 @@ msgstr ""
 msgid "LOCALE"
 msgstr "MIESTO"
 
-#: php/index.php:144 php/src/Utilities.php:209
+#: php/index.php:144 php/src/Utilities.php:210
 msgid "or"
 msgstr "alebo"
 

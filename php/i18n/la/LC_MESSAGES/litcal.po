@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 19:17+0000\n"
+"POT-Creation-Date: 2024-10-02 19:22+0000\n"
 "PO-Revision-Date: 2024-10-02 18:49+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
@@ -95,7 +95,7 @@ msgstr ""
 msgid "LOCALE"
 msgstr "LINGUA"
 
-#: php/index.php:144 php/src/Utilities.php:209
+#: php/index.php:144 php/src/Utilities.php:210
 msgid "or"
 msgstr "vel"
 
