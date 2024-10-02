@@ -33,7 +33,7 @@ class Festivity
         $this->grade_lcl      = $LitEvent['grade_lcl'];
         $this->common         = $LitEvent['common'];
         $this->common_lcl     = $LitEvent['common_lcl'];
-        $this->liturgicalYear = $LitEvent['liturgical_year'];
+        $this->liturgicalYear = $LitEvent['liturgical_year'] ?? '';
         $this->displayGrade   = $LitEvent['display_grade'];
     }
 }
