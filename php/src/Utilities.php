@@ -123,7 +123,7 @@ class Utilities
         return [$options, $i ];
     }
 
-    public static function buildNationOptions(array $nations, string $NATION, string $locale)
+    public static function buildNationOptions(array $nations, ?string $NATION, string $locale)
     {
         $options = '<option value="">---</option>';
         foreach ($nations as $nationVal) {
