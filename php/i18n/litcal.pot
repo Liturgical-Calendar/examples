@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 19:15+0000\n"
+"POT-Creation-Date: 2024-10-02 19:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: php/index.php:81 php/index.php:148
+#: php/index.php:81 php/index.php:149
 msgid "Generate Roman Calendar"
 msgstr ""
 
@@ -40,94 +40,94 @@ msgid ""
 "prior to 1970."
 msgstr ""
 
-#: php/index.php:129
+#: php/index.php:130
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 
-#: php/index.php:131 php/index.php:156
+#: php/index.php:132 php/index.php:157
 msgid "YEAR"
 msgstr ""
 
-#: php/index.php:132 php/index.php:156
+#: php/index.php:133 php/index.php:157
 msgid "EPIPHANY"
 msgstr ""
 
-#: php/index.php:132
+#: php/index.php:133
 msgid "January 6"
 msgstr ""
 
-#: php/index.php:132
+#: php/index.php:133
 msgid "Sunday between January 2 and January 8"
 msgstr ""
 
-#: php/index.php:133 php/index.php:156
+#: php/index.php:134 php/index.php:157
 msgid "ASCENSION"
 msgstr ""
 
-#: php/index.php:133 php/index.php:134
+#: php/index.php:134 php/index.php:135
 msgid "Thursday"
 msgstr ""
 
-#: php/index.php:133 php/index.php:134
+#: php/index.php:134 php/index.php:135
 msgid "Sunday"
 msgstr ""
 
-#: php/index.php:134 php/index.php:156
+#: php/index.php:135 php/index.php:157
 msgid "CORPUS CHRISTI"
 msgstr ""
 
-#: php/index.php:135
+#: php/index.php:136
 msgid "ETERNAL HIGH PRIEST"
 msgstr ""
 
-#: php/index.php:135
+#: php/index.php:136
 msgid "False"
 msgstr ""
 
-#: php/index.php:135
+#: php/index.php:136
 msgid "True"
 msgstr ""
 
-#: php/index.php:136 php/index.php:156
+#: php/index.php:137 php/index.php:157
 msgid "LOCALE"
 msgstr ""
 
-#: php/index.php:143 php/src/Utilities.php:209
+#: php/index.php:144 php/src/Utilities.php:209
 msgid "or"
 msgstr ""
 
-#: php/index.php:143
+#: php/index.php:144
 msgid "Choose the desired calendar from the list"
 msgstr ""
 
-#: php/index.php:145 php/index.php:157
+#: php/index.php:146 php/index.php:158
 msgid "NATION"
 msgstr ""
 
-#: php/index.php:146 php/index.php:157
+#: php/index.php:147 php/index.php:158
 msgid "DIOCESE"
 msgstr ""
 
-#: php/index.php:155
+#: php/index.php:156
 msgid "Configurations being used to generate this calendar:"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "Month"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "Date in Gregorian Calendar"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "General Roman Calendar Festivity"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:163
 msgid "Grade of the Festivity"
 msgstr ""
 
-#: php/index.php:210
+#: php/index.php:211
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr ""
