@@ -197,7 +197,7 @@ class Utilities
             echo '<td class="dateEntry" rowspan="' . ($cc + 1) . '">' . $dateString . '</td>';
         }
         $currentCycle = property_exists($festivity, "liturgical_year") && $festivity->liturgical_year !== null && $festivity->liturgical_year !== "" ? " (" . $festivity->liturgical_year . ")" : "";
-        echo '<td style="background-color:' . $festivity->color[0] . ';' . (in_array($festivity->color[0], $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . $festivity->color_lcl . '</i><br /><i>' . $festivity->common_lcl . '</i></td>';
+        echo '<td style="background-color:' . $festivity->color[0] . ';' . (in_array($festivity->color[0], $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . implode(' ' . _('or') . ' ', $festivity->color_lcl) . '</i><br /><i>' . $festivity->common_lcl . '</i></td>';
         echo '<td style="background-color:' . $festivity->color[0] . ';' . (in_array($festivity->color[0], $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($festivity->display_grade !== '' ? $festivity->display_grade : $festivity->grade_lcl) . '</td>';
         echo '</tr>';
     }

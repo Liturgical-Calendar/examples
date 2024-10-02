@@ -13,7 +13,7 @@ class Festivity
     public string $name;
     public \DateTime $date;
     public array $color;
-    public string $color_lcl;
+    public array $color_lcl;
     public string $type;
     public int $grade;
     public string $grade_lcl;
