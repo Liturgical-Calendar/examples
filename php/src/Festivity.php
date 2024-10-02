@@ -13,21 +13,27 @@ class Festivity
     public string $name;
     public \DateTime $date;
     public array $color;
+    public string $color_lcl;
     public string $type;
     public int $grade;
+    public string $grade_lcl;
     public string $displayGrade;
     public array $common;
+    public string $common_lcl;
     public string $liturgicalYear;
 
-    public function __construct(string $name, int $date, array $color, string $type, int $grade = 0, array $common = [], string $liturgicalYear = '', string $displayGrade = '')
+    public function __construct(array $LitEvent)
     {
-        $this->name     = (string) $name;
-        $this->date     = \DateTime::createFromFormat('U', $date, new \DateTimeZone('UTC'));
-        $this->color    = $color;
-        $this->type     = (string) $type;
-        $this->grade    = (int) $grade;
-        $this->common   = $common;
-        $this->liturgicalYear = (string) $liturgicalYear;
-        $this->displayGrade = (string) $displayGrade;
+        $this->name           = $LitEvent['name'];
+        $this->date           = \DateTime::createFromFormat('U', $LitEvent['date'], new \DateTimeZone('UTC'));
+        $this->color          = $LitEvent['color'];
+        $this->color_lcl      = $LitEvent['color_lcl'];
+        $this->type           = $LitEvent['type'];
+        $this->grade          = $LitEvent['grade'];
+        $this->grade_lcl      = $LitEvent['grade_lcl'];
+        $this->common         = $LitEvent['common'];
+        $this->common_lcl     = $LitEvent['common_lcl'];
+        $this->liturgicalYear = $LitEvent['liturgical_year'];
+        $this->displayGrade   = $LitEvent['display_grade'];
     }
 }
