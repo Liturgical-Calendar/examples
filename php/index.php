@@ -12,7 +12,7 @@
 ini_set('error_reporting', E_ALL);
 ini_set("display_errors", 1);
 
-require './vendor/autoload.php';
+require 'vendor/autoload.php';
 
 use LiturgicalCalendar\Examples\Php\LitSettings;
 use LiturgicalCalendar\Examples\Php\Utilities;
@@ -190,22 +190,22 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
                 $newMonth = true;
                 $currentMonth = (int) $festivity->date->format('n');
                 $cm = 0;
-                countSameMonthEvents($keyindex, $LitCal, $cm);
+                Utilities::countSameMonthEvents($keyindex, $LitCal, $cm);
             }
 
             //Let's check if we have more than one event on the same day, such as optional memorials...
             $cc = 0;
-            countSameDayEvents($keyindex, $LitCal, $cc);
+            Utilities::countSameDayEvents($keyindex, $LitCal, $cc);
             if ($cc > 0) {
                 for ($ev = 0; $ev <= $cc; $ev++) {
                     $keyname = $LitCalKeys[$keyindex];
                     $festivity = $LitCal[$keyname];
-                    buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, $ev);
+                    Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, $ev);
                     $keyindex++;
                 }
                 $keyindex--;
             } else {
-                buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, null);
+                Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, null);
             }
         }
 
@@ -222,7 +222,6 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
         }
         echo '</tbody></table>';
     }
-
 
     ?>
 </body>
