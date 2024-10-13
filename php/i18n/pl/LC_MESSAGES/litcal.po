@@ -7,125 +7,129 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-02 19:22+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-10-14 14:40+0000\n"
+"Last-Translator: Emaer1916 <SzC87@wp.pl>\n"
+"Language-Team: Polish <https://translate.johnromanodorazio.com/projects/"
+"liturgical-calendar/php-example/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.6.1\n"
 
 #: php/index.php:81 php/index.php:149
 msgid "Generate Roman Calendar"
-msgstr ""
+msgstr "Wygeneruj kalendarz rzymski"
 
 #: php/index.php:98
 msgid "Go back"
-msgstr ""
+msgstr "Cofnij"
 
 #: php/index.php:102
 msgid "Liturgical Calendar Calculation for a Given Year"
-msgstr ""
+msgstr "Obliczanie kalendarza liturgicznego dla danego roku"
 
 #: php/index.php:103
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
-msgstr ""
+msgstr "Prezentacja HTML stworzona przez PHP za pomocą żądania CURL do %s"
 
 #: php/index.php:111
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
-msgstr ""
+msgstr "Podano rok wcześniejszy niż 1970: Lata przed 1970 nie są obsługiwane."
 
 #: php/index.php:130
 msgid "Customize options for generating the Roman Calendar"
-msgstr ""
+msgstr "Skonfiguruj generator kalendarza rzymskiego"
 
 #: php/index.php:132 php/index.php:157
 msgid "YEAR"
-msgstr ""
+msgstr "ROK"
 
 #: php/index.php:133 php/index.php:157
 msgid "EPIPHANY"
-msgstr ""
+msgstr "Objawienie Pańskie"
 
 #: php/index.php:133
 msgid "January 6"
-msgstr ""
+msgstr "6 Stycznia"
 
 #: php/index.php:133
 msgid "Sunday between January 2 and January 8"
-msgstr ""
+msgstr "Niedziela między 2-8 Stycznia"
 
 #: php/index.php:134 php/index.php:157
 msgid "ASCENSION"
-msgstr ""
+msgstr "Wniebowstąpienie Pańskie"
 
 #: php/index.php:134 php/index.php:135
 msgid "Thursday"
-msgstr ""
+msgstr "Czwartek"
 
 #: php/index.php:134 php/index.php:135
 msgid "Sunday"
-msgstr ""
+msgstr "Niedziela"
 
 #: php/index.php:135 php/index.php:157
 msgid "CORPUS CHRISTI"
-msgstr ""
+msgstr "Boże Ciało"
 
 #: php/index.php:136
 msgid "ETERNAL HIGH PRIEST"
-msgstr ""
+msgstr "Jezusa Chrystusa Najwyższego i Wiecznego Kapłana"
 
 #: php/index.php:136
 msgid "False"
-msgstr ""
+msgstr "Nie"
 
 #: php/index.php:136
 msgid "True"
-msgstr ""
+msgstr "Tak"
 
 #: php/index.php:137 php/index.php:157
 msgid "LOCALE"
-msgstr ""
+msgstr "Ustawienia regionalne"
 
 #: php/index.php:144 php/src/Utilities.php:210
 msgid "or"
-msgstr ""
+msgstr "albo"
 
 #: php/index.php:144
 msgid "Choose the desired calendar from the list"
-msgstr ""
+msgstr "Wybierz kalendarz z listy"
 
 #: php/index.php:146 php/index.php:158
 msgid "NATION"
-msgstr ""
+msgstr "Kraj"
 
 #: php/index.php:147 php/index.php:158
 msgid "DIOCESE"
-msgstr ""
+msgstr "Diecezja"
 
 #: php/index.php:156
 msgid "Configurations being used to generate this calendar:"
-msgstr ""
+msgstr "Konfiguracja użyta do wygenerowania tego kalendarza:"
 
 #: php/index.php:163
 msgid "Month"
-msgstr ""
+msgstr "Miesiąc"
 
 #: php/index.php:163
 msgid "Date in Gregorian Calendar"
-msgstr ""
+msgstr "Data w kalendarzu gregoriańskim"
 
 #: php/index.php:163
 msgid "General Roman Calendar Festivity"
-msgstr ""
+msgstr "Święta w generalnym kalendarzu rzymskim"
 
 #: php/index.php:163
 msgid "Grade of the Festivity"
-msgstr ""
+msgstr "Stopień gradacji"
 
 #: php/index.php:211
 msgid "Information about the current calculation of the Liturgical Year"
-msgstr ""
+msgstr "Informacje o obliczeniach podczas generowania kalendarza liturgicznego"
