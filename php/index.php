@@ -17,6 +17,9 @@ require dirname(__FILE__) . '/vendor/autoload.php';
 use LiturgicalCalendar\Examples\Php\LitSettings;
 use LiturgicalCalendar\Examples\Php\Utilities;
 use LiturgicalCalendar\Examples\Php\Festivity;
+use LiturgicalCalendar\Components\ApiOptions;
+use LiturgicalCalendar\Components\ApiOptions\Input;
+use LiturgicalCalendar\Components\ApiOptions\PathType;
 
 $isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false );
 $stagingURL = $isStaging ? "-staging" : "";
@@ -123,35 +126,19 @@ if ($litSettings->Year < 1970) {
     echo dgettext('litexmplphp', 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
     echo '</div>';
 }
-$c = $litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA' ? new Collator('en') : new Collator($litSettings->Locale);
-$AllAvailableLocales = array_filter(ResourceBundle::getLocales(''), function ($value) {
-    return strpos($value, 'POSIX') === false;
-});
-$AllAvailableLocales = array_reduce($AllAvailableLocales, function ($carry, $item) use ($litSettings) {
-    if ($litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA') {
-        $carry[$item] = [ Locale::getDisplayName($item, 'en'), Locale::getDisplayName($item, 'en') ];
-    } else {
-        $carry[$item] = [ Locale::getDisplayName($item, $litSettings->Locale), Locale::getDisplayName($item, 'en') ];
-    }
-    return $carry;
-}, []);
-//$AllAvailableLocales['la'] = [ 'Latin', 'Latin' ];
-$AllAvailableLocales['la_VA'] = [ 'Latin (Vatican)', 'Latin (Vatican)' ];
-$c->asort($AllAvailableLocales);
 echo '<form method="GET">';
 echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
 echo '<table style="width:100%;"><tr>';
-echo '<td><label>' . dgettext('litexmplphp', 'YEAR') . ': <input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
-echo '<td><label>' . dgettext('litexmplphp', 'EPIPHANY') . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " selected" : "") . '>' . dgettext('litexmplphp', 'January 6') . '</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Sunday between January 2 and January 8') . '</option></select></label></td>';
-echo '<td><label>' . dgettext('litexmplphp', 'ASCENSION') . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Sunday') . '</option></select></label></td>';
-echo '<td><label>' . dgettext('litexmplphp', 'CORPUS CHRISTI') . ': <select name="corpus_christi" id="corpus_christi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Sunday') . '</option></select></label></td>';
-echo '<td><label>' . dgettext('litexmplphp', 'ETERNAL HIGH PRIEST') . ': <select name="eternal_high_priest" id="eternal_high_priest"><option value="0" ' . (false === $litSettings->EternalHighPriest ? " selected" : "") . '>' . dgettext('litexmplphp', 'False') . '</option><option value="1" ' . (true === $litSettings->EternalHighPriest ? " selected" : "") . '>' . dgettext('litexmplphp', 'True') . '</option></select></label></td>';
-echo '<td><input type="hidden" value="' . $litSettings->Locale . '" /><label>' . dgettext('litexmplphp', 'LOCALE') . ': ';
-echo '<select name="locale" id="locale">';
-foreach ($AllAvailableLocales as $locale => $displayName) {
-    echo "<option value=\"$locale\" title=\"" . $displayName[1] . "\"" . ($litSettings->Locale === $locale ? ' selected' : '') . ">" . $displayName[0] . "</option>";
-}
-echo '</select></label></td>';
+echo '<td><label>' . dgettext('litexmplphp', 'year') . '<br><input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
+$apiOptions = new ApiOptions();
+$apiOptions->acceptHeaderInput->hide();
+Input::setGlobalWrapper('td');
+$apiOptions->localeInput->name('');
+echo $apiOptions->getForm(PathType::BASE_PATH);
+echo '</tr>';
+echo '<tr>';
+echo $apiOptions->getForm(PathType::ALL_PATHS);
+
 echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', 'or') . '</i><br /><i>' . dgettext('litexmplphp', "Choose the desired calendar from the list") . '</i></td>';
 echo '</tr><tr>';
