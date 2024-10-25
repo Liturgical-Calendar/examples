@@ -23,7 +23,7 @@ $stagingURL = $isStaging ? "-staging" : "";
 $endpointV = $isStaging ? "dev" : "v3";
 define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
-const DIRECT_ACCESS = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
+const DIRECT_ACCESS = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) ? true : false;
 
 $litSettings = new LitSettings($_GET, DIRECT_ACCESS);
 
