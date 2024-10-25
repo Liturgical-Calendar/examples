@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 19:26+0000\n"
+"POT-Creation-Date: 2024-10-25 19:27+0000\n"
 "PO-Revision-Date: 2024-10-25 18:56+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: German <https://translate.johnromanodorazio.com/projects/"
@@ -53,7 +53,7 @@ msgstr ""
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Optionen zum Generieren des römischen Kalenders anpassen"
 
-#: php/index.php:132
+#: php/index.php:146
 msgid "year"
 msgstr ""
 
