@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 21:09+0000\n"
+"POT-Creation-Date: 2024-10-25 21:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,11 +44,7 @@ msgstr ""
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 
-#: php/index.php:151
-msgid "year"
-msgstr ""
-
-#: php/index.php:155 php/src/Utilities.php:218
+#: php/index.php:155 php/src/Utilities.php:298
 msgid "or"
 msgstr ""
 
@@ -56,36 +52,8 @@ msgstr ""
 msgid "Choose the desired calendar from the list"
 msgstr ""
 
-#: php/index.php:157 php/index.php:169
-msgid "NATION"
-msgstr ""
-
-#: php/index.php:158 php/index.php:169
-msgid "DIOCESE"
-msgstr ""
-
 #: php/index.php:167
 msgid "Configurations being used to generate this calendar:"
-msgstr ""
-
-#: php/index.php:168
-msgid "YEAR"
-msgstr ""
-
-#: php/index.php:168
-msgid "EPIPHANY"
-msgstr ""
-
-#: php/index.php:168
-msgid "ASCENSION"
-msgstr ""
-
-#: php/index.php:168
-msgid "CORPUS CHRISTI"
-msgstr ""
-
-#: php/index.php:168
-msgid "LOCALE"
 msgstr ""
 
 #: php/index.php:174
