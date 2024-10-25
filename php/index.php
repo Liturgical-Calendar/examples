@@ -137,6 +137,7 @@ $apiOptions->epiphanyInput->labelAfter('<br>')->selectedValue($litSettings->Epip
 $apiOptions->ascensionInput->labelAfter('<br>')->selectedValue($litSettings->Ascension);
 $apiOptions->corpusChristiInput->labelAfter('<br>')->selectedValue($litSettings->CorpusChristi);
 $apiOptions->eternalHighPriestInput->labelAfter('<br>')->selectedValue($litSettings->EternalHighPriest);
+$apiOptions->yearTypeInput->labelAfter('<br>')->selectedValue($litSettings->YearType);
 if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
     $apiOptions->epiphanyInput->disabled();
     $apiOptions->ascensionInput->disabled();

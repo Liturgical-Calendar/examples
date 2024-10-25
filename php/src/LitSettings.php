@@ -6,6 +6,7 @@ use LiturgicalCalendar\Examples\Php\Enums\Epiphany;
 use LiturgicalCalendar\Examples\Php\Enums\Ascension;
 use LiturgicalCalendar\Examples\Php\Enums\CorpusChristi;
 use LiturgicalCalendar\Examples\Php\Enums\LitLocale;
+use LiturgicalCalendar\Examples\Php\Enums\YearType;
 
 class LitSettings
 {
@@ -13,6 +14,7 @@ class LitSettings
     public string $Epiphany          = Epiphany::JAN6;
     public string $Ascension         = Ascension::THURSDAY;
     public string $CorpusChristi     = CorpusChristi::THURSDAY;
+    public string $YearType          = YearType::LITURGICAL;
     public bool $EternalHighPriest   = false;
     public ?string $Locale           = null;
     public ?string $NationalCalendar = null;
@@ -28,7 +30,8 @@ class LitSettings
         "locale",
         "national_calendar",
         "diocesan_calendar",
-        "eternal_high_priest"
+        "eternal_high_priest",
+        "year_type"
     ];
 
     //If we can get more data from 1582 (year of the Gregorian reform) to 1969
@@ -83,6 +86,9 @@ class LitSettings
                         break;
                     case "eternal_high_priest":
                         $this->EternalHighPriest = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                        break;
+                    case "year_type":
+                        $this->YearType = YearType::isValid($value) ? $value : YearType::LITURGICAL;
                         break;
                 }
             }
