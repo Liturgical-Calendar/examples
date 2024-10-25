@@ -1,154 +1,135 @@
-# Spanish translations for PACKAGE package.
-# Copyright (C) 2021 THE PACKAGE'S COPYRIGHT HOLDER
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Ubuntu <priest@johnromanodorazio.com>, 2021.
-# John R. D'Orazio <priest@johnromanodorazio.com>, 2022.
-# OpenAI <noreply-mt-openai@weblate.org>, 2024.
-# Weblate Admin <admin@example.com>, 2024.
+# Emaer1916 <SzC87@wp.pl>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 15:54+0000\n"
-"PO-Revision-Date: 2024-10-02 19:34+0000\n"
-"Last-Translator: Weblate Admin <admin@example.com>\n"
-"Language-Team: Spanish <https://translate.johnromanodorazio.com/projects/"
-"liturgical-calendar/php-example/es/>\n"
-"Language: es\n"
+"POT-Creation-Date: 2024-10-02 19:22+0000\n"
+"PO-Revision-Date: 2024-10-14 14:40+0000\n"
+"Last-Translator: Emaer1916 <SzC87@wp.pl>\n"
+"Language-Team: Polish <https://translate.johnromanodorazio.com/projects/"
+"liturgical-calendar/php-example/pl/>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:82 php/index.php:149
+#: php/index.php:81 php/index.php:149
 msgid "Generate Roman Calendar"
-msgstr "Generar Calendario Romano"
+msgstr "Wygeneruj kalendarz rzymski"
 
 #: php/index.php:98
 msgid "Go back"
-msgstr "Regresar"
+msgstr "Cofnij"
 
 #: php/index.php:102
 msgid "Liturgical Calendar Calculation for a Given Year"
-msgstr "Cálculo del Calendario Litúrgico para un año dado"
+msgstr "Obliczanie kalendarza liturgicznego dla danego roku"
 
 #: php/index.php:103
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
-msgstr "Presentación HTML elaborada por PHP usando una solicitud CURL a un %s"
+msgstr "Prezentacja HTML stworzona przez PHP za pomocą żądania CURL do %s"
 
 #: php/index.php:111
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
-msgstr ""
-"Estás solicitando un año anterior a 1970: no es posible solicitar años "
-"anteriores a 1970."
+msgstr "Podano rok wcześniejszy niż 1970: Lata przed 1970 nie są obsługiwane."
 
 #: php/index.php:130
 msgid "Customize options for generating the Roman Calendar"
-msgstr "Personalizar opciones para generar el Calendario Romano"
+msgstr "Skonfiguruj generator kalendarza rzymskiego"
 
 #: php/index.php:132 php/index.php:157
 msgid "YEAR"
-msgstr "AÑO"
+msgstr "ROK"
 
 #: php/index.php:133 php/index.php:157
 msgid "EPIPHANY"
-msgstr "EPIFANÍA"
+msgstr "Objawienie Pańskie"
 
 #: php/index.php:133
 msgid "January 6"
-msgstr "6 de enero"
+msgstr "6 Stycznia"
 
 #: php/index.php:133
 msgid "Sunday between January 2 and January 8"
-msgstr "Domingo entre el 2 y el 8 de enero"
+msgstr "Niedziela między 2-8 Stycznia"
 
 #: php/index.php:134 php/index.php:157
 msgid "ASCENSION"
-msgstr "ASCENSIÓN"
+msgstr "Wniebowstąpienie Pańskie"
 
 #: php/index.php:134 php/index.php:135
 msgid "Thursday"
-msgstr "Jueves"
+msgstr "Czwartek"
 
 #: php/index.php:134 php/index.php:135
 msgid "Sunday"
-msgstr "Domingo"
+msgstr "Niedziela"
 
 #: php/index.php:135 php/index.php:157
 msgid "CORPUS CHRISTI"
-msgstr "CORPUS CHRISTI"
+msgstr "Boże Ciało"
 
 #: php/index.php:136
 msgid "ETERNAL HIGH PRIEST"
-msgstr "SUMO SACERDOTE ETERNO"
+msgstr "Jezusa Chrystusa Najwyższego i Wiecznego Kapłana"
 
 #: php/index.php:136
 msgid "False"
-msgstr "Falso"
+msgstr "Nie"
 
 #: php/index.php:136
 msgid "True"
-msgstr "Verdadero"
+msgstr "Tak"
 
 #: php/index.php:137 php/index.php:157
 msgid "LOCALE"
-msgstr "LOCAL"
+msgstr "Ustawienia regionalne"
 
 #: php/index.php:144 php/src/Utilities.php:210
 msgid "or"
-msgstr "o"
+msgstr "albo"
 
 #: php/index.php:144
 msgid "Choose the desired calendar from the list"
-msgstr "Elige el calendario deseado de la lista"
+msgstr "Wybierz kalendarz z listy"
 
 #: php/index.php:146 php/index.php:158
 msgid "NATION"
-msgstr "NACIÓN"
+msgstr "Kraj"
 
 #: php/index.php:147 php/index.php:158
 msgid "DIOCESE"
-msgstr "DIÓCESIS"
+msgstr "Diecezja"
 
 #: php/index.php:156
 msgid "Configurations being used to generate this calendar:"
-msgstr "Configuraciones utilizadas para generar este calendario:"
+msgstr "Konfiguracja użyta do wygenerowania tego kalendarza:"
 
 #: php/index.php:163
 msgid "Month"
-msgstr "Mes"
+msgstr "Miesiąc"
 
 #: php/index.php:163
 msgid "Date in Gregorian Calendar"
-msgstr "Fecha en el Calendario Gregoriano"
+msgstr "Data w kalendarzu gregoriańskim"
 
 #: php/index.php:163
 msgid "General Roman Calendar Festivity"
-msgstr "Festividad del Calendario Romano General"
+msgstr "Święta w generalnym kalendarzu rzymskim"
 
 #: php/index.php:163
 msgid "Grade of the Festivity"
-msgstr "Grado de la Festividad"
+msgstr "Stopień gradacji"
 
 #: php/index.php:211
 msgid "Information about the current calculation of the Liturgical Year"
-msgstr "Información sobre el cálculo actual del Año Litúrgico"
-
-#~ msgid "Optional memorial"
-#~ msgstr "Memoria facultativa"
-
-#~ msgid "Memorial"
-#~ msgstr "Memoria obligatoria"
-
-#~ msgid "FEAST"
-#~ msgstr "FIESTA"
-
-#~ msgid "FEAST OF THE LORD"
-#~ msgstr "FIESTA DEL SEÑOR"
-
-#~ msgid "SOLEMNITY"
-#~ msgstr "SOLEMNIDAD"
+msgstr "Informacje o obliczeniach podczas generowania kalendarza liturgicznego"
