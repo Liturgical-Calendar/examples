@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 16:38+0000\n"
+"POT-Creation-Date: 2024-10-25 16:58+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
@@ -20,25 +20,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:83 php/index.php:158
+#: php/index.php:84 php/index.php:161
 msgid "Generate Roman Calendar"
 msgstr "Genera il Calendario Romano"
 
-#: php/index.php:99
+#: php/index.php:100
 msgid "Go back"
 msgstr "Torna indietro"
 
-#: php/index.php:111
+#: php/index.php:114
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Calcolo del Calendario Liturgico per un dato anno"
 
-#: php/index.php:112
+#: php/index.php:115
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "Presentazione HTML elaborata da PHP con l'utilizzo di una richiesta cURL a %s"
 
-#: php/index.php:120
+#: php/index.php:123
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
@@ -46,95 +46,95 @@ msgstr ""
 "Hai richiesto un anno precedente al 1970: non è possibile richiedere anni "
 "prima del 1970."
 
-#: php/index.php:139
+#: php/index.php:142
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Configurare le impostazioni per la generazione del Calendario Romano"
 
-#: php/index.php:141 php/index.php:166
+#: php/index.php:144 php/index.php:169
 msgid "YEAR"
 msgstr "ANNO"
 
-#: php/index.php:142 php/index.php:166
+#: php/index.php:145 php/index.php:169
 msgid "EPIPHANY"
 msgstr "EPIFANIA"
 
-#: php/index.php:142
+#: php/index.php:145
 msgid "January 6"
 msgstr "6 Gennaio"
 
-#: php/index.php:142
+#: php/index.php:145
 msgid "Sunday between January 2 and January 8"
 msgstr "Domenica tra il 2 gennaio e l'8 gennaio"
 
-#: php/index.php:143 php/index.php:166
+#: php/index.php:146 php/index.php:169
 msgid "ASCENSION"
 msgstr "ASCENSIONE"
 
-#: php/index.php:143 php/index.php:144
+#: php/index.php:146 php/index.php:147
 msgid "Thursday"
 msgstr "Giovedì"
 
-#: php/index.php:143 php/index.php:144
+#: php/index.php:146 php/index.php:147
 msgid "Sunday"
 msgstr "Domenica"
 
-#: php/index.php:144 php/index.php:166
+#: php/index.php:147 php/index.php:169
 msgid "CORPUS CHRISTI"
 msgstr "CORPUS DOMINI"
 
-#: php/index.php:145
+#: php/index.php:148
 msgid "ETERNAL HIGH PRIEST"
 msgstr "SOMMO ED ETERNO SACERDOTE"
 
-#: php/index.php:145
+#: php/index.php:148
 msgid "False"
 msgstr "Falso"
 
-#: php/index.php:145
+#: php/index.php:148
 msgid "True"
 msgstr "Vero"
 
-#: php/index.php:146 php/index.php:166
+#: php/index.php:149 php/index.php:169
 msgid "LOCALE"
 msgstr "LINGUA"
 
-#: php/index.php:153 php/src/Utilities.php:210
+#: php/index.php:156 php/src/Utilities.php:210
 msgid "or"
 msgstr "oppure"
 
-#: php/index.php:153
+#: php/index.php:156
 msgid "Choose the desired calendar from the list"
 msgstr "Scegli il calendario desiderato dalla lista"
 
-#: php/index.php:155 php/index.php:167
+#: php/index.php:158 php/index.php:170
 msgid "NATION"
 msgstr "NAZIONE"
 
-#: php/index.php:156 php/index.php:167
+#: php/index.php:159 php/index.php:170
 msgid "DIOCESE"
 msgstr "DIOCESI"
 
-#: php/index.php:165
+#: php/index.php:168
 msgid "Configurations being used to generate this calendar:"
 msgstr "Le impostazioni utilizzate per generare questo calendario:"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "Month"
 msgstr "Mese"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "Date in Gregorian Calendar"
 msgstr "Data nel Calendario Gregoriano"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "General Roman Calendar Festivity"
 msgstr "Festività del Calendario Romano Universale"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "Grade of the Festivity"
 msgstr "Grado della Festività"
 
-#: php/index.php:220
+#: php/index.php:223
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informazioni sull'attuale calcolo dell'Anno Liturgico"
 

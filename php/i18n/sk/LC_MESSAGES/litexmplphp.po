@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 16:38+0000\n"
+"POT-Creation-Date: 2024-10-25 16:58+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
@@ -19,119 +19,119 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:83 php/index.php:158
+#: php/index.php:84 php/index.php:161
 msgid "Generate Roman Calendar"
 msgstr "Generovať rímsky kalendár"
 
-#: php/index.php:99
+#: php/index.php:100
 msgid "Go back"
 msgstr "Vráť sa späť"
 
-#: php/index.php:111
+#: php/index.php:114
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Výpočet liturgického kalendára pre daný rok"
 
-#: php/index.php:112
+#: php/index.php:115
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML prezentácia vypracovaná pomocou PHP s použitím CURL požiadavky na %s"
 
-#: php/index.php:120
+#: php/index.php:123
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr "Žiadate rok pred rokom 1970: nie je možné žiadať roky pred rokom 1970."
 
-#: php/index.php:139
+#: php/index.php:142
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Prispôsobte možnosti na vytvorenie Rímskeho kalendára"
 
-#: php/index.php:141 php/index.php:166
+#: php/index.php:144 php/index.php:169
 msgid "YEAR"
 msgstr "ROK"
 
-#: php/index.php:142 php/index.php:166
+#: php/index.php:145 php/index.php:169
 msgid "EPIPHANY"
 msgstr "Zjavenie Pána"
 
-#: php/index.php:142
+#: php/index.php:145
 msgid "January 6"
 msgstr "6. januára"
 
-#: php/index.php:142
+#: php/index.php:145
 msgid "Sunday between January 2 and January 8"
 msgstr "Nedeľa medzi 2. januárom a 8. januárom"
 
-#: php/index.php:143 php/index.php:166
+#: php/index.php:146 php/index.php:169
 msgid "ASCENSION"
 msgstr "Nanebovstúpenie"
 
-#: php/index.php:143 php/index.php:144
+#: php/index.php:146 php/index.php:147
 msgid "Thursday"
 msgstr "Štvrtok"
 
-#: php/index.php:143 php/index.php:144
+#: php/index.php:146 php/index.php:147
 msgid "Sunday"
 msgstr "Nedeľa"
 
-#: php/index.php:144 php/index.php:166
+#: php/index.php:147 php/index.php:169
 msgid "CORPUS CHRISTI"
 msgstr "Sviatok Božieho Tela"
 
-#: php/index.php:145
+#: php/index.php:148
 msgid "ETERNAL HIGH PRIEST"
 msgstr "VEČNÝ VEĽKŇAZ"
 
-#: php/index.php:145
+#: php/index.php:148
 msgid "False"
 msgstr "Nepravda"
 
-#: php/index.php:145
+#: php/index.php:148
 msgid "True"
 msgstr "Pravda"
 
-#: php/index.php:146 php/index.php:166
+#: php/index.php:149 php/index.php:169
 msgid "LOCALE"
 msgstr "MIESTO"
 
-#: php/index.php:153 php/src/Utilities.php:210
+#: php/index.php:156 php/src/Utilities.php:210
 msgid "or"
 msgstr "alebo"
 
-#: php/index.php:153
+#: php/index.php:156
 msgid "Choose the desired calendar from the list"
 msgstr "Vyberte požadovaný kalendár zo zoznamu"
 
-#: php/index.php:155 php/index.php:167
+#: php/index.php:158 php/index.php:170
 msgid "NATION"
 msgstr "NÁROD"
 
-#: php/index.php:156 php/index.php:167
+#: php/index.php:159 php/index.php:170
 msgid "DIOCESE"
 msgstr "DIECÉZA"
 
-#: php/index.php:165
+#: php/index.php:168
 msgid "Configurations being used to generate this calendar:"
 msgstr "Konfigurácie používané na vytvorenie tohto kalendára:"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "Month"
 msgstr "Mesiac"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "Date in Gregorian Calendar"
 msgstr "Dátum v gregoriánskom kalendári"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "General Roman Calendar Festivity"
 msgstr "Všeobecný rímsky kalendár Sviatok"
 
-#: php/index.php:172
+#: php/index.php:175
 msgid "Grade of the Festivity"
 msgstr "Stupeň slávnosti"
 
-#: php/index.php:220
+#: php/index.php:223
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informácie o aktuálnom výpočte liturgického roka"
 
