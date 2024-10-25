@@ -16,6 +16,23 @@
     color: DarkBlue;
 }
 
+#ApiOptionsForm fieldset {
+    border: 1px solid lightgray;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+#ApiOptionsForm legend {
+    float: none;
+    width: auto;
+    margin-left: 3px;
+    padding: 0 6px;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: 1px solid lightgray;
+    border-radius: 3px;
+}
+
 #LitCalTable {
     width:75%;
     margin:30px auto;

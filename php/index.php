@@ -126,7 +126,7 @@ if ($litSettings->Year < 1970) {
     echo dgettext('litexmplphp', 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
     echo '</div>';
 }
-echo '<form method="GET">';
+echo '<form method="GET" id="ApiOptionsForm">';
 echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
 echo '<table style="width:100%;"><tr>';
 $apiOptions = new ApiOptions();
