@@ -73,10 +73,8 @@ class LitSettings
                         $this->CorpusChristi = CorpusChristi::isValid(strtoupper($value)) ? strtoupper($value) : CorpusChristi::THURSDAY;
                         break;
                     case "locale":
+                        $value = \Locale::canonicalize($value);
                         $this->Locale        = LitLocale::isValid($value)                 ? $value             : LitLocale::LATIN;
-                        if (strpos($this->Locale, '_') === false) {
-                            $this->Locale = strtolower($this->Locale);
-                        }
                         break;
                     case "national_calendar":
                         $this->NationalCalendar = $value !== ""                           ? strtoupper($value) : null;
@@ -95,6 +93,17 @@ class LitSettings
         }
     }
 
+    /**
+     * Constructor for LitSettings class.
+     *
+     * Initializes the settings for the liturgical calendar based on input data and direct access flag.
+     * Sets the default year to the current year. Determines the locale from cookies, HTTP headers, or defaults to Latin if unavailable.
+     * Ensures the Locale is canonicalized.
+     * Delegates further variable setting to the setVars method.
+     *
+     * @param array $DATA An array of input parameters to initialize the settings.
+     * @param bool $directAccess A flag indicating if the access is direct, default is false.
+     */
     public function __construct(array $DATA, bool $directAccess = false)
     {
         //set a few default values
@@ -107,15 +116,22 @@ class LitSettings
         } else {
             $this->Locale = LitLocale::LATIN;
         }
-        if (strpos($this->Locale, '_') === false) {
-            $this->Locale = strtolower($this->Locale);
-        }
+        $this->Locale = \Locale::canonicalize($this->Locale);
 
         $this->directAccess = $directAccess;
 
         $this->setVars($DATA);
     }
 
+    /**
+     * Sets the Epiphany, Ascension, CorpusChristi, and Locale settings based on the selected National Calendar.
+     * If the National Calendar is not set, or if it is set to "VA" (Vatican), the settings are set to their default values.
+     * If the National Calendar is set to a different value, the settings are set to the corresponding values from the
+     * NationalCalendarMetadata array.
+     * If the directAccess flag is set to true, the function also sets the locale for the current PHP script using the
+     * setlocale() function, and sets a cookie to store the current locale.
+     * @param string $stagingURL the URL of the staging site (used to set the domain of the cookie)
+     */
     private function updateSettingsByNation(string $stagingURL)
     {
         $NationalCalendarMetadata = null;
@@ -168,6 +184,13 @@ class LitSettings
         //ini_set('date.timezone', 'Europe/Vatican');
     }
 
+    /**
+     * Updates the internal metadata reference and then updates the settings based on the selected nation.
+     *
+     * @param array $MetaData A list of metadata about the diocesan calendars available.
+     * @param string $stagingURL The URL of the staging server on which the API is hosted.
+     * @return void
+     */
     public function setMetaData(array $MetaData, string $stagingURL)
     {
         $this->MetaData = $MetaData;
