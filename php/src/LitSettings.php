@@ -141,8 +141,8 @@ class LitSettings
             $baseLocale
         ];
         setlocale(LC_ALL, $localeArray);
-        bindtextdomain("litcal", "i18n");
-        textdomain("litcal");
+        bindtextdomain("litexmplphp", "i18n");
+        //textdomain("litcal");
         ini_set('date.timezone', 'Europe/Vatican');
         if (!isset($_COOKIE["currentLocale"]) || $_COOKIE["currentLocale"] !== $this->Locale) {
             setcookie(

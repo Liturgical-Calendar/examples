@@ -73,12 +73,13 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
 /**************************
  * BEGIN DISPLAY LOGIC
  *************************/
-
-?>
+if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
+    // The file is being accessed directly
+    ?>
 <!doctype html>
 
 <head>
-    <title><?php echo _("Generate Roman Calendar") ?></title>
+    <title><?php echo dgettext('litexmplphp', "Generate Roman Calendar") ?></title>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff" />
@@ -91,130 +92,134 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     <link rel="apple-touch-icon-precomposed" href="../../assets/easter-egg-5-57-279148.png">
     <link rel="icon" href="../../assets/easter-egg-5-32-279148.png" sizes="32x32">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <div><a class="backNav" href="https://litcal<?php echo $stagingURL; ?>.johnromanodorazio.com/usage.php">↩      <?php echo _("Go back") ?>      ↩</a></div>
-
+    <div><a class="backNav" href="https://litcal<?php echo $stagingURL; ?>.johnromanodorazio.com/usage.php">↩      <?php echo dgettext('litexmplphp', "Go back") ?>      ↩</a></div>
     <?php
+}
 
-    echo '<h1 style="text-align:center;">' . _("Liturgical Calendar Calculation for a Given Year") . ' (' . $litSettings->Year . ')</h1>';
-    echo '<h2 style="text-align:center;">' . sprintf(_("HTML presentation elaborated by PHP using a CURL request to a %s"), "<a href=\"" . LITCAL_API_URL . "\">PHP engine</a>") . '</h2>';
+echo '<h1 style="text-align:center;">' . dgettext('litexmplphp', "Liturgical Calendar Calculation for a Given Year") . ' (' . $litSettings->Year . ')</h1>';
+echo '<h2 style="text-align:center;">' . sprintf(dgettext('litexmplphp', "HTML presentation elaborated by PHP using a CURL request to a %s"), "<a href=\"" . LITCAL_API_URL . "\">PHP engine</a>") . '</h2>';
 
-    if ($litSettings->Year > 9999) {
-        $litSettings->Year = 9999;
-    }
+if ($litSettings->Year > 9999) {
+    $litSettings->Year = 9999;
+}
 
-    if ($litSettings->Year < 1970) {
-        echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">';
-        echo _('You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
-        echo '</div>';
-    }
-    $c = $litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA' ? new Collator('en') : new Collator($litSettings->Locale);
-    $AllAvailableLocales = array_filter(ResourceBundle::getLocales(''), function ($value) {
-        return strpos($value, 'POSIX') === false;
-    });
-    $AllAvailableLocales = array_reduce($AllAvailableLocales, function ($carry, $item) use ($litSettings) {
-        if ($litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA') {
-            $carry[$item] = [ Locale::getDisplayName($item, 'en'), Locale::getDisplayName($item, 'en') ];
-        } else {
-            $carry[$item] = [ Locale::getDisplayName($item, $litSettings->Locale), Locale::getDisplayName($item, 'en') ];
-        }
-        return $carry;
-    }, []);
-    //$AllAvailableLocales['la'] = [ 'Latin', 'Latin' ];
-    $AllAvailableLocales['la_VA'] = [ 'Latin (Vatican)', 'Latin (Vatican)' ];
-    $c->asort($AllAvailableLocales);
-    echo '<form method="GET">';
-    echo '<fieldset style="margin-bottom:6px;"><legend>' . _('Customize options for generating the Roman Calendar') . '</legend>';
-    echo '<table style="width:100%;"><tr>';
-    echo '<td><label>' . _('YEAR') . ': <input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
-    echo '<td><label>' . _('EPIPHANY') . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " selected" : "") . '>' . _('January 6') . '</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " selected" : "") . '>' . _('Sunday between January 2 and January 8') . '</option></select></label></td>';
-    echo '<td><label>' . _('ASCENSION') . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " selected" : "") . '>' . _('Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " selected" : "") . '>' . _('Sunday') . '</option></select></label></td>';
-    echo '<td><label>' . _('CORPUS CHRISTI') . ': <select name="corpus_christi" id="corpus_christi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " selected" : "") . '>' . _('Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " selected" : "") . '>' . _('Sunday') . '</option></select></label></td>';
-    echo '<td><label>' . _('ETERNAL HIGH PRIEST') . ': <select name="eternal_high_priest" id="eternal_high_priest"><option value="0" ' . (false === $litSettings->EternalHighPriest ? " selected" : "") . '>' . _('False') . '</option><option value="1" ' . (true === $litSettings->EternalHighPriest ? " selected" : "") . '>' . _('True') . '</option></select></label></td>';
-    echo '<td><input type="hidden" value="' . $litSettings->Locale . '" /><label>' . _('LOCALE') . ': ';
-    echo '<select name="locale" id="locale">';
-    foreach ($AllAvailableLocales as $locale => $displayName) {
-        echo "<option value=\"$locale\" title=\"" . $displayName[1] . "\"" . ($litSettings->Locale === $locale ? ' selected' : '') . ">" . $displayName[0] . "</option>";
-    }
-    echo '</select></label></td>';
-    echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . _('or') . '</i><br /><i>' . _("Choose the desired calendar from the list") . '</i></td>';
-    echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;"><label>' . _('NATION') . ': <select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
-    echo '<label style="margin-left: 18px;">' . _('DIOCESE') . ': <select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
-    echo '</tr><tr>';
-    echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(_("Generate Roman Calendar")) . '" /></td>';
-    echo '</tr></table>';
-    echo '</fieldset>';
-    echo '</form>';
-
-    echo '<div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">';
-
-    echo '<h3>' . _('Configurations being used to generate this calendar:') . '</h3>';
-    echo '<span>' . _('YEAR') . ' = ' . $litSettings->Year . ', ' . _('EPIPHANY') . ' = ' . $litSettings->Epiphany . ', ' . _('ASCENSION') . ' = ' . $litSettings->Ascension . ', ' . _('CORPUS CHRISTI') . ' = ' . $litSettings->CorpusChristi . ', ' . _('LOCALE') . ' = ' . $litSettings->Locale . '</span>';
-    echo '<br /><span>' . _('NATION') . ' = ' . $litSettings->NationalCalendar . ', ' . _('DIOCESE') . ' = ' . $litSettings->DiocesanCalendar . '</span>';
+if ($litSettings->Year < 1970) {
+    echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">';
+    echo dgettext('litexmplphp', 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
     echo '</div>';
+}
+$c = $litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA' ? new Collator('en') : new Collator($litSettings->Locale);
+$AllAvailableLocales = array_filter(ResourceBundle::getLocales(''), function ($value) {
+    return strpos($value, 'POSIX') === false;
+});
+$AllAvailableLocales = array_reduce($AllAvailableLocales, function ($carry, $item) use ($litSettings) {
+    if ($litSettings->Locale === 'la' || $litSettings->Locale === 'la_VA') {
+        $carry[$item] = [ Locale::getDisplayName($item, 'en'), Locale::getDisplayName($item, 'en') ];
+    } else {
+        $carry[$item] = [ Locale::getDisplayName($item, $litSettings->Locale), Locale::getDisplayName($item, 'en') ];
+    }
+    return $carry;
+}, []);
+//$AllAvailableLocales['la'] = [ 'Latin', 'Latin' ];
+$AllAvailableLocales['la_VA'] = [ 'Latin (Vatican)', 'Latin (Vatican)' ];
+$c->asort($AllAvailableLocales);
+echo '<form method="GET">';
+echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
+echo '<table style="width:100%;"><tr>';
+echo '<td><label>' . dgettext('litexmplphp', 'YEAR') . ': <input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
+echo '<td><label>' . dgettext('litexmplphp', 'EPIPHANY') . ': <select name="epiphany" id="epiphany"><option value="JAN6" ' . ($litSettings->Epiphany === "JAN6" ? " selected" : "") . '>' . dgettext('litexmplphp', 'January 6') . '</option><option value="SUNDAY_JAN2_JAN8" ' . ($litSettings->Epiphany === "SUNDAY_JAN2_JAN8" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Sunday between January 2 and January 8') . '</option></select></label></td>';
+echo '<td><label>' . dgettext('litexmplphp', 'ASCENSION') . ': <select name="ascension" id="ascension"><option value="THURSDAY" ' . ($litSettings->Ascension === "THURSDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->Ascension === "SUNDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Sunday') . '</option></select></label></td>';
+echo '<td><label>' . dgettext('litexmplphp', 'CORPUS CHRISTI') . ': <select name="corpus_christi" id="corpus_christi"><option value="THURSDAY" ' . ($litSettings->CorpusChristi === "THURSDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Thursday') . '</option><option value="SUNDAY" ' . ($litSettings->CorpusChristi === "SUNDAY" ? " selected" : "") . '>' . dgettext('litexmplphp', 'Sunday') . '</option></select></label></td>';
+echo '<td><label>' . dgettext('litexmplphp', 'ETERNAL HIGH PRIEST') . ': <select name="eternal_high_priest" id="eternal_high_priest"><option value="0" ' . (false === $litSettings->EternalHighPriest ? " selected" : "") . '>' . dgettext('litexmplphp', 'False') . '</option><option value="1" ' . (true === $litSettings->EternalHighPriest ? " selected" : "") . '>' . dgettext('litexmplphp', 'True') . '</option></select></label></td>';
+echo '<td><input type="hidden" value="' . $litSettings->Locale . '" /><label>' . dgettext('litexmplphp', 'LOCALE') . ': ';
+echo '<select name="locale" id="locale">';
+foreach ($AllAvailableLocales as $locale => $displayName) {
+    echo "<option value=\"$locale\" title=\"" . $displayName[1] . "\"" . ($litSettings->Locale === $locale ? ' selected' : '') . ">" . $displayName[0] . "</option>";
+}
+echo '</select></label></td>';
+echo '</tr><tr>';
+echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', 'or') . '</i><br /><i>' . dgettext('litexmplphp', "Choose the desired calendar from the list") . '</i></td>';
+echo '</tr><tr>';
+echo '<td colspan="5" style="text-align:center;"><label>' . dgettext('litexmplphp', 'NATION') . ': <select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
+echo '<label style="margin-left: 18px;">' . dgettext('litexmplphp', 'DIOCESE') . ': <select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
+echo '</tr><tr>';
+echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', "Generate Roman Calendar")) . '" /></td>';
+echo '</tr></table>';
+echo '</fieldset>';
+echo '</form>';
 
-    if ($litSettings->Year >= 1970) {
-        echo '<table id="LitCalTable">';
-        echo '<thead><tr><th>' . _("Month") . '</th><th>' . _("Date in Gregorian Calendar") . '</th><th>' . _("General Roman Calendar Festivity") . '</th><th>' . _("Grade of the Festivity") . '</th></tr></thead>';
-        echo '<tbody>';
+echo '<div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">';
+
+echo '<h3>' . dgettext('litexmplphp', 'Configurations being used to generate this calendar:') . '</h3>';
+echo '<span>' . dgettext('litexmplphp', 'YEAR') . ' = ' . $litSettings->Year . ', ' . dgettext('litexmplphp', 'EPIPHANY') . ' = ' . $litSettings->Epiphany . ', ' . dgettext('litexmplphp', 'ASCENSION') . ' = ' . $litSettings->Ascension . ', ' . dgettext('litexmplphp', 'CORPUS CHRISTI') . ' = ' . $litSettings->CorpusChristi . ', ' . dgettext('litexmplphp', 'LOCALE') . ' = ' . $litSettings->Locale . '</span>';
+echo '<br /><span>' . dgettext('litexmplphp', 'NATION') . ' = ' . $litSettings->NationalCalendar . ', ' . dgettext('litexmplphp', 'DIOCESE') . ' = ' . $litSettings->DiocesanCalendar . '</span>';
+echo '</div>';
+
+if ($litSettings->Year >= 1970) {
+    echo '<table id="LitCalTable">';
+    echo '<thead><tr><th>' . dgettext('litexmplphp', "Month") . '</th><th>' . dgettext('litexmplphp', "Date in Gregorian Calendar") . '</th><th>' . dgettext('litexmplphp', "General Roman Calendar Festivity") . '</th><th>' . dgettext('litexmplphp', "Grade of the Festivity") . '</th></tr></thead>';
+    echo '<tbody>';
 
 
-        $dayCnt = 0;
-        //for($i=1997;$i<=2037;$i++){
+    $dayCnt = 0;
+    //for($i=1997;$i<=2037;$i++){
 
-        $LitCalKeys = array_keys($LitCal);
+    $LitCalKeys = array_keys($LitCal);
 
-        $currentMonth = 0; //1=January, ... 12=December
-        $newMonth = false;
+    $currentMonth = 0; //1=January, ... 12=December
+    $newMonth = false;
 
-        //print_r($LitCalKeys);
-        //echo count($LitCalKeys);
-        for ($keyindex = 0; $keyindex < count($LitCalKeys); $keyindex++) {
-            $dayCnt++;
-            $keyname = $LitCalKeys[$keyindex];
-            $festivity = $LitCal[$keyname];
-            //If we are at the start of a new month, count how many events we have in that same month, so we can display the Month table cell
-            if ((int) $festivity->date->format('n') !== $currentMonth) {
-                $newMonth = true;
-                $currentMonth = (int) $festivity->date->format('n');
-                $cm = 0;
-                Utilities::countSameMonthEvents($keyindex, $LitCal, $cm);
-            }
-
-            //Let's check if we have more than one event on the same day, such as optional memorials...
-            $cc = 0;
-            Utilities::countSameDayEvents($keyindex, $LitCal, $cc);
-            if ($cc > 0) {
-                for ($ev = 0; $ev <= $cc; $ev++) {
-                    $keyname = $LitCalKeys[$keyindex];
-                    $festivity = $LitCal[$keyname];
-                    Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, $ev);
-                    $keyindex++;
-                }
-                $keyindex--;
-            } else {
-                Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, null);
-            }
+    //print_r($LitCalKeys);
+    //echo count($LitCalKeys);
+    for ($keyindex = 0; $keyindex < count($LitCalKeys); $keyindex++) {
+        $dayCnt++;
+        $keyname = $LitCalKeys[$keyindex];
+        $festivity = $LitCal[$keyname];
+        //If we are at the start of a new month, count how many events we have in that same month, so we can display the Month table cell
+        if ((int) $festivity->date->format('n') !== $currentMonth) {
+            $newMonth = true;
+            $currentMonth = (int) $festivity->date->format('n');
+            $cm = 0;
+            Utilities::countSameMonthEvents($keyindex, $LitCal, $cm);
         }
 
-        echo '</tbody></table>';
-
-        echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">' . $dayCnt . ' event days created</div>';
-    }
-
-    if (isset($LitCalData["messages"]) && is_array($LitCalData["messages"]) && count($LitCalData["messages"]) > 0) {
-        echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . _("Information about the current calculation of the Liturgical Year") . '</th></tr></thead>';
-        echo '<tbody>';
-        foreach ($LitCalData["messages"] as $idx => $message) {
-            echo "<tr><td>{$idx}</td><td>{$message}</td></tr>";
+        //Let's check if we have more than one event on the same day, such as optional memorials...
+        $cc = 0;
+        Utilities::countSameDayEvents($keyindex, $LitCal, $cc);
+        if ($cc > 0) {
+            for ($ev = 0; $ev <= $cc; $ev++) {
+                $keyname = $LitCalKeys[$keyindex];
+                $festivity = $LitCal[$keyname];
+                Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, $ev);
+                $keyindex++;
+            }
+            $keyindex--;
+        } else {
+            Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, null);
         }
-        echo '</tbody></table>';
     }
 
+    echo '</tbody></table>';
+
+    echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">' . $dayCnt . ' event days created</div>';
+}
+
+if (isset($LitCalData["messages"]) && is_array($LitCalData["messages"]) && count($LitCalData["messages"]) > 0) {
+    echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . dgettext('litexmplphp', "Information about the current calculation of the Liturgical Year") . '</th></tr></thead>';
+    echo '<tbody>';
+    foreach ($LitCalData["messages"] as $idx => $message) {
+        echo "<tr><td>{$idx}</td><td>{$message}</td></tr>";
+    }
+    echo '</tbody></table>';
+}
+
+if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
+    // The file is being accessed directly
     ?>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>
+    <?php
+}
