@@ -166,8 +166,8 @@ echo '</form>';
 echo '<div style="text-align:center;border:2px groove White;border-radius:6px;margin:0px auto;padding-bottom:6px;">';
 
 echo '<h6><b>' . dgettext('litexmplphp', 'Configurations used to generate this calendar') . '</b></h6>';
-echo '<b>year</b>: ' . $litSettings->Year . ', <b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false') . ', <b>locale</b>: ' . $litSettings->Locale;
-echo '<br /><b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null');
+echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false') . ', <b>locale</b>: ' . $litSettings->Locale;
+echo '<br /><b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null') . '<b>year</b>: ' . $litSettings->Year;
 echo '</div>';
 
 if ($litSettings->Year >= 1970) {
