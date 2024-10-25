@@ -1,6 +1,6 @@
 "use strict";
 
-Object.filter = (obj, predicate) => 
+Object.filter = (obj, predicate) =>
 Object.keys(obj)
     .filter( key => predicate(obj[key]) )
     .reduce( (res, key) => (res[key] = obj[key], res), {} );
@@ -9,15 +9,223 @@ const thirdLevelDomain = window.location.hostname.split('.')[0];
 const isStaging = ( thirdLevelDomain.includes( '-staging' ) || window.location.pathname.includes( '-staging' ) );
 const stagingURL = isStaging ? '-staging' : '';
 const endpointV = isStaging ? 'dev' : 'v3';
-const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/`;
-const metadataURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/metadata/`;
+const endpointURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/calendar`;
+const metadataURL = `https://litcal.johnromanodorazio.com/api/${endpointV}/calendars`;
 const supportedUILocales = [ 'de', 'en', 'es', 'fr', 'it', 'la', 'pt', 'nl' ];
+
+const stringProps = Object.freeze([ 'epiphany', 'ascension', 'corpus_christi' ]);
+const booleanProps = Object.freeze([ 'eternal_high_priest' ]);
+const intProps = Object.freeze([ 'year' ]);
+
+/**
+ * Epiphany
+ * @typedef {('JAN6'|'SUNDAY_JAN2_JAN8')} Epiphany
+ * @default 'JAN6'
+ */
+
+/**
+ * Ascension
+ * @typedef {('THURSDAY'|'SUNDAY')} Ascension
+ * @default 'THURSDAY'
+ */
+
+/**
+ * Corpus Christi
+ * @typedef {('THURSDAY'|'SUNDAY')} CorpusChristi
+ * @default 'THURSDAY'
+ */
+
+/** Eternal High Priest
+ * @typedef {boolean} EternalHighPriest
+ * @default false
+ */
+
+/**
+ * Proxied Settings object. This object is used to track the settings used to query the API.
+ * @typedef {Object} ProxiedSettings
+ * @property {string} year                           - liturgical year to generate. Must be a value greater than 1970.
+ * @property {Epiphany} epiphany                     - whether Epiphany is to be celebrated on Jan. 6 or on the Sunday between Jan. 2 and Jan. 8.
+ * @property {Ascension} ascension                   - whether Ascension is to be celebrated on Thursday or Sunday.
+ * @property {CorpusChristi} corpus_christi          - whether Corpus Christi is to be celebrated on Thursday or Sunday.
+ * @property {EternalHighPriest} eternal_high_priest - whether the Eternal High Priest is to be celebrated.
+ */
+
+/**
+ * Proxy sanitizer for the ProxiedSettings object. Sanitizes the values assigned to properties of the ProxiedSettings object.
+ * @type {Proxy}
+ * @prop {function} get - the getter for the proxy
+ * @prop {function} set - the setter for the proxy
+ * @prop {string} prop - the name of the property being accessed or modified
+ * @prop {*} value - the value to be assigned to the property
+ * @prop {Object} target - the object being proxied
+ */
+const sanitizeProxiedSettings = {
+    get: (target, prop) => {
+        return Reflect.get(target, prop);
+    },
+    set: (target, prop, value) => {
+        if (stringProps.includes(prop)) {
+            value = sanitizeInput(value);
+        }
+        if (booleanProps.includes(prop)) {
+            if (typeof value !== 'boolean') {
+                console.error(`'${prop}' must be a boolean.`);
+                return false;
+            }
+        }
+        if (intProps.includes(prop)) {
+            if (typeof value !== 'number') {
+                console.error(`'${prop}' must be a number.`);
+                return false;
+            }
+        }
+        switch (prop) {
+            case 'year':
+                if (value < 1970) {
+                    console.error(`'${prop}' must be greater than 1970.`);
+                    return false;
+                }
+                break;
+            case 'epiphany':
+                if (value !== 'JAN6' && value !== 'SUNDAY_JAN2_JAN8') {
+                    console.error(`'${prop}' must have a value of 'JAN6' or 'SUNDAY_JAN2_JAN8'.`);
+                    return false;
+                }
+                break;
+            case 'ascension':
+            case 'corpus_christi':
+                if (value !== 'THURSDAY' && value !== 'SUNDAY') {
+                    console.error(`'${prop}' must have a value of 'THURSDAY' or 'SUNDAY'.`);
+                    return false;
+                }
+                break;
+        }
+        target[prop] = value;
+        return true;
+    }
+};
+
+/**
+ * @type {ProxiedSettings}
+ */
+const Settings = new Proxy({
+    year: new Date().getFullYear(),
+    epiphany: 'JAN6',
+    ascension: 'THURSDAY',
+    corpus_christi: 'THURSDAY',
+    eternal_high_priest: false
+}, sanitizeProxiedSettings);
+
+/**
+ * Proxy sanitizer for the proxied API object. Sanitizes the values assigned to properties of the proxied API object.
+ * @type {Proxy}
+ * @prop {function} get - the getter for the proxy
+ * @prop {function} set - the setter for the proxy
+ * @prop {string} prop - the name of the property being accessed or modified
+ * @prop {*} value - the value to be assigned to the property
+ * @prop {Object} target - the object being proxied
+ */
+const sanitizeProxiedAPI = {
+    get: (target, prop) => {
+        if (prop === 'path') {
+            if (target.hasOwnProperty('category') && target['category'] !== '') {
+                if (target.hasOwnProperty('key') && target['key'] !== '') {
+                    return `${RegionalDataURL}/${target['category']}/${target['key']}`;
+                } else {
+                    return `${RegionalDataURL}/${target['category']}`;
+                }
+            }
+            return `${RegionalDataURL}`;
+        }
+        else if (prop === 'base_locale') {
+            if (target.hasOwnProperty('locale') && target['locale'] !== '') {
+                const canonicalLocale = target['locale'].replace(/_/g, '-');
+                const locale = new Intl.Locale(canonicalLocale);
+                return locale.language;
+            }
+            else {
+                console.warn(`property 'locale' of this object must be set in order to retrieve the base_locale property`);
+            }
+        }
+        return Reflect.get(target, prop);
+    },
+    set: (target, prop, value) => {
+        // all props are strings
+        if (typeof value !== 'string') {
+            console.warn(`property ${prop} of this object must be of type string`);
+            return;
+        }
+        if (value !== '') {
+            value = sanitizeInput( value );
+        }
+        switch (prop) {
+            case 'category':
+                if (false === ['nation', 'diocese'].includes(value)) {
+                    console.warn(`property 'category' of this object must be one of the values 'nation', or 'diocese'`);
+                    return;
+                }
+                break;
+            case 'key':
+                if (target['category'] === 'nation') {
+                    if (false === Object.keys(AvailableCountries).includes(value)) {
+                        console.warn(`property 'key' of this object is not a valid value, possible values are: ${Object.keys(AvailableCountries).join(', ')}`);
+                        return;
+                    }
+                    if (false === LitCalMetadata.national_calendars_keys.includes(value)) {
+                        console.warn(`property 'key' of this object is not yet defined, defined values are: ${LitCalMetadata.national_calendars_keys.join(', ')}`);
+                    }
+                }
+                else if (target['category'] === 'diocese') {
+                    if (false === LitCalMetadata.diocesan_calendars_keys.includes(value)) {
+                        console.warn(`property 'key' of this object is not yet defined, defined values are: ${LitCalMetadata.diocesan_calendars_keys.join(', ')}`);
+                    }
+                }
+                break;
+            case 'locale':
+                if (false === LOCALE.includes(value) && false === LOCALE_WITH_REGION.includes(value)) {
+                    console.warn(`property 'locale' of this object must be one of the values ${LOCALE.join(', ')}, ${LOCALE_WITH_REGION.join(', ')}`);
+                    return;
+                }
+                break;
+            default:
+                console.warn('unexpected property ' + prop + ' of type ' + typeof prop + ' on target of type ' + typeof target);
+                return;
+        }
+        return Reflect.set(target, prop, value);
+    }
+}
+
+/**
+ * Proxied API object. This object is used to build the URL for the API to be queried.
+ * @typedef {Object} ProxiedAPI
+ * @property {string} category    - category of API query. Valid values are 'nation' and 'diocese'.
+ * @property {string} key         - value of category above. Valid values are ISO 3166-1 Alpha-2 codes for nations and valid diocese codes for dioceses.
+ * @property {string} path        - URL path for API query. Will be set by the proxy once category and key are set.
+ * @property {string} locale      - locale in which the liturgical calendar should be produced. Must be a valid PHP or JavaScript (BCP 47) locale string.
+ * @property {string} base_locale - the language code corresponding to the ProxiedAPI locale property.
+ */
+
+/**
+ * @type {ProxiedAPI}
+ */
+const API = new Proxy({
+    category: '',
+    key: '',
+    locale: ''
+}, sanitizeProxiedAPI);
+
+
+//kudos to https://stackoverflow.com/a/47140708/394921 for the idea
+const sanitizeInput = (input) => {
+    let doc = new DOMParser().parseFromString(input, 'text/html');
+    return doc.body.textContent || "";
+}
 
 let messages = null,
     loadMessages = (locale,callback) => {
         console.log('retrieving messages with locale = ' + locale);
         if( supportedUILocales.includes(locale.split('_')[0]) === false ) {
-            locale = 'en';
+            locale = 'en_US';
         }
         $.getJSON( `locales/${locale.split('_')[0]}.json`, data => {
             messages = data;
@@ -25,14 +233,6 @@ let messages = null,
         }).fail(() => { console.log("there was an error retrieving local messages..."); });
     },
     today = new Date(),
-    $Settings = {
-        "year": today.getFullYear(),
-        "epiphany": "JAN6",
-        "ascension": "SUNDAY",
-        "corpuschristi": "SUNDAY",
-        "locale": "la",
-        "returntype": "JSON"
-    },
     pad = n => n < 10 ? '0' + n : n,
     fullCalendarSettings = {
         headerToolbar: {
@@ -90,11 +290,11 @@ let messages = null,
         return events;
     },
     updateFCSettings = events => {
-        if ($Settings.locale !== 'en') {
-            fullCalendarSettings.locale = $Settings.locale.split('_')[0];
+        if (API.locale !== 'en') {
+            fullCalendarSettings.locale = API.base_locale;
         }
-        if (parseInt($Settings.year) !== today.getFullYear()) {
-            fullCalendarSettings.initialDate = $Settings.year + '-01-01';
+        if (parseInt(Settingsyear) !== today.getFullYear()) {
+            fullCalendarSettings.initialDate = Settingsyear + '-01-01';
         }
         fullCalendarSettings.events = events;
     },
@@ -122,7 +322,7 @@ let messages = null,
 
                     //even though the following code works for Latin, the Latin however is not removed for successive renders
                     //in other locales. Must have something to do with how the renders are working, like an append or something?
-                    /*if ($Settings.locale === 'la') {
+                    /*if (API.locale === 'la' || API.locale === 'la-VA') {
                         console.log('locale is Latin, now fixing days of the week');
                         $('.fc-day').each((idx, el) => {
                             $(el).find('a.fc-col-header-cell-cushion').text(dayNamesShort[idx]);
@@ -154,16 +354,16 @@ let messages = null,
         let templateStr = __('HTML presentation elaborated by JAVASCRIPT using an AJAX request to a %s');
         templateStr = templateStr.replace('%s', `<a id="endpointURL" href="${endpointURL}?${jQuery.param($Settings)}">PHP engine</a>`);
         let $header = `
-    <h1 style="text-align:center;">${__('Liturgical Calendar Calculation for a Given Year')} (${$Settings.year})</h1>
+    <h1 style="text-align:center;">${__('Liturgical Calendar Calculation for a Given Year')} (${Settings.year})</h1>
     <h2 style="text-align:center;">${templateStr}</h2>
     <div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">
     <h3>${__('Configurations being used to generate this calendar')}:</h3>
-    <span>${__('YEAR')} = ${$Settings.year}, ${__('EPIPHANY')} = ${$Settings.epiphany}, ${__('ASCENSION')} = ${$Settings.ascension}, CORPUS CHRISTI = ${$Settings.corpuschristi}, LOCALE = ${$Settings.locale}, NATIONALCALENDAR = ${$Settings.nationalcalendar}, DIOCESANCALENDAR = ${$Settings.diocesancalendar}</span>
+    <span>${__('YEAR')} = ${Settings.year}, ${__('EPIPHANY')} = ${Settings.epiphany}, ${__('ASCENSION')} = ${Settings.ascension}, CORPUS CHRISTI = ${Settings.corpus_christi}, LOCALE = ${API.locale}, CALENDAR TYPE = ${API.category}, CALENDAR ID = ${API.key}</span>
     </div>`,
             $tbheader = `<tr><th>${__("Month")}</th><th>${__("Date in Gregorian Calendar")}</th><th>${__("General Roman Calendar Festivity")}</th><th>${__("Grade of the Festivity")}</th></tr>`,
             $nationalCalendarSelect = `<select id="nationalcalendar" name="nationalcalendar"><option value=""></option>`;
             for( const key of Object.keys($index.NationalCalendars) ) {
-                $nationalCalendarSelect += `<option value="${key}" ${($Settings.nationalcalendar === key ? " SELECTED" : "")}>${key}</option>`;
+                $nationalCalendarSelect += `<option value="${key}" ${(API.key === key ? " SELECTED" : "")}>${key}</option>`;
             }
             $nationalCalendarSelect += `</select>`;
             const $localesSelect = `<select class="form-control" name="locale" id="locale">
@@ -920,14 +1120,14 @@ let messages = null,
                 <option value="zu_ZA">Zulu (South Africa)</option>
                 </select>`;
         let $settingsDialog = `<div id="settingsWrapper"><form id="calSettingsForm"><table id="calSettings">
-<tr><td colspan="2"><label>${__('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${$Settings.year}" /></label></td></tr>
+<tr><td colspan="2"><label>${__('YEAR')}: </td><td colspan="2"><input type="number" name="year" id="year" min="1969" max="9999" value="${Settings.year}" /></label></td></tr>
 <tr><td><label>${__('LOCALE')}: </td><td>${$localesSelect}</label></td><td>${__('NATIONAL PRESET')}: </td><td>${$nationalCalendarSelect}</td></tr>
-<tr><td><label>${__('EPIPHANY')}: </td><td><select name="epiphany" id="epiphany"><option value="JAN6" ${($Settings.epiphany === "JAN6" ? " SELECTED" : "")}>${__('January 6')}</option>
-<option value="SUNDAY_JAN2_JAN8" ${($Settings.epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "")}>${__('Sunday Jan 2↔Jan 8')}</option></select></label></td><td>${__('DIOCESAN PRESET')}: </td><td><select id="diocesancalendar" name="diocesancalendar" ${($Settings.nationalcalendar == '' || $Settings.nationalcalendar == 'VATICAN' ) ? 'disabled' : ''}></select></td></tr>
-<tr><td><label>${__('ASCENSION')}: </td><td><select name="ascension" id="ascension"><option value="THURSDAY" ${($Settings.ascension === "THURSDAY" ? " SELECTED" : "")}>${__('Thursday')}</option>
-<option value="SUNDAY" ${($Settings.ascension === "SUNDAY" ? " SELECTED" : "")}>${__('Sunday')}</option></select></label></td><td></td><td></td></tr>
-<tr><td><label>CORPUS CHRISTI: </td><td><select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ${($Settings.corpuschristi === "THURSDAY" ? " SELECTED" : "")}>${__('Thursday')}</option>
-<option value="SUNDAY" ${($Settings.corpuschristi === "SUNDAY" ? " SELECTED" : "")}>${__('Sunday')}</option></select></label></td><td></td><td></td></tr>
+<tr><td><label>${__('EPIPHANY')}: </td><td><select name="epiphany" id="epiphany"><option value="JAN6" ${(Settings.epiphany === "JAN6" ? " SELECTED" : "")}>${__('January 6')}</option>
+<option value="SUNDAY_JAN2_JAN8" ${(Settings.epiphany === "SUNDAY_JAN2_JAN8" ? " SELECTED" : "")}>${__('Sunday Jan 2↔Jan 8')}</option></select></label></td><td>${__('DIOCESAN PRESET')}: </td><td><select id="diocesancalendar" name="diocesancalendar" ${($Settings.nationalcalendar == '' || API.key == 'VA' ) ? 'disabled' : ''}></select></td></tr>
+<tr><td><label>${__('ASCENSION')}: </td><td><select name="ascension" id="ascension"><option value="THURSDAY" ${(Settings.ascension === "THURSDAY" ? " SELECTED" : "")}>${__('Thursday')}</option>
+<option value="SUNDAY" ${(Settings.ascension === "SUNDAY" ? " SELECTED" : "")}>${__('Sunday')}</option></select></label></td><td></td><td></td></tr>
+<tr><td><label>CORPUS CHRISTI: </td><td><select name="corpuschristi" id="corpuschristi"><option value="THURSDAY" ${(Settings.corpus_christi === "THURSDAY" ? " SELECTED" : "")}>${__('Thursday')}</option>
+<option value="SUNDAY" ${(Settings.corpus_christi === "SUNDAY" ? " SELECTED" : "")}>${__('Sunday')}</option></select></label></td><td></td><td></td></tr>
 <tr><td colspan="4" style="text-align:center;"><input type="submit" id="generateLitCal" value="${__("Generate Roman Calendar")}" /></td></tr>
 </table></form></div>`;
         $('header').html($header);
@@ -948,7 +1148,7 @@ let messages = null,
                 duration: 500
             },
             open: () => {
-                $('#locale').val( $Settings.locale );
+                $('#locale').val( API.locale );
                 if( $Settings.nationalcalendar === '' ) {
                     $('#calSettingsForm :input').prop('disabled', false);
                 } else {
@@ -1080,8 +1280,8 @@ $(document).on("submit", '#calSettingsForm', event => {
     console.log($Settings);
     $('#settingsWrapper').dialog("close");
     Cookies.set( 'litCalSettings', JSON.stringify($Settings), { secure: true } );
-    if( $Settings.locale !== 'en' ){
-        loadMessages( $Settings.locale, genLitCal);
+    if( API.base_locale !== 'en' ){
+        loadMessages( API.base_locale, genLitCal);
     } else {
         messages = null;
         genLitCal();
