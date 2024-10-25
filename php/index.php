@@ -132,11 +132,11 @@ echo '<table style="width:100%;"><tr>';
 $apiOptions = new ApiOptions();
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('td');
-$apiOptions->localeInput->labelAfter('<br>');
-$apiOptions->epiphanyInput->labelAfter('<br>');
-$apiOptions->ascensionInput->labelAfter('<br>');
-$apiOptions->corpusChristiInput->labelAfter('<br>');
-$apiOptions->eternalHighPriestInput->labelAfter('<br>');
+$apiOptions->localeInput->labelAfter('<br>')->selectedValue($litSettings->Locale);
+$apiOptions->epiphanyInput->labelAfter('<br>')->selectedValue($litSettings->Epiphany);
+$apiOptions->ascensionInput->labelAfter('<br>')->selectedValue($litSettings->Ascension);
+$apiOptions->corpusChristiInput->labelAfter('<br>')->selectedValue($litSettings->CorpusChristi);
+$apiOptions->eternalHighPriestInput->labelAfter('<br>')->selectedValue($litSettings->EternalHighPriest);
 if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
     $apiOptions->epiphanyInput->disabled();
     $apiOptions->ascensionInput->disabled();
