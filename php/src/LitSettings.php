@@ -74,7 +74,7 @@ class LitSettings
                         break;
                     case "locale":
                         $value = \Locale::canonicalize($value);
-                        $this->Locale        = LitLocale::isValid($value)                 ? $value             : LitLocale::LATIN;
+                        $this->Locale        = LitLocale::isValid($value)                 ? $value             : LitLocale::LATIN_PRIMARY_LANGUAGE;
                         break;
                     case "national_calendar":
                         $this->NationalCalendar = $value !== ""                           ? strtoupper($value) : null;
@@ -114,7 +114,7 @@ class LitSettings
         } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             $this->Locale = \Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
         } else {
-            $this->Locale = LitLocale::LATIN;
+            $this->Locale = LitLocale::LATIN_PRIMARY_LANGUAGE;
         }
         $this->Locale = \Locale::canonicalize($this->Locale);
 
