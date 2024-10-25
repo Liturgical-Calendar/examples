@@ -136,7 +136,7 @@ $apiOptions->localeInput->labelAfter('<br>')->selectedValue($litSettings->Locale
 $apiOptions->epiphanyInput->labelAfter('<br>')->selectedValue($litSettings->Epiphany);
 $apiOptions->ascensionInput->labelAfter('<br>')->selectedValue($litSettings->Ascension);
 $apiOptions->corpusChristiInput->labelAfter('<br>')->selectedValue($litSettings->CorpusChristi);
-$apiOptions->eternalHighPriestInput->labelAfter('<br>')->selectedValue($litSettings->EternalHighPriest);
+$apiOptions->eternalHighPriestInput->labelAfter('<br>')->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false');
 $apiOptions->yearTypeInput->labelAfter('<br>')->selectedValue($litSettings->YearType);
 if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
     $apiOptions->epiphanyInput->disabled();
@@ -148,14 +148,14 @@ if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !=
 echo $apiOptions->getForm(PathType::BASE_PATH);
 echo '</tr>';
 echo '<tr>';
-echo '<td><label>' . dgettext('litexmplphp', 'year') . '<br><input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
+echo '<td><label>year<br><input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
 echo $apiOptions->getForm(PathType::ALL_PATHS);
 
 echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', 'or') . '</i><br /><i>' . dgettext('litexmplphp', "Choose the desired calendar from the list") . '</i></td>';
 echo '</tr><tr>';
-echo '<td colspan="5" style="text-align:center;"><label>' . dgettext('litexmplphp', 'NATION') . ': <select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
-echo '<label style="margin-left: 18px;">' . dgettext('litexmplphp', 'DIOCESE') . ': <select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
+echo '<td colspan="5" style="text-align:center;"><label>nation<br><select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
+echo '<label style="margin-left: 18px;">diocese<br><select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
 echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;padding:15px;">' . $submitParent . '<input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', "Generate Roman Calendar")) . '" /></td>';
 echo '</tr></table>';
@@ -165,8 +165,8 @@ echo '</form>';
 echo '<div style="text-align:center;border:2px groove White;border-radius:6px;width:60%;margin:0px auto;padding-bottom:6px;">';
 
 echo '<h3>' . dgettext('litexmplphp', 'Configurations being used to generate this calendar:') . '</h3>';
-echo '<span>' . dgettext('litexmplphp', 'YEAR') . ' = ' . $litSettings->Year . ', ' . dgettext('litexmplphp', 'EPIPHANY') . ' = ' . $litSettings->Epiphany . ', ' . dgettext('litexmplphp', 'ASCENSION') . ' = ' . $litSettings->Ascension . ', ' . dgettext('litexmplphp', 'CORPUS CHRISTI') . ' = ' . $litSettings->CorpusChristi . ', ' . dgettext('litexmplphp', 'LOCALE') . ' = ' . $litSettings->Locale . '</span>';
-echo '<br /><span>' . dgettext('litexmplphp', 'NATION') . ' = ' . $litSettings->NationalCalendar . ', ' . dgettext('litexmplphp', 'DIOCESE') . ' = ' . $litSettings->DiocesanCalendar . '</span>';
+echo '<span>year = ' . $litSettings->Year . ', epiphany = ' . $litSettings->Epiphany . ', ascension = ' . $litSettings->Ascension . ', corpus_christi = ' . $litSettings->CorpusChristi . ', eternal_high_priest = ' . ($litSettings->EternalHighPriest ? 'true' : 'false') . ', locale = ' . $litSettings->Locale . '</span>';
+echo '<br /><span>nation = ' . $litSettings->NationalCalendar . ', diocese = ' . $litSettings->DiocesanCalendar . '</span>';
 echo '</div>';
 
 if ($litSettings->Year >= 1970) {
