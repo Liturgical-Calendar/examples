@@ -23,9 +23,9 @@ $stagingURL = $isStaging ? "-staging" : "";
 $endpointV = $isStaging ? "dev" : "v3";
 define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
-const DIRECT_ACCESS = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) ? true : false;
+$directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) ? true : false;
 
-$litSettings = new LitSettings($_GET, DIRECT_ACCESS);
+$litSettings = new LitSettings($_GET, $directAccess);
 
 $nationalCalendarOptions = '<option value="">---</option>';
 $diocesanCalendarOptions = '<option value="">---</option>';
@@ -74,7 +74,7 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
 /**************************
  * BEGIN DISPLAY LOGIC
  *************************/
-if (DIRECT_ACCESS) {
+if ($directAccess) {
     // The file is being accessed directly
     ?>
 <!doctype html>
@@ -217,7 +217,7 @@ if (isset($LitCalData["messages"]) && is_array($LitCalData["messages"]) && count
     echo '</tbody></table>';
 }
 
-if (DIRECT_ACCESS) {
+if ($directAccess) {
     // The file is being accessed directly
     ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
