@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 21:43+0000\n"
+"POT-Creation-Date: 2024-10-25 23:33+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Portuguese <https://translate.johnromanodorazio.com/projects/"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:87 php/index.php:160
+#: php/index.php:87 php/index.php:161
 msgid "Generate Roman Calendar"
 msgstr "Gerar Calendário Romano"
 
@@ -51,35 +51,35 @@ msgstr ""
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Personalizar opções para gerar o Calendário Romano"
 
-#: php/index.php:155 php/src/Utilities.php:298
+#: php/index.php:156 php/src/Utilities.php:298
 msgid "or"
 msgstr "ou"
 
-#: php/index.php:155
+#: php/index.php:156
 msgid "Choose the desired calendar from the list"
 msgstr "Escolha o calendário desejado da lista"
 
-#: php/index.php:167
+#: php/index.php:168
 msgid "Configurations being used to generate this calendar:"
 msgstr "Configurações sendo usadas para gerar este calendário:"
 
-#: php/index.php:174
+#: php/index.php:175
 msgid "Month"
 msgstr "Mês"
 
-#: php/index.php:174
+#: php/index.php:175
 msgid "Date in Gregorian Calendar"
 msgstr "Data no Calendário Gregoriano"
 
-#: php/index.php:174
+#: php/index.php:175
 msgid "General Roman Calendar Festivity"
 msgstr "Festa do Calendário Romano Geral"
 
-#: php/index.php:174
+#: php/index.php:175
 msgid "Grade of the Festivity"
 msgstr "Grau da Festividade"
 
-#: php/index.php:222
+#: php/index.php:223
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informações sobre o cálculo atual do Ano Litúrgico"
 
