@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 19:27+0000\n"
+"POT-Creation-Date: 2024-10-25 20:02+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:87 php/index.php:155
+#: php/index.php:87 php/index.php:159
 msgid "Generate Roman Calendar"
 msgstr "Calendarium Romanum Generare"
 
@@ -47,67 +47,67 @@ msgstr "Rogavisti annum ante 1970: non potest rogare annos ante annum 1970."
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Eligere optiones per generationem Calendarii Romani"
 
-#: php/index.php:146
+#: php/index.php:150
 msgid "year"
 msgstr ""
 
-#: php/index.php:150 php/src/Utilities.php:210
+#: php/index.php:154 php/src/Utilities.php:218
 msgid "or"
 msgstr "vel"
 
-#: php/index.php:150
+#: php/index.php:154
 msgid "Choose the desired calendar from the list"
 msgstr "Elige desideratum calendarium ex indice"
 
-#: php/index.php:152 php/index.php:164
+#: php/index.php:156 php/index.php:168
 msgid "NATION"
 msgstr "GENS"
 
-#: php/index.php:153 php/index.php:164
+#: php/index.php:157 php/index.php:168
 msgid "DIOCESE"
 msgstr "DIŒCESIS"
 
-#: php/index.php:162
+#: php/index.php:166
 msgid "Configurations being used to generate this calendar:"
 msgstr "Optiones electuus ut generare hic calendarium:"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "YEAR"
 msgstr "ANNUM"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "EPIPHANY"
 msgstr "EPIPHANIA"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "ASCENSION"
 msgstr "ASCENSIO"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "CORPUS CHRISTI"
 msgstr "CORPUS CHRISTI"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "LOCALE"
 msgstr "LINGUA"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "Month"
 msgstr "Mensis"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "Date in Gregorian Calendar"
 msgstr "Dies in Calendario Gregoriano"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "General Roman Calendar Festivity"
 msgstr "Festivitas in Calendario Romano Generale"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "Grade of the Festivity"
 msgstr "Gradum Festivitatis"
 
-#: php/index.php:217
+#: php/index.php:221
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Notitiæ de computatione præsente Anni Liturgici"
 

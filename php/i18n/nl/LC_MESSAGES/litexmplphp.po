@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 19:27+0000\n"
+"POT-Creation-Date: 2024-10-25 20:02+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:87 php/index.php:155
+#: php/index.php:87 php/index.php:159
 msgid "Generate Roman Calendar"
 msgstr "Genereer de Romeinse kalender"
 
@@ -50,67 +50,67 @@ msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 "Configureer de instellingen voor het genereren van de Romeinse kalender"
 
-#: php/index.php:146
+#: php/index.php:150
 msgid "year"
 msgstr ""
 
-#: php/index.php:150 php/src/Utilities.php:210
+#: php/index.php:154 php/src/Utilities.php:218
 msgid "or"
 msgstr "of"
 
-#: php/index.php:150
+#: php/index.php:154
 msgid "Choose the desired calendar from the list"
 msgstr "Kies de gewenste kalender uit de lijst"
 
-#: php/index.php:152 php/index.php:164
+#: php/index.php:156 php/index.php:168
 msgid "NATION"
 msgstr "NATIE"
 
-#: php/index.php:153 php/index.php:164
+#: php/index.php:157 php/index.php:168
 msgid "DIOCESE"
 msgstr "BISDOM"
 
-#: php/index.php:162
+#: php/index.php:166
 msgid "Configurations being used to generate this calendar:"
 msgstr "De instellingen die zijn gebruikt om deze agenda te genereren:"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "YEAR"
 msgstr "JAAR"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "EPIPHANY"
 msgstr "OPENBARING"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "ASCENSION"
 msgstr "HEMELVAART"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "CORPUS CHRISTI"
 msgstr "SACRAMENTSDAG"
 
-#: php/index.php:163
+#: php/index.php:167
 msgid "LOCALE"
 msgstr "TAAL"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "Month"
 msgstr "Maand"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "Date in Gregorian Calendar"
 msgstr "Datum in de Gregoriaanse kalender"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "General Roman Calendar Festivity"
 msgstr "Feestdagen van de universele Romeinse kalender"
 
-#: php/index.php:169
+#: php/index.php:173
 msgid "Grade of the Festivity"
 msgstr "Graad van de Viering"
 
-#: php/index.php:217
+#: php/index.php:221
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informatie over de huidige berekening van het liturgisch jaar"
 
