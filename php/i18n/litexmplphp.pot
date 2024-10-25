@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 18:56+0000\n"
+"POT-Creation-Date: 2024-10-25 19:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: php/index.php:87 php/index.php:148
+#: php/index.php:87 php/index.php:155
 msgid "Generate Roman Calendar"
 msgstr ""
 
@@ -48,62 +48,62 @@ msgstr ""
 msgid "year"
 msgstr ""
 
-#: php/index.php:143 php/src/Utilities.php:210
+#: php/index.php:150 php/src/Utilities.php:210
 msgid "or"
 msgstr ""
 
-#: php/index.php:143
+#: php/index.php:150
 msgid "Choose the desired calendar from the list"
 msgstr ""
 
-#: php/index.php:145 php/index.php:157
+#: php/index.php:152 php/index.php:164
 msgid "NATION"
 msgstr ""
 
-#: php/index.php:146 php/index.php:157
+#: php/index.php:153 php/index.php:164
 msgid "DIOCESE"
 msgstr ""
 
-#: php/index.php:155
+#: php/index.php:162
 msgid "Configurations being used to generate this calendar:"
 msgstr ""
 
-#: php/index.php:156
+#: php/index.php:163
 msgid "YEAR"
 msgstr ""
 
-#: php/index.php:156
+#: php/index.php:163
 msgid "EPIPHANY"
 msgstr ""
 
-#: php/index.php:156
+#: php/index.php:163
 msgid "ASCENSION"
 msgstr ""
 
-#: php/index.php:156
+#: php/index.php:163
 msgid "CORPUS CHRISTI"
 msgstr ""
 
-#: php/index.php:156
+#: php/index.php:163
 msgid "LOCALE"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:169
 msgid "Month"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:169
 msgid "Date in Gregorian Calendar"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:169
 msgid "General Roman Calendar Festivity"
 msgstr ""
 
-#: php/index.php:162
+#: php/index.php:169
 msgid "Grade of the Festivity"
 msgstr ""
 
-#: php/index.php:210
+#: php/index.php:217
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr ""
