@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "163b5818ea992da79766bc96483d6eee",
+    "content-hash": "d286730285e95e1e0119bda1f6a8f229",
     "packages": [
         {
             "name": "liturgical-calendar/components",
-            "version": "v1.0.5",
+            "version": "v2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Liturgical-Calendar/liturgy-components-php.git",
-                "reference": "2d863fc43159cddf1a69262247b0cd87e7d7d93d"
+                "reference": "7ceb9cdc43b3aa6c0bb5cc7d422ef8d479acebf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Liturgical-Calendar/liturgy-components-php/zipball/2d863fc43159cddf1a69262247b0cd87e7d7d93d",
-                "reference": "2d863fc43159cddf1a69262247b0cd87e7d7d93d",
+                "url": "https://api.github.com/repos/Liturgical-Calendar/liturgy-components-php/zipball/7ceb9cdc43b3aa6c0bb5cc7d422ef8d479acebf7",
+                "reference": "7ceb9cdc43b3aa6c0bb5cc7d422ef8d479acebf7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4"
+                "php": ">=8.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9"
@@ -45,9 +45,9 @@
             "description": "Reusable frontend components for the Liturgical Calendar API",
             "support": {
                 "issues": "https://github.com/Liturgical-Calendar/liturgy-components-php/issues",
-                "source": "https://github.com/Liturgical-Calendar/liturgy-components-php/tree/v1.0.5"
+                "source": "https://github.com/Liturgical-Calendar/liturgy-components-php/tree/v2.0.8"
             },
-            "time": "2024-10-01T10:58:13+00:00"
+            "time": "2024-10-25T18:35:59+00:00"
         }
     ],
     "packages-dev": [
