@@ -44,8 +44,8 @@ if ($MetaData !== null) {
 }
 
 if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
-    $queryData = Utilities::prepareQueryData($litSettings);
-    $response = Utilities::sendAPIRequest($queryData);
+    $queryData  = Utilities::prepareQueryData($litSettings);
+    $response   = Utilities::sendAPIRequest($queryData);
     $LitCalData = json_decode($response, true);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
@@ -134,6 +134,13 @@ $apiOptions = new ApiOptions();
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('td');
 $apiOptions->localeInput->name('');
+if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
+    $apiOptions->epiphanyInput->disabled();
+    $apiOptions->ascensionInput->disabled();
+    $apiOptions->corpusChristiInput->disabled();
+    $apiOptions->eternalHighPriestInput->disabled();
+    $apiOptions->localeInput->disabled();
+}
 echo $apiOptions->getForm(PathType::BASE_PATH);
 echo '</tr>';
 echo '<tr>';
