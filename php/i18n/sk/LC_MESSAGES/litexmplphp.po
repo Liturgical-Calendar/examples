@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 21:09+0000\n"
+"POT-Creation-Date: 2024-10-25 21:43+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
@@ -47,11 +47,7 @@ msgstr "Žiadate rok pred rokom 1970: nie je možné žiadať roky pred rokom 19
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Prispôsobte možnosti na vytvorenie Rímskeho kalendára"
 
-#: php/index.php:151
-msgid "year"
-msgstr ""
-
-#: php/index.php:155 php/src/Utilities.php:218
+#: php/index.php:155 php/src/Utilities.php:298
 msgid "or"
 msgstr "alebo"
 
@@ -59,37 +55,9 @@ msgstr "alebo"
 msgid "Choose the desired calendar from the list"
 msgstr "Vyberte požadovaný kalendár zo zoznamu"
 
-#: php/index.php:157 php/index.php:169
-msgid "NATION"
-msgstr "NÁROD"
-
-#: php/index.php:158 php/index.php:169
-msgid "DIOCESE"
-msgstr "DIECÉZA"
-
 #: php/index.php:167
 msgid "Configurations being used to generate this calendar:"
 msgstr "Konfigurácie používané na vytvorenie tohto kalendára:"
-
-#: php/index.php:168
-msgid "YEAR"
-msgstr "ROK"
-
-#: php/index.php:168
-msgid "EPIPHANY"
-msgstr "Zjavenie Pána"
-
-#: php/index.php:168
-msgid "ASCENSION"
-msgstr "Nanebovstúpenie"
-
-#: php/index.php:168
-msgid "CORPUS CHRISTI"
-msgstr "Sviatok Božieho Tela"
-
-#: php/index.php:168
-msgid "LOCALE"
-msgstr "MIESTO"
 
 #: php/index.php:174
 msgid "Month"
@@ -110,6 +78,27 @@ msgstr "Stupeň slávnosti"
 #: php/index.php:222
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informácie o aktuálnom výpočte liturgického roka"
+
+#~ msgid "NATION"
+#~ msgstr "NÁROD"
+
+#~ msgid "DIOCESE"
+#~ msgstr "DIECÉZA"
+
+#~ msgid "YEAR"
+#~ msgstr "ROK"
+
+#~ msgid "EPIPHANY"
+#~ msgstr "Zjavenie Pána"
+
+#~ msgid "ASCENSION"
+#~ msgstr "Nanebovstúpenie"
+
+#~ msgid "CORPUS CHRISTI"
+#~ msgstr "Sviatok Božieho Tela"
+
+#~ msgid "LOCALE"
+#~ msgstr "MIESTO"
 
 #~ msgid "January 6"
 #~ msgstr "6. januára"

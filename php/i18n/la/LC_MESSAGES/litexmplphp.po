@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 21:09+0000\n"
+"POT-Creation-Date: 2024-10-25 21:43+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
@@ -47,11 +47,7 @@ msgstr "Rogavisti annum ante 1970: non potest rogare annos ante annum 1970."
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Eligere optiones per generationem Calendarii Romani"
 
-#: php/index.php:151
-msgid "year"
-msgstr ""
-
-#: php/index.php:155 php/src/Utilities.php:218
+#: php/index.php:155 php/src/Utilities.php:298
 msgid "or"
 msgstr "vel"
 
@@ -59,37 +55,9 @@ msgstr "vel"
 msgid "Choose the desired calendar from the list"
 msgstr "Elige desideratum calendarium ex indice"
 
-#: php/index.php:157 php/index.php:169
-msgid "NATION"
-msgstr "GENS"
-
-#: php/index.php:158 php/index.php:169
-msgid "DIOCESE"
-msgstr "DIŒCESIS"
-
 #: php/index.php:167
 msgid "Configurations being used to generate this calendar:"
 msgstr "Optiones electuus ut generare hic calendarium:"
-
-#: php/index.php:168
-msgid "YEAR"
-msgstr "ANNUM"
-
-#: php/index.php:168
-msgid "EPIPHANY"
-msgstr "EPIPHANIA"
-
-#: php/index.php:168
-msgid "ASCENSION"
-msgstr "ASCENSIO"
-
-#: php/index.php:168
-msgid "CORPUS CHRISTI"
-msgstr "CORPUS CHRISTI"
-
-#: php/index.php:168
-msgid "LOCALE"
-msgstr "LINGUA"
 
 #: php/index.php:174
 msgid "Month"
@@ -110,6 +78,27 @@ msgstr "Gradum Festivitatis"
 #: php/index.php:222
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Notitiæ de computatione præsente Anni Liturgici"
+
+#~ msgid "NATION"
+#~ msgstr "GENS"
+
+#~ msgid "DIOCESE"
+#~ msgstr "DIŒCESIS"
+
+#~ msgid "YEAR"
+#~ msgstr "ANNUM"
+
+#~ msgid "EPIPHANY"
+#~ msgstr "EPIPHANIA"
+
+#~ msgid "ASCENSION"
+#~ msgstr "ASCENSIO"
+
+#~ msgid "CORPUS CHRISTI"
+#~ msgstr "CORPUS CHRISTI"
+
+#~ msgid "LOCALE"
+#~ msgstr "LINGUA"
 
 #~ msgid "January 6"
 #~ msgstr "6 Ianuarii"

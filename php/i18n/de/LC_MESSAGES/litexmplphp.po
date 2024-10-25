@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 21:09+0000\n"
+"POT-Creation-Date: 2024-10-25 21:43+0000\n"
 "PO-Revision-Date: 2024-10-25 18:56+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: German <https://translate.johnromanodorazio.com/projects/"
@@ -53,11 +53,7 @@ msgstr ""
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Optionen zum Generieren des römischen Kalenders anpassen"
 
-#: php/index.php:151
-msgid "year"
-msgstr ""
-
-#: php/index.php:155 php/src/Utilities.php:218
+#: php/index.php:155 php/src/Utilities.php:298
 msgid "or"
 msgstr "oder"
 
@@ -65,37 +61,9 @@ msgstr "oder"
 msgid "Choose the desired calendar from the list"
 msgstr "Wähle den gewünschten Kalender aus der Liste"
 
-#: php/index.php:157 php/index.php:169
-msgid "NATION"
-msgstr "NATION"
-
-#: php/index.php:158 php/index.php:169
-msgid "DIOCESE"
-msgstr "DIÖZESE"
-
 #: php/index.php:167
 msgid "Configurations being used to generate this calendar:"
 msgstr "Konfigurationen, die zur Erstellung dieses Kalenders verwendet werden:"
-
-#: php/index.php:168
-msgid "YEAR"
-msgstr "JAHR"
-
-#: php/index.php:168
-msgid "EPIPHANY"
-msgstr "EPIPHANIE"
-
-#: php/index.php:168
-msgid "ASCENSION"
-msgstr "HIMMELFAHRT"
-
-#: php/index.php:168
-msgid "CORPUS CHRISTI"
-msgstr "FRONLEICHNAM"
-
-#: php/index.php:168
-msgid "LOCALE"
-msgstr "LOKALE"
 
 #: php/index.php:174
 msgid "Month"
@@ -116,6 +84,27 @@ msgstr "Grad des Festes"
 #: php/index.php:222
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informationen zur aktuellen Berechnung des liturgischen Jahres"
+
+#~ msgid "NATION"
+#~ msgstr "NATION"
+
+#~ msgid "DIOCESE"
+#~ msgstr "DIÖZESE"
+
+#~ msgid "YEAR"
+#~ msgstr "JAHR"
+
+#~ msgid "EPIPHANY"
+#~ msgstr "EPIPHANIE"
+
+#~ msgid "ASCENSION"
+#~ msgstr "HIMMELFAHRT"
+
+#~ msgid "CORPUS CHRISTI"
+#~ msgstr "FRONLEICHNAM"
+
+#~ msgid "LOCALE"
+#~ msgstr "LOKALE"
 
 #~ msgid "January 6"
 #~ msgstr "6. Januar"
