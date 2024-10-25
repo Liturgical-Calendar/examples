@@ -137,22 +137,24 @@ class LitSettings
                 $this->Locale           = $NationalCalendarMetadata["settings"]["locale"];
                 break;
         }
-        $baseLocale = strtolower(explode('_', $this->Locale)[0]);
-        $localeArray = [
-            $this->Locale . '.utf8',
-            $this->Locale . '.UTF-8',
-            $this->Locale,
-            $baseLocale . '_' . strtoupper($baseLocale) . '.utf8',
-            $baseLocale . '_' . strtoupper($baseLocale) . '.UTF-8',
-            $baseLocale . '_' . strtoupper($baseLocale),
-            $baseLocale . '.utf8',
-            $baseLocale . '.UTF-8',
-            $baseLocale
-        ];
-        setlocale(LC_ALL, $localeArray);
+        if ($this->directAccess) {
+            $baseLocale = \Locale::getPrimaryLanguage($this->Locale);
+            $localeArray = [
+                $this->Locale . '.utf8',
+                $this->Locale . '.UTF-8',
+                $this->Locale,
+                $baseLocale . '_' . strtoupper($baseLocale) . '.utf8',
+                $baseLocale . '_' . strtoupper($baseLocale) . '.UTF-8',
+                $baseLocale . '_' . strtoupper($baseLocale),
+                $baseLocale . '.utf8',
+                $baseLocale . '.UTF-8',
+                $baseLocale
+            ];
+            setlocale(LC_ALL, $localeArray);
+        }
         bindtextdomain("litexmplphp", "i18n");
         //textdomain("litcal");
-        ini_set('date.timezone', 'Europe/Vatican');
+        //ini_set('date.timezone', 'Europe/Vatican');
         if (!isset($_COOKIE["currentLocale"]) || $_COOKIE["currentLocale"] !== $this->Locale && $this->directAccess) {
             setcookie(
                 "currentLocale",                                //name

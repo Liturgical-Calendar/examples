@@ -37,6 +37,13 @@ class Utilities
      * UTILITY FUNCTIONS
      *************************/
 
+    /**
+     * Recursively counts the number of subsequent festivities in the same day.
+     *
+     * @param int $currentKeyIndex The current position in the array of festivities.
+     * @param array $EventsArray The array of festivities.
+     * @param int $cc [reference] The count of subsequent festivities in the same day.
+     */
     public static function countSameDayEvents($currentKeyIndex, $EventsArray, &$cc)
     {
         $Keys = array_keys($EventsArray);
@@ -50,6 +57,13 @@ class Utilities
         }
     }
 
+    /**
+     * Counts the number of subsequent festivities in the same month.
+     *
+     * @param int $currentKeyIndex
+     * @param array $EventsArray
+     * @param int $cm
+     */
     public static function countSameMonthEvents($currentKeyIndex, $EventsArray, &$cm)
     {
         $Keys = array_keys($EventsArray);
@@ -63,6 +77,10 @@ class Utilities
         }
     }
 
+    /**
+     * Retrieve the metadata from the liturgical calendar API, if available.
+     * @return array|null the metadata array, or null if it cannot be retrieved
+     */
     public static function retrieveMetadata()
     {
         $metadata = null;
@@ -78,6 +96,22 @@ class Utilities
         return $metadata !== null ? $metadata["litcal_metadata"] : null;
     }
 
+    /**
+     * Sends an API request to the Liturgical Calendar service using the provided query data.
+     *
+     * Constructs the request URL based on the provided query parameters, which may include
+     * diocesan or national calendar identifiers, locale, and year. The request is sent as a POST
+     * request with the remaining query data as the request body.
+     *
+     * If a diocesan calendar is specified, the request targets the diocesan endpoint; otherwise,
+     * if a national calendar is specified, it targets the national endpoint. If a locale is
+     * specified, it adds the corresponding Accept-Language header. If a year is specified, it
+     * appends the year to the URL.
+     *
+     * @param array $queryData An associative array containing query parameters for the API request.
+     * @return string The response from the API request.
+     * @throws Exception If the request fails or the HTTP response status is not 200.
+     */
     public static function sendAPIRequest($queryData)
     {
         $url = LITCAL_API_URL;
@@ -125,6 +159,15 @@ class Utilities
     }
 
 
+    /**
+     * Generates an HTML string for a dropdown list of options for selecting a diocese based on the given list of diocesan calendars.
+     *
+     * @param array $MetaData A list of metadata about the diocesan calendars available.
+     * @param string $NATION The currently selected nation.
+     * @param string $DIOCESE The currently selected diocese.
+     *
+     * @return array A list containing the HTML string for the dropdown options and the number of options that were generated.
+     */
     public static function buildDioceseOptions($MetaData, $NATION, $DIOCESE)
     {
         $options = '<option value=""></option>';
@@ -140,6 +183,15 @@ class Utilities
         return [$options, $i ];
     }
 
+    /**
+     * Generates an HTML string for a dropdown list of options for selecting a nation based on the given list of nation codes.
+     *
+     * @param array $nations A list of 2-letter nation codes to include in the dropdown.
+     * @param string|null $NATION The currently selected nation.
+     * @param string $locale The locale to use for displaying the nation names.
+     *
+     * @return string An HTML string for a dropdown list of options.
+     */
     public static function buildNationOptions(array $nations, ?string $NATION, string $locale)
     {
         $options = '<option value="">---</option>';
@@ -151,6 +203,14 @@ class Utilities
         return $options;
     }
 
+    /**
+     * Prepares query data for sending API requests based on the given liturgical settings.
+     *
+     * @param LitSettings $litSettings An instance of LitSettings containing the necessary configuration.
+     *
+     * @return array An associative array containing query parameters such as year, epiphany, ascension,
+     *               corpus christi, eternal high priest, year type, locale, and optionally national and diocesan calendars.
+     */
     public static function prepareQueryData($litSettings)
     {
         $queryData = [
@@ -158,6 +218,8 @@ class Utilities
             "epiphany"       => $litSettings->Epiphany,
             "ascension"      => $litSettings->Ascension,
             "corpus_christi" => $litSettings->CorpusChristi,
+            "eternal_high_priest" => ($litSettings->EternalHighPriest ? 'true' : 'false'),
+            "year_type"      => $litSettings->YearType,
             "locale"         => $litSettings->Locale
         ];
         if ($litSettings->NationalCalendar !== null) {
@@ -169,6 +231,13 @@ class Utilities
         return $queryData;
     }
 
+    /**
+     * Determines the liturgical color for the Liturgical Season, to apply to liturgical events within that season.
+     *
+     * @param Festivity $festivity The festivity for which the color is determined.
+     * @param array $LitCal The liturgical calendar containing key events and their dates.
+     * @return string The color representing the liturgical season (e.g., "green", "purple", "white").
+     */
     public static function getSeasonColor($festivity, $LitCal)
     {
         $SeasonColor = "green";
@@ -182,6 +251,17 @@ class Utilities
         return $SeasonColor;
     }
 
+    /**
+     * Outputs a table row for the given festivity from the requested Liturgical Calendar
+     *
+     * @param Festivity $festivity The festivity to display
+     * @param array $LitCal The Liturgical Calendar
+     * @param bool $newMonth Whether we are starting a new month
+     * @param int $cc Count of Celebrations on the same day
+     * @param int $cm Count of Celebrations on the same month
+     * @param string $locale The locale to use for date and month formatting
+     * @param int $ev Whether we need to set the rowspan based on the number of liturgical events within the same day. If null, we are displaying only a single liturgical event and we do not need to set rowspan, otherwise we set the rowspan on the the first liturgical event based on how many liturgical events there are in the given day.
+     */
     public static function buildHTML($festivity, $LitCal, &$newMonth, $cc, $cm, $locale, $ev = null)
     {
         $monthFmt = \IntlDateFormatter::create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, 'UTC', \IntlDateFormatter::GREGORIAN, 'MMMM');
@@ -220,6 +300,12 @@ class Utilities
         echo '</tr>';
     }
 
+    /**
+     * Function called after a successful installation of the Catholic Liturgical Calendar examples.
+     * It prints a message of thanksgiving to God and a prayer for the Pope.
+     *
+     * @return void
+     */
     public static function postInstall(): void
     {
         printf("\t\033[4m\033[1;44mCatholic Liturgical Calendar components\033[0m\n");
