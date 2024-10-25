@@ -151,21 +151,21 @@ class LitSettings
                 $baseLocale
             ];
             setlocale(LC_ALL, $localeArray);
+            if (!isset($_COOKIE["currentLocale"]) || $_COOKIE["currentLocale"] !== $this->Locale) {
+                setcookie(
+                    "currentLocale",                                //name
+                    $this->Locale,                                  //value
+                    time() + 60 * 60 * 24 * 40,                     //expire in 30 days
+                    "/examples/",                                   //path
+                    "litcal{$stagingURL}.johnromanodorazio.com",    //domain
+                    true,                                           //https only
+                    false                                           //httponly (if true, cookie won't be available to javascript)
+                );
+            }
         }
         bindtextdomain("litexmplphp", "i18n");
         //textdomain("litcal");
         //ini_set('date.timezone', 'Europe/Vatican');
-        if (!isset($_COOKIE["currentLocale"]) || $_COOKIE["currentLocale"] !== $this->Locale && $this->directAccess) {
-            setcookie(
-                "currentLocale",                                //name
-                $this->Locale,                                  //value
-                time() + 60 * 60 * 24 * 40,                     //expire in 30 days
-                "/examples/",                                   //path
-                "litcal{$stagingURL}.johnromanodorazio.com",    //domain
-                true,                                           //https only
-                false                                           //httponly (if true, cookie won't be available to javascript)
-            );
-        }
     }
 
     public function setMetaData(array $MetaData, string $stagingURL)
