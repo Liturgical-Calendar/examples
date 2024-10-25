@@ -144,7 +144,7 @@ class LitSettings
                 $this->Epiphany         = Epiphany::JAN6;
                 $this->Ascension        = Ascension::THURSDAY;
                 $this->CorpusChristi    = CorpusChristi::THURSDAY;
-                $this->Locale           = LitLocale::LATIN;
+                $this->Locale           = LitLocale::LATIN_PRIMARY_LANGUAGE;
                 break;
             default:
                 $this->Epiphany         = $NationalCalendarMetadata["settings"]["epiphany"];
