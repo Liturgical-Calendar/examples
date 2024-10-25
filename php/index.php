@@ -12,7 +12,7 @@
 ini_set('error_reporting', E_ALL);
 ini_set("display_errors", 1);
 
-require 'vendor/autoload.php';
+require dirname(__FILE__) . '/vendor/autoload.php';
 
 use LiturgicalCalendar\Examples\Php\LitSettings;
 use LiturgicalCalendar\Examples\Php\Utilities;
