@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 16:58+0000\n"
+"POT-Creation-Date: 2024-10-25 18:56+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
@@ -19,124 +19,121 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:84 php/index.php:161
+#: php/index.php:87 php/index.php:148
 msgid "Generate Roman Calendar"
 msgstr "Genereer de Romeinse kalender"
 
-#: php/index.php:100
+#: php/index.php:103
 msgid "Go back"
 msgstr "Ga terug"
 
-#: php/index.php:114
+#: php/index.php:117
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Berekening van de liturgische kalender voor een bepaald jaar"
 
-#: php/index.php:115
+#: php/index.php:118
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML-presentatie uitgewerkt door PHP met behulp van een CURL-verzoek naar "
 "een %s"
 
-#: php/index.php:123
+#: php/index.php:126
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 "U hebt een jaar vóór 1970 aangevraagd: U kunt geen jaren vóór 1970 aanvragen."
 
-#: php/index.php:142
+#: php/index.php:130
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 "Configureer de instellingen voor het genereren van de Romeinse kalender"
 
-#: php/index.php:144 php/index.php:169
-msgid "YEAR"
-msgstr "JAAR"
+#: php/index.php:132
+msgid "year"
+msgstr ""
 
-#: php/index.php:145 php/index.php:169
-msgid "EPIPHANY"
-msgstr "OPENBARING"
-
-#: php/index.php:145
-msgid "January 6"
-msgstr "6 januari"
-
-#: php/index.php:145
-msgid "Sunday between January 2 and January 8"
-msgstr "Zondag tussen 2 januari en 8 januari"
-
-#: php/index.php:146 php/index.php:169
-msgid "ASCENSION"
-msgstr "HEMELVAART"
-
-#: php/index.php:146 php/index.php:147
-msgid "Thursday"
-msgstr "Donderdag"
-
-#: php/index.php:146 php/index.php:147
-msgid "Sunday"
-msgstr "Zondag"
-
-#: php/index.php:147 php/index.php:169
-msgid "CORPUS CHRISTI"
-msgstr "SACRAMENTSDAG"
-
-#: php/index.php:148
-msgid "ETERNAL HIGH PRIEST"
-msgstr "EEUWIGE HOGEPRIESTER"
-
-#: php/index.php:148
-msgid "False"
-msgstr "Onwaar"
-
-#: php/index.php:148
-msgid "True"
-msgstr "Waar"
-
-#: php/index.php:149 php/index.php:169
-msgid "LOCALE"
-msgstr "TAAL"
-
-#: php/index.php:156 php/src/Utilities.php:210
+#: php/index.php:143 php/src/Utilities.php:210
 msgid "or"
 msgstr "of"
 
-#: php/index.php:156
+#: php/index.php:143
 msgid "Choose the desired calendar from the list"
 msgstr "Kies de gewenste kalender uit de lijst"
 
-#: php/index.php:158 php/index.php:170
+#: php/index.php:145 php/index.php:157
 msgid "NATION"
 msgstr "NATIE"
 
-#: php/index.php:159 php/index.php:170
+#: php/index.php:146 php/index.php:157
 msgid "DIOCESE"
 msgstr "BISDOM"
 
-#: php/index.php:168
+#: php/index.php:155
 msgid "Configurations being used to generate this calendar:"
 msgstr "De instellingen die zijn gebruikt om deze agenda te genereren:"
 
-#: php/index.php:175
+#: php/index.php:156
+msgid "YEAR"
+msgstr "JAAR"
+
+#: php/index.php:156
+msgid "EPIPHANY"
+msgstr "OPENBARING"
+
+#: php/index.php:156
+msgid "ASCENSION"
+msgstr "HEMELVAART"
+
+#: php/index.php:156
+msgid "CORPUS CHRISTI"
+msgstr "SACRAMENTSDAG"
+
+#: php/index.php:156
+msgid "LOCALE"
+msgstr "TAAL"
+
+#: php/index.php:162
 msgid "Month"
 msgstr "Maand"
 
-#: php/index.php:175
+#: php/index.php:162
 msgid "Date in Gregorian Calendar"
 msgstr "Datum in de Gregoriaanse kalender"
 
-#: php/index.php:175
+#: php/index.php:162
 msgid "General Roman Calendar Festivity"
 msgstr "Feestdagen van de universele Romeinse kalender"
 
-#: php/index.php:175
+#: php/index.php:162
 msgid "Grade of the Festivity"
 msgstr "Graad van de Viering"
 
-#: php/index.php:223
+#: php/index.php:210
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informatie over de huidige berekening van het liturgisch jaar"
+
+#~ msgid "January 6"
+#~ msgstr "6 januari"
+
+#~ msgid "Sunday between January 2 and January 8"
+#~ msgstr "Zondag tussen 2 januari en 8 januari"
+
+#~ msgid "Thursday"
+#~ msgstr "Donderdag"
+
+#~ msgid "Sunday"
+#~ msgstr "Zondag"
+
+#~ msgid "ETERNAL HIGH PRIEST"
+#~ msgstr "EEUWIGE HOGEPRIESTER"
+
+#~ msgid "False"
+#~ msgstr "Onwaar"
+
+#~ msgid "True"
+#~ msgstr "Waar"
 
 #~ msgid "green"
 #~ msgstr "groen"
