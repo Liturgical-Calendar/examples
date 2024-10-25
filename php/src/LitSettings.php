@@ -18,6 +18,7 @@ class LitSettings
     public ?string $NationalCalendar = null;
     public ?string $DiocesanCalendar = null;
     private ?array $MetaData         = null;
+    private bool $directAccess       = false;
 
     private const ALLOWED_PARAMS  = [
         "year",
@@ -88,7 +89,7 @@ class LitSettings
         }
     }
 
-    public function __construct(array $DATA)
+    public function __construct(array $DATA, bool $directAccess = false)
     {
         //set a few default values
         $this->Year = (int)date("Y");
@@ -103,6 +104,8 @@ class LitSettings
         if (strpos($this->Locale, '_') === false) {
             $this->Locale = strtolower($this->Locale);
         }
+
+        $this->directAccess = $directAccess;
 
         $this->setVars($DATA);
     }
@@ -144,7 +147,7 @@ class LitSettings
         bindtextdomain("litexmplphp", "i18n");
         //textdomain("litcal");
         ini_set('date.timezone', 'Europe/Vatican');
-        if (!isset($_COOKIE["currentLocale"]) || $_COOKIE["currentLocale"] !== $this->Locale) {
+        if (!isset($_COOKIE["currentLocale"]) || $_COOKIE["currentLocale"] !== $this->Locale && $this->directAccess) {
             setcookie(
                 "currentLocale",                                //name
                 $this->Locale,                                  //value
