@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 23:33+0000\n"
+"POT-Creation-Date: 2024-10-25 23:58+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
@@ -60,7 +60,9 @@ msgid "Choose the desired calendar from the list"
 msgstr "Choisissez le calendrier souhaité dans la liste"
 
 #: php/index.php:168
-msgid "Configurations being used to generate this calendar:"
+#, fuzzy
+#| msgid "Configurations being used to generate this calendar:"
+msgid "Configurations used to generate this calendar"
 msgstr "Configurations utilisées pour générer ce calendrier :"
 
 #: php/index.php:175
