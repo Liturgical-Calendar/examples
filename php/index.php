@@ -23,7 +23,7 @@ $stagingURL = $isStaging ? "-staging" : "";
 $endpointV = $isStaging ? "dev" : "v3";
 define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
-$directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) ? true : false;
+$directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
 
 $litSettings = new LitSettings($_GET, $directAccess);
 
@@ -74,6 +74,7 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
 /**************************
  * BEGIN DISPLAY LOGIC
  *************************/
+$submitParent = '';
 if ($directAccess) {
     // The file is being accessed directly via a web URL
     ?>
@@ -100,6 +101,8 @@ if ($directAccess) {
     <?php
 } else {
     // The file is being included in another PHP script
+    // We need to make sure that the submit will submit to the parent script
+    $submitParent = '<input type="hidden" name="example" value="PHP">';
     // We need to inline the styles
     ?>
 <style>
@@ -155,7 +158,7 @@ echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;"><label>' . dgettext('litexmplphp', 'NATION') . ': <select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
 echo '<label style="margin-left: 18px;">' . dgettext('litexmplphp', 'DIOCESE') . ': <select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
 echo '</tr><tr>';
-echo '<td colspan="5" style="text-align:center;padding:15px;"><input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', "Generate Roman Calendar")) . '" /></td>';
+echo '<td colspan="5" style="text-align:center;padding:15px;">' . $submitParent . '<input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', "Generate Roman Calendar")) . '" /></td>';
 echo '</tr></table>';
 echo '</fieldset>';
 echo '</form>';
