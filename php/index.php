@@ -75,7 +75,7 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
  * BEGIN DISPLAY LOGIC
  *************************/
 if ($directAccess) {
-    // The file is being accessed directly
+    // The file is being accessed directly via a web URL
     ?>
 <!doctype html>
 
@@ -97,6 +97,14 @@ if ($directAccess) {
 
 <body>
     <div><a class="backNav" href="https://litcal<?php echo $stagingURL; ?>.johnromanodorazio.com/usage.php">↩      <?php echo dgettext('litexmplphp', "Go back") ?>      ↩</a></div>
+    <?php
+} else {
+    // The file is being included in another PHP script
+    // We need to inline the styles
+    ?>
+<style>
+    <?php include 'styles.css'; ?>
+</style>
     <?php
 }
 
