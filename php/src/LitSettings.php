@@ -19,7 +19,7 @@ class LitSettings
     public ?string $Locale           = null;
     public ?string $NationalCalendar = null;
     public ?string $DiocesanCalendar = null;
-    public ?string $setLocale        = null;
+    //public ?string $setLocale        = null;
     private ?array $MetaData         = null;
     private bool $directAccess       = false;
 
@@ -118,6 +118,7 @@ class LitSettings
             $this->Locale = LitLocale::LATIN_PRIMARY_LANGUAGE;
         }
         $this->Locale = \Locale::canonicalize($this->Locale);
+        /*
         $baseLocale = \Locale::getPrimaryLanguage($this->Locale);
         $localeArray = [
             $this->Locale . '.utf8',
@@ -131,7 +132,7 @@ class LitSettings
             $baseLocale
         ];
         $this->setLocale = setlocale(LC_ALL, $localeArray);
-
+        */
         $this->directAccess = $directAccess;
 
         $this->setVars($DATA);
