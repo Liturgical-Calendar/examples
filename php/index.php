@@ -135,8 +135,8 @@ if ($litSettings->Year < 1970) {
 echo '<form method="GET" id="ApiOptionsForm">';
 echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
 echo '<table style="width:100%;"><tr>';
-$apiOptions = new ApiOptions();
-ApiOptions::$locale = $baseLocale;
+
+$apiOptions = new ApiOptions(['locale' => $baseLocale]);
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('td');
 Input::setGlobalLabelClass('api-option-label');
