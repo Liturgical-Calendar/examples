@@ -39,6 +39,9 @@ if (false === $directAccess) {
 
 $litSettings = new LitSettings($_GET, $directAccess);
 
+// debug value of locale that the script was set to
+echo '<!-- setLocale: ' . $litSettings->setLocale . ' -->';
+
 $nationalCalendarOptions = '<option value="">---</option>';
 $diocesanCalendarOptions = '<option value="">---</option>';
 
