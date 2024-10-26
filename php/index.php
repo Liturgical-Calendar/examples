@@ -132,6 +132,7 @@ echo '<table style="width:100%;"><tr>';
 $apiOptions = new ApiOptions();
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('td');
+Input::setGlobalLabelClass('api-option-label');
 $primaryLanguage = Locale::getPrimaryLanguage($litSettings->Locale);
 $apiOptions->localeInput->selectedValue($primaryLanguage);
 $apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
@@ -153,7 +154,7 @@ echo '<td><label>year<br><input type="number" name="year" id="year" min="1970" m
 echo $apiOptions->getForm(PathType::ALL_PATHS);
 
 echo '</tr><tr>';
-echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', 'or') . '</i><br /><i>' . dgettext('litexmplphp', "Choose the desired calendar from the list") . '</i></td>';
+echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', "Choose a calendar") . '</i></td>';
 echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;"><label>nation<br><select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
 echo '<label style="margin-left: 18px;">diocese<br><select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
