@@ -21,6 +21,7 @@ class LitSettings
     public ?string $DiocesanCalendar = null;
     //public ?string $setLocale        = null;
     public ?string $expectedTextDomainPath = null;
+    public ?string $currentTextDomainPath = null;
     private ?array $MetaData         = null;
     private bool $directAccess       = false;
 
@@ -135,7 +136,7 @@ class LitSettings
         $this->setLocale = setlocale(LC_ALL, $localeArray);
         */
         $this->expectedTextDomainPath = dirname(__DIR__) . "/i18n";
-        bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
+        $this->currentTextDomainPath = bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
         //textdomain("litcal");
         $this->directAccess = $directAccess;
 
