@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-26 00:57+0000\n"
+"POT-Creation-Date: 2024-10-26 01:07+0000\n"
 "PO-Revision-Date: 2024-10-26 00:18+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
@@ -19,62 +19,62 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:106 php/index.php:181
+#: php/index.php:93 php/index.php:169
 msgid "Generate Roman Calendar"
 msgstr "Genereer de Romeinse kalender"
 
-#: php/index.php:122
+#: php/index.php:109
 msgid "Go back"
 msgstr "Ga terug"
 
-#: php/index.php:136
+#: php/index.php:123
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Berekening van de liturgische kalender voor een bepaald jaar"
 
-#: php/index.php:137
+#: php/index.php:124
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML-presentatie uitgewerkt door PHP met behulp van een CURL-verzoek naar "
 "een %s"
 
-#: php/index.php:145
+#: php/index.php:132
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 "U hebt een jaar vóór 1970 aangevraagd: U kunt geen jaren vóór 1970 aanvragen."
 
-#: php/index.php:149
+#: php/index.php:136
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 "Configureer de instellingen voor het genereren van de Romeinse kalender"
 
-#: php/index.php:176
+#: php/index.php:164
 msgid "Choose a calendar"
 msgstr "Kies een kalender"
 
-#: php/index.php:188
+#: php/index.php:176
 msgid "Configurations used to generate this calendar"
 msgstr "Configuraties gebruikt om deze kalender te genereren"
 
-#: php/index.php:195
+#: php/index.php:183
 msgid "Month"
 msgstr "Maand"
 
-#: php/index.php:195
+#: php/index.php:183
 msgid "Date in Gregorian Calendar"
 msgstr "Datum in de Gregoriaanse kalender"
 
-#: php/index.php:195
+#: php/index.php:183
 msgid "General Roman Calendar Festivity"
 msgstr "Feestdagen van de universele Romeinse kalender"
 
-#: php/index.php:195
+#: php/index.php:183
 msgid "Grade of the Festivity"
 msgstr "Graad van de Viering"
 
-#: php/index.php:243
+#: php/index.php:231
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informatie over de huidige berekening van het liturgisch jaar"
 
