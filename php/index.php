@@ -41,8 +41,10 @@ if (false === $directAccess) {
 echo '<!-- current environment locale: ' . setlocale(LC_ALL, 0) . ' -->';
 
 $litSettings = new LitSettings($_GET, $directAccess);
-// debug value of textdomain path
-echo '<!-- textdomain path: ' . $litSettings->expectedTextDomainPath . ' -->';
+// debug value of expected textdomain path
+echo '<!-- expected textdomain path: ' . $litSettings->expectedTextDomainPath . ' -->';
+// debug value of set textdomain path
+echo '<!-- set textdomain path: ' . $litSettings->currentTextDomainPath . ' -->';
 /*
 // debug value of locale that the script was set to after initializing LitSettings
 echo '<!-- setLocale: ' . $litSettings->setLocale . ' -->';
