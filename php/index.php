@@ -28,27 +28,14 @@ define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
 $directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
 
-// debug value of currentLocale cookie
-if (false === $directAccess) {
-    if (!empty($_COOKIE["currentLocale"])) {
-        echo '<!-- value of currentLocale: ' . $_COOKIE["currentLocale"] . ' -->';
-    } else {
-        echo '<!-- currentLocale cookie is empty! -->';
-    }
-}
-
-// debug value of current environment locale
-echo '<!-- current environment locale: ' . setlocale(LC_ALL, 0) . ' -->';
-
+$baseLocale = Locale::getPrimaryLanguage(setlocale(LC_ALL, 0));
 $litSettings = new LitSettings($_GET, $directAccess);
+
 // debug value of expected textdomain path
 echo '<!-- expected textdomain path: ' . $litSettings->expectedTextDomainPath . ' -->';
 // debug value of set textdomain path
 echo '<!-- set textdomain path: ' . $litSettings->currentTextDomainPath . ' -->';
-/*
-// debug value of locale that the script was set to after initializing LitSettings
-echo '<!-- setLocale: ' . $litSettings->setLocale . ' -->';
-*/
+
 $nationalCalendarOptions = '<option value="">---</option>';
 $diocesanCalendarOptions = '<option value="">---</option>';
 
@@ -133,8 +120,8 @@ if ($directAccess) {
     <?php
 }
 
-echo '<h1 style="text-align:center;">' . dgettext('litexmplphp', "Liturgical Calendar Calculation for a Given Year") . ' (' . $litSettings->Year . ')</h1>';
-echo '<h2 style="text-align:center;">' . sprintf(dgettext('litexmplphp', "HTML presentation elaborated by PHP using a CURL request to a %s"), "<a href=\"" . LITCAL_API_URL . "\">PHP engine</a>") . '</h2>';
+echo '<h1 style="text-align:center;">' . dgettext('litexmplphp', 'Liturgical Calendar Calculation for a Given Year') . ' (' . $litSettings->Year . ')</h1>';
+echo '<h2 style="text-align:center;">' . sprintf(dgettext('litexmplphp', 'HTML presentation elaborated by PHP using a CURL request to a %s'), "<a href=\"" . LITCAL_API_URL . "\">PHP engine</a>") . '</h2>';
 
 if ($litSettings->Year > 9999) {
     $litSettings->Year = 9999;
@@ -149,6 +136,7 @@ echo '<form method="GET" id="ApiOptionsForm">';
 echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
 echo '<table style="width:100%;"><tr>';
 $apiOptions = new ApiOptions();
+ApiOptions::$locale = $baseLocale;
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('td');
 Input::setGlobalLabelClass('api-option-label');
@@ -173,12 +161,12 @@ echo '<td><label>year<br><input type="number" name="year" id="year" min="1970" m
 echo $apiOptions->getForm(PathType::ALL_PATHS);
 
 echo '</tr><tr>';
-echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', "Choose a calendar") . '</i></td>';
+echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', 'Choose a calendar') . '</i></td>';
 echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;"><label>nation<br><select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
 echo '<label style="margin-left: 18px;">diocese<br><select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
 echo '</tr><tr>';
-echo '<td colspan="5" style="text-align:center;padding:15px;">' . $submitParent . '<input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', "Generate Roman Calendar")) . '" /></td>';
+echo '<td colspan="5" style="text-align:center;padding:15px;">' . $submitParent . '<input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', 'Generate Roman Calendar')) . '" /></td>';
 echo '</tr></table>';
 echo '</fieldset>';
 echo '</form>';

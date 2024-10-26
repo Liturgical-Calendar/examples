@@ -120,21 +120,7 @@ class LitSettings
             $this->Locale = LitLocale::LATIN_PRIMARY_LANGUAGE;
         }
         $this->Locale = \Locale::canonicalize($this->Locale);
-        /*
-        $baseLocale = \Locale::getPrimaryLanguage($this->Locale);
-        $localeArray = [
-            $this->Locale . '.utf8',
-            $this->Locale . '.UTF-8',
-            $this->Locale,
-            $baseLocale . '_' . strtoupper($baseLocale) . '.utf8',
-            $baseLocale . '_' . strtoupper($baseLocale) . '.UTF-8',
-            $baseLocale . '_' . strtoupper($baseLocale),
-            $baseLocale . '.utf8',
-            $baseLocale . '.UTF-8',
-            $baseLocale
-        ];
-        $this->setLocale = setlocale(LC_ALL, $localeArray);
-        */
+
         $this->expectedTextDomainPath = dirname(__DIR__) . "/i18n";
         $this->currentTextDomainPath = bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
         //textdomain("litcal");
@@ -199,7 +185,6 @@ class LitSettings
                 );
             }
         }
-        //ini_set('date.timezone', 'Europe/Vatican');
     }
 
     /**
