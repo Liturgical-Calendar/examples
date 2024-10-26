@@ -37,9 +37,12 @@ if (false === $directAccess) {
     }
 }
 
+// debug value of current environment locale
+echo '<!-- current environment locale: ' . setlocale(LC_ALL, 0) . ' -->';
+
 $litSettings = new LitSettings($_GET, $directAccess);
 
-// debug value of locale that the script was set to
+// debug value of locale that the script was set to after initializing LitSettings
 echo '<!-- setLocale: ' . $litSettings->setLocale . ' -->';
 
 $nationalCalendarOptions = '<option value="">---</option>';
