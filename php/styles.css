@@ -39,12 +39,14 @@
 }
 
 #LitCalTable {
-    width:75%;
+    width:90%;
     margin:30px auto;
     border:1px solid Blue;
     border-radius: 6px;
     padding:10px;
     background:LightBlue;
+    border-collapse: separate;
+    border-spacing: 1px;
 }
 
 #LitCalTable td {
