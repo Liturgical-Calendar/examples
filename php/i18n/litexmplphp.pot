@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-26 00:44+0000\n"
+"POT-Creation-Date: 2024-10-26 00:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,58 +17,58 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: php/index.php:104 php/index.php:179
+#: php/index.php:106 php/index.php:181
 msgid "Generate Roman Calendar"
 msgstr ""
 
-#: php/index.php:120
+#: php/index.php:122
 msgid "Go back"
 msgstr ""
 
-#: php/index.php:134
+#: php/index.php:136
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr ""
 
-#: php/index.php:135
+#: php/index.php:137
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 
-#: php/index.php:143
+#: php/index.php:145
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 
-#: php/index.php:147
+#: php/index.php:149
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 
-#: php/index.php:174
+#: php/index.php:176
 msgid "Choose a calendar"
 msgstr ""
 
-#: php/index.php:186
+#: php/index.php:188
 msgid "Configurations used to generate this calendar"
 msgstr ""
 
-#: php/index.php:193
+#: php/index.php:195
 msgid "Month"
 msgstr ""
 
-#: php/index.php:193
+#: php/index.php:195
 msgid "Date in Gregorian Calendar"
 msgstr ""
 
-#: php/index.php:193
+#: php/index.php:195
 msgid "General Roman Calendar Festivity"
 msgstr ""
 
-#: php/index.php:193
+#: php/index.php:195
 msgid "Grade of the Festivity"
 msgstr ""
 
-#: php/index.php:241
+#: php/index.php:243
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr ""
 
