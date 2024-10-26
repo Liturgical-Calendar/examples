@@ -117,6 +117,19 @@ class LitSettings
             $this->Locale = LitLocale::LATIN_PRIMARY_LANGUAGE;
         }
         $this->Locale = \Locale::canonicalize($this->Locale);
+        $baseLocale = \Locale::getPrimaryLanguage($this->Locale);
+        $localeArray = [
+            $this->Locale . '.utf8',
+            $this->Locale . '.UTF-8',
+            $this->Locale,
+            $baseLocale . '_' . strtoupper($baseLocale) . '.utf8',
+            $baseLocale . '_' . strtoupper($baseLocale) . '.UTF-8',
+            $baseLocale . '_' . strtoupper($baseLocale),
+            $baseLocale . '.utf8',
+            $baseLocale . '.UTF-8',
+            $baseLocale
+        ];
+        setlocale(LC_ALL, $localeArray);
 
         $this->directAccess = $directAccess;
 

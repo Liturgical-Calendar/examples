@@ -28,6 +28,7 @@ define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
 $directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
 
+// debug value of currentLocale cookie
 if (false === $directAccess) {
     if (!empty($_COOKIE["currentLocale"])) {
         echo '<!-- value of currentLocale: ' . $_COOKIE["currentLocale"] . ' -->';
