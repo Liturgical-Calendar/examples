@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-26 00:07+0000\n"
+"POT-Creation-Date: 2024-10-26 00:18+0000\n"
 "PO-Revision-Date: 2024-10-26 00:18+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Latin <https://translate.johnromanodorazio.com/projects/"
@@ -20,58 +20,58 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:87 php/index.php:162
+#: php/index.php:95 php/index.php:170
 msgid "Generate Roman Calendar"
 msgstr "Calendarium Romanum Generare"
 
-#: php/index.php:103
+#: php/index.php:111
 msgid "Go back"
 msgstr "Revertere"
 
-#: php/index.php:117
+#: php/index.php:125
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Computus Calendarii Liturgici pro anno dedi"
 
-#: php/index.php:118
+#: php/index.php:126
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr "Repraesentatio HTML elaborata cum PHP utendo petitionem cURL ad %s"
 
-#: php/index.php:126
+#: php/index.php:134
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr "Rogavisti annum ante 1970: non potest rogare annos ante annum 1970."
 
-#: php/index.php:130
+#: php/index.php:138
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Eligere optiones per generationem Calendarii Romani"
 
-#: php/index.php:157
+#: php/index.php:165
 msgid "Choose a calendar"
 msgstr "Elige calendarium"
 
-#: php/index.php:169
+#: php/index.php:177
 msgid "Configurations used to generate this calendar"
 msgstr "Configurationes ad hunc calendarium generandum adhibitae"
 
-#: php/index.php:176
+#: php/index.php:184
 msgid "Month"
 msgstr "Mensis"
 
-#: php/index.php:176
+#: php/index.php:184
 msgid "Date in Gregorian Calendar"
 msgstr "Dies in Calendario Gregoriano"
 
-#: php/index.php:176
+#: php/index.php:184
 msgid "General Roman Calendar Festivity"
 msgstr "Festivitas in Calendario Romano Generale"
 
-#: php/index.php:176
+#: php/index.php:184
 msgid "Grade of the Festivity"
 msgstr "Gradum Festivitatis"
 
-#: php/index.php:224
+#: php/index.php:232
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Notitiæ de computatione præsente Anni Liturgici"
 
