@@ -134,7 +134,7 @@ class LitSettings
         ];
         $this->setLocale = setlocale(LC_ALL, $localeArray);
         */
-        $this->expectedTextDomainPath = __DIR__ . "/i18n";
+        $this->expectedTextDomainPath = __DIR__ . "/../i18n";
         bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
         //textdomain("litcal");
         $this->directAccess = $directAccess;
