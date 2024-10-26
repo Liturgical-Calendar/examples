@@ -19,6 +19,7 @@ class LitSettings
     public ?string $Locale           = null;
     public ?string $NationalCalendar = null;
     public ?string $DiocesanCalendar = null;
+    public ?string $setLocale        = null;
     private ?array $MetaData         = null;
     private bool $directAccess       = false;
 
@@ -129,7 +130,7 @@ class LitSettings
             $baseLocale . '.UTF-8',
             $baseLocale
         ];
-        setlocale(LC_ALL, $localeArray);
+        $this->setLocale = setlocale(LC_ALL, $localeArray);
 
         $this->directAccess = $directAccess;
 
