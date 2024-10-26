@@ -133,6 +133,8 @@ class LitSettings
         ];
         $this->setLocale = setlocale(LC_ALL, $localeArray);
         */
+        bindtextdomain("litexmplphp", "i18n");
+        //textdomain("litcal");
         $this->directAccess = $directAccess;
 
         $this->setVars($DATA);
@@ -194,8 +196,6 @@ class LitSettings
                 );
             }
         }
-        bindtextdomain("litexmplphp", "i18n");
-        //textdomain("litcal");
         //ini_set('date.timezone', 'Europe/Vatican');
     }
 
