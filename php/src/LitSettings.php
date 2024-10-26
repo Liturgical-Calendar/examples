@@ -20,6 +20,7 @@ class LitSettings
     public ?string $NationalCalendar = null;
     public ?string $DiocesanCalendar = null;
     //public ?string $setLocale        = null;
+    public ?string $expectedTextDomainPath = null;
     private ?array $MetaData         = null;
     private bool $directAccess       = false;
 
@@ -133,7 +134,8 @@ class LitSettings
         ];
         $this->setLocale = setlocale(LC_ALL, $localeArray);
         */
-        bindtextdomain("litexmplphp", "i18n");
+        $this->expectedTextDomainPath = __DIR__ . "/i18n";
+        bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
         //textdomain("litcal");
         $this->directAccess = $directAccess;
 
