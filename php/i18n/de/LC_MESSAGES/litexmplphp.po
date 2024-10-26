@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 16:58+0000\n"
-"PO-Revision-Date: 2024-10-02 19:34+0000\n"
+"POT-Creation-Date: 2024-10-26 00:07+0000\n"
+"PO-Revision-Date: 2024-10-25 18:56+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: German <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/de/>\n"
@@ -22,124 +22,115 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:84 php/index.php:161
+#: php/index.php:87 php/index.php:162
 msgid "Generate Roman Calendar"
 msgstr "Römischen Kalender generieren"
 
-#: php/index.php:100
+#: php/index.php:103
 msgid "Go back"
 msgstr "Zurück"
 
-#: php/index.php:114
+#: php/index.php:117
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Berechnung des liturgischen Kalenders für ein bestimmtes Jahr"
 
-#: php/index.php:115
+#: php/index.php:118
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML-Präsentation, die von PHP unter Verwendung einer CURL-Anfrage an einen "
 "%s erstellt wurde"
 
-#: php/index.php:123
+#: php/index.php:126
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
-"Du forderst ein Jahr vor 1970 an: Es ist nicht möglich, Jahre vor 1970 "
+"Sie fordern ein Jahr vor 1970 an: Es ist nicht möglich, Jahre vor 1970 "
 "anzufordern."
 
-#: php/index.php:142
+#: php/index.php:130
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Optionen zum Generieren des römischen Kalenders anpassen"
 
-#: php/index.php:144 php/index.php:169
-msgid "YEAR"
-msgstr "JAHR"
+#: php/index.php:157
+msgid "Choose a calendar"
+msgstr ""
 
-#: php/index.php:145 php/index.php:169
-msgid "EPIPHANY"
-msgstr "EPIPHANIE"
-
-#: php/index.php:145
-msgid "January 6"
-msgstr "6. Januar"
-
-#: php/index.php:145
-msgid "Sunday between January 2 and January 8"
-msgstr "Sonntag zwischen dem 2. und 8. Januar"
-
-#: php/index.php:146 php/index.php:169
-msgid "ASCENSION"
-msgstr "HIMMELFAHRT"
-
-#: php/index.php:146 php/index.php:147
-msgid "Thursday"
-msgstr "Donnerstag"
-
-#: php/index.php:146 php/index.php:147
-msgid "Sunday"
-msgstr "Sonntag"
-
-#: php/index.php:147 php/index.php:169
-msgid "CORPUS CHRISTI"
-msgstr "FRONLEICHNAM"
-
-#: php/index.php:148
-msgid "ETERNAL HIGH PRIEST"
-msgstr "EWIGER HOHERPRIESTER"
-
-#: php/index.php:148
-msgid "False"
-msgstr "Falsch"
-
-#: php/index.php:148
-msgid "True"
-msgstr "Wahr"
-
-#: php/index.php:149 php/index.php:169
-msgid "LOCALE"
-msgstr "LOKALE"
-
-#: php/index.php:156 php/src/Utilities.php:210
-msgid "or"
-msgstr "oder"
-
-#: php/index.php:156
-msgid "Choose the desired calendar from the list"
-msgstr "Wähle den gewünschten Kalender aus der Liste"
-
-#: php/index.php:158 php/index.php:170
-msgid "NATION"
-msgstr "NATION"
-
-#: php/index.php:159 php/index.php:170
-msgid "DIOCESE"
-msgstr "DIÖZESE"
-
-#: php/index.php:168
-msgid "Configurations being used to generate this calendar:"
+#: php/index.php:169
+#, fuzzy
+#| msgid "Configurations being used to generate this calendar:"
+msgid "Configurations used to generate this calendar"
 msgstr "Konfigurationen, die zur Erstellung dieses Kalenders verwendet werden:"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "Month"
 msgstr "Monat"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "Date in Gregorian Calendar"
 msgstr "Datum im gregorianischen Kalender"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "General Roman Calendar Festivity"
 msgstr "Allgemeiner Römischer Kalender Festtag"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "Grade of the Festivity"
 msgstr "Grad des Festes"
 
-#: php/index.php:223
+#: php/index.php:224
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informationen zur aktuellen Berechnung des liturgischen Jahres"
+
+#: php/src/Utilities.php:298
+msgid "or"
+msgstr "oder"
+
+#~ msgid "Choose the desired calendar from the list"
+#~ msgstr "Wähle den gewünschten Kalender aus der Liste"
+
+#~ msgid "NATION"
+#~ msgstr "NATION"
+
+#~ msgid "DIOCESE"
+#~ msgstr "DIÖZESE"
+
+#~ msgid "YEAR"
+#~ msgstr "JAHR"
+
+#~ msgid "EPIPHANY"
+#~ msgstr "EPIPHANIE"
+
+#~ msgid "ASCENSION"
+#~ msgstr "HIMMELFAHRT"
+
+#~ msgid "CORPUS CHRISTI"
+#~ msgstr "FRONLEICHNAM"
+
+#~ msgid "LOCALE"
+#~ msgstr "LOKALE"
+
+#~ msgid "January 6"
+#~ msgstr "6. Januar"
+
+#~ msgid "Sunday between January 2 and January 8"
+#~ msgstr "Sonntag zwischen dem 2. und 8. Januar"
+
+#~ msgid "Thursday"
+#~ msgstr "Donnerstag"
+
+#~ msgid "Sunday"
+#~ msgstr "Sonntag"
+
+#~ msgid "ETERNAL HIGH PRIEST"
+#~ msgstr "EWIGER HOHERPRIESTER"
+
+#~ msgid "False"
+#~ msgstr "Falsch"
+
+#~ msgid "True"
+#~ msgstr "Wahr"
 
 #~ msgid "purple"
 #~ msgstr "violett"
