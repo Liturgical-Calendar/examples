@@ -133,12 +133,12 @@ $apiOptions = new ApiOptions();
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('td');
 $primaryLanguage = Locale::getPrimaryLanguage($litSettings->Locale);
-$apiOptions->localeInput->labelAfter('<br>')->selectedValue($primaryLanguage);
-$apiOptions->epiphanyInput->labelAfter('<br>')->selectedValue($litSettings->Epiphany);
-$apiOptions->ascensionInput->labelAfter('<br>')->selectedValue($litSettings->Ascension);
-$apiOptions->corpusChristiInput->labelAfter('<br>')->selectedValue($litSettings->CorpusChristi);
-$apiOptions->eternalHighPriestInput->labelAfter('<br>')->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false');
-$apiOptions->yearTypeInput->labelAfter('<br>')->selectedValue($litSettings->YearType);
+$apiOptions->localeInput->selectedValue($primaryLanguage);
+$apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
+$apiOptions->ascensionInput->selectedValue($litSettings->Ascension);
+$apiOptions->corpusChristiInput->selectedValue($litSettings->CorpusChristi);
+$apiOptions->eternalHighPriestInput->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false');
+$apiOptions->yearTypeInput->selectedValue($litSettings->YearType);
 if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
     $apiOptions->epiphanyInput->disabled();
     $apiOptions->ascensionInput->disabled();

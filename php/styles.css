@@ -16,6 +16,11 @@
     color: DarkBlue;
 }
 
+#ApiOptionsForm label {
+    display: block;
+    margin: 6px 0;
+}
+
 #ApiOptionsForm fieldset {
     border: 1px solid lightgray;
     padding: 6px 12px;
