@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-25 23:58+0000\n"
+"POT-Creation-Date: 2024-10-26 00:07+0000\n"
 "PO-Revision-Date: 2024-10-02 19:34+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:87 php/index.php:161
+#: php/index.php:87 php/index.php:162
 msgid "Generate Roman Calendar"
 msgstr "Générer le Calendrier Romain"
 
@@ -51,39 +51,42 @@ msgstr ""
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Personnaliser les options pour générer le Calendrier Romain"
 
-#: php/index.php:156 php/src/Utilities.php:298
-msgid "or"
-msgstr "ou"
+#: php/index.php:157
+msgid "Choose a calendar"
+msgstr ""
 
-#: php/index.php:156
-msgid "Choose the desired calendar from the list"
-msgstr "Choisissez le calendrier souhaité dans la liste"
-
-#: php/index.php:168
+#: php/index.php:169
 #, fuzzy
 #| msgid "Configurations being used to generate this calendar:"
 msgid "Configurations used to generate this calendar"
 msgstr "Configurations utilisées pour générer ce calendrier :"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "Month"
 msgstr "Mois"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "Date in Gregorian Calendar"
 msgstr "Date dans le Calendrier Grégorien"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "General Roman Calendar Festivity"
 msgstr "Fête du Calendrier Romain Général"
 
-#: php/index.php:175
+#: php/index.php:176
 msgid "Grade of the Festivity"
 msgstr "Grade de la Fête"
 
-#: php/index.php:223
+#: php/index.php:224
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informations sur le calcul actuel de l'Année Liturgique"
+
+#: php/src/Utilities.php:298
+msgid "or"
+msgstr "ou"
+
+#~ msgid "Choose the desired calendar from the list"
+#~ msgstr "Choisissez le calendrier souhaité dans la liste"
 
 #~ msgid "NATION"
 #~ msgstr "NATION"
