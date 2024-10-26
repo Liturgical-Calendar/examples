@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-26 00:07+0000\n"
-"PO-Revision-Date: 2024-10-25 18:56+0000\n"
+"PO-Revision-Date: 2024-10-26 00:18+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: German <https://translate.johnromanodorazio.com/projects/"
 "liturgical-calendar/php-example/de/>\n"
@@ -55,13 +55,11 @@ msgstr "Optionen zum Generieren des römischen Kalenders anpassen"
 
 #: php/index.php:157
 msgid "Choose a calendar"
-msgstr ""
+msgstr "Wähle einen Kalender aus"
 
 #: php/index.php:169
-#, fuzzy
-#| msgid "Configurations being used to generate this calendar:"
 msgid "Configurations used to generate this calendar"
-msgstr "Konfigurationen, die zur Erstellung dieses Kalenders verwendet werden:"
+msgstr "Konfigurationen zur Erstellung dieses Kalenders verwendet"
 
 #: php/index.php:176
 msgid "Month"
