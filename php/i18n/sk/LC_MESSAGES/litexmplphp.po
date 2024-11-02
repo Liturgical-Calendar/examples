@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-02 13:14+0000\n"
+"POT-Creation-Date: 2024-11-02 13:40+0000\n"
 "PO-Revision-Date: 2024-10-26 00:18+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
@@ -57,27 +57,27 @@ msgstr "Vyber si kalendár"
 msgid "Configurations sent in the request"
 msgstr "Konfigurácie použité na vytvorenie tohto kalendára"
 
-#: php/index.php:180
+#: php/index.php:181
 msgid "Configurations received in the response"
 msgstr ""
 
-#: php/index.php:187
+#: php/index.php:188
 msgid "Month"
 msgstr "Mesiac"
 
-#: php/index.php:187
+#: php/index.php:188
 msgid "Date in Gregorian Calendar"
 msgstr "Dátum v gregoriánskom kalendári"
 
-#: php/index.php:187
+#: php/index.php:188
 msgid "General Roman Calendar Festivity"
 msgstr "Všeobecný rímsky kalendár Sviatok"
 
-#: php/index.php:187
+#: php/index.php:188
 msgid "Grade of the Festivity"
 msgstr "Stupeň slávnosti"
 
-#: php/index.php:235
+#: php/index.php:236
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informácie o aktuálnom výpočte liturgického roka"
 
