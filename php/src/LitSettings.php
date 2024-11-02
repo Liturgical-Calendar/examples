@@ -57,7 +57,7 @@ class LitSettings
      * @param array $DATA An array of input parameters to initialize the settings.
      * @param bool $directAccess A flag indicating if the access is direct, default is false.
      */
-    public function __construct(array $DATA, bool $directAccess = false)
+    public function __construct(array $DATA, bool $directAccess = false, array|null $Metadata = null)
     {
         // set default year value
         $this->Year = (int)date("Y");
@@ -75,6 +75,8 @@ class LitSettings
         $this->expectedTextDomainPath = dirname(__DIR__) . "/i18n";
         $this->currentTextDomainPath = bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
         $this->directAccess = $directAccess;
+
+        $this->setMetadata($Metadata);
 
         $this->setVars($DATA);
     }
@@ -169,9 +171,8 @@ class LitSettings
      * NationalCalendarMetadata array.
      * If the directAccess flag is set to true, the function also sets the locale for the current PHP script using the
      * setlocale() function, and sets a cookie to store the current locale.
-     * @param string $stagingURL the URL of the staging site (used to set the domain of the cookie)
      */
-    private function updateSettingsByNation(string $stagingURL)
+    private function updateSettingsByNation()
     {
         $NationalCalendarMetadata = null;
         if ($this->NationalCalendar !== null && $this->NationalCalendar !== "VA") {
@@ -207,6 +208,8 @@ class LitSettings
             ];
             setlocale(LC_ALL, $localeArray);
             if (!isset($_COOKIE["currentLocale"]) || $_COOKIE["currentLocale"] !== $this->Locale) {
+                $isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false );
+                $stagingURL = $isStaging ? "-staging" : "";
                 setcookie(
                     "currentLocale",                                //name
                     $this->Locale,                                  //value
@@ -224,15 +227,14 @@ class LitSettings
      * Updates the internal metadata reference and then updates the settings based on the selected nation.
      *
      * @param array $Metadata A list of metadata about the diocesan calendars available.
-     * @param string $stagingURL If the current page is a staging site, this will contain the identifier of the staging site such as "-staging".
      * @return void
      */
-    public function setMetadata(array $Metadata, string $stagingURL)
+    public function setMetadata(array $Metadata)
     {
         $this->Metadata = $Metadata;
         if ($this->DiocesanCalendar !== null) {
             $this->NationalCalendar = array_values(array_filter($this->Metadata["diocesan_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar))[0]["nation"];
         }
-        $this->updateSettingsByNation($stagingURL);
+        $this->updateSettingsByNation();
     }
 }
