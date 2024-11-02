@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-02 13:54+0000\n"
+"POT-Creation-Date: 2024-11-02 15:57+0000\n"
 "PO-Revision-Date: 2024-10-26 00:18+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Italian <https://translate.johnromanodorazio.com/projects/"
@@ -60,27 +60,27 @@ msgstr "Scegli un calendario"
 msgid "Configurations sent in the request"
 msgstr "Configurazioni utilizzate per generare questo calendario"
 
-#: php/index.php:180
+#: php/index.php:183
 msgid "Configurations received in the response"
 msgstr ""
 
-#: php/index.php:187
+#: php/index.php:190
 msgid "Month"
 msgstr "Mese"
 
-#: php/index.php:187
+#: php/index.php:190
 msgid "Date in Gregorian Calendar"
 msgstr "Data nel Calendario Gregoriano"
 
-#: php/index.php:187
+#: php/index.php:190
 msgid "General Roman Calendar Festivity"
 msgstr "Festività del Calendario Romano Universale"
 
-#: php/index.php:187
+#: php/index.php:190
 msgid "Grade of the Festivity"
 msgstr "Grado della Festività"
 
-#: php/index.php:235
+#: php/index.php:238
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informazioni sull'attuale calcolo dell'Anno Liturgico"
 
