@@ -77,8 +77,8 @@ class LitSettings
         $this->directAccess = $directAccess;
 
         $this->setMetadata($Metadata);
-
         $this->setVars($DATA);
+        $this->updateSettingsByCalendar();
     }
 
     /**
@@ -165,34 +165,79 @@ class LitSettings
     }
 
     /**
-     * Sets the Epiphany, Ascension, CorpusChristi, and Locale settings based on the selected National Calendar.
+     * Converts an array's keys from snake_case to PascalCase.
+     *
+     * Given an array, this function will iterate over its keys and convert them from snake_case to PascalCase.
+     * If the value of a key is an array, the function will be called recursively on that array.
+     *
+     * @param array $array The array to convert.
+     * @return array The array with PascalCase keys.
+     */
+    private static function snakeToPascalCaseArrayKeys(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            // Convert each key from snake_case to PascalCase
+            $pascalCaseKey = str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+
+            // If the value is an array, apply the function recursively
+            if (is_array($value)) {
+                $value = self::snakeToPascalCaseArrayKeys($value);
+            }
+
+            $result[$pascalCaseKey] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Sets the Epiphany, Ascension, CorpusChristi, and Locale settings based on the selected National or Diocesan Calendar.
      * If the National Calendar is not set, or if it is set to "VA" (Vatican), the settings are set to their default values.
      * If the National Calendar is set to a different value, the settings are set to the corresponding values from the
      * NationalCalendarMetadata array.
      * If the directAccess flag is set to true, the function also sets the locale for the current PHP script using the
      * setlocale() function, and sets a cookie to store the current locale.
      */
-    private function updateSettingsByNation()
+    private function updateSettingsByCalendar(): void
     {
-        $NationalCalendarMetadata = null;
+        if (null === $this->Metadata) {
+            return;
+        }
+
         if ($this->NationalCalendar !== null && $this->NationalCalendar !== "VA") {
-            $NationalCalendarMetadata = array_values(array_filter($this->Metadata["national_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->NationalCalendar))[0];
+            $NationalCalendarMetadata = array_values(array_filter(
+                $this->Metadata["national_calendars"],
+                fn ($calendar) => $calendar["calendar_id"] === $this->NationalCalendar
+            ))[0];
+            switch ($this->NationalCalendar) {
+                case "VA":
+                case null:
+                    $this->Epiphany         = Epiphany::JAN6;
+                    $this->Ascension        = Ascension::THURSDAY;
+                    $this->CorpusChristi    = CorpusChristi::THURSDAY;
+                    $this->Locale           = LitLocale::LATIN_PRIMARY_LANGUAGE;
+                    break;
+                default:
+                    $this->Epiphany         = $NationalCalendarMetadata["settings"]["epiphany"];
+                    $this->Ascension        = $NationalCalendarMetadata["settings"]["ascension"];
+                    $this->CorpusChristi    = $NationalCalendarMetadata["settings"]["corpus_christi"];
+                    $this->Locale           = $NationalCalendarMetadata["settings"]["locale"];
+                    break;
+            }
         }
-        switch ($this->NationalCalendar) {
-            case "VA":
-            case null:
-                $this->Epiphany         = Epiphany::JAN6;
-                $this->Ascension        = Ascension::THURSDAY;
-                $this->CorpusChristi    = CorpusChristi::THURSDAY;
-                $this->Locale           = LitLocale::LATIN_PRIMARY_LANGUAGE;
-                break;
-            default:
-                $this->Epiphany         = $NationalCalendarMetadata["settings"]["epiphany"];
-                $this->Ascension        = $NationalCalendarMetadata["settings"]["ascension"];
-                $this->CorpusChristi    = $NationalCalendarMetadata["settings"]["corpus_christi"];
-                $this->Locale           = $NationalCalendarMetadata["settings"]["locale"];
-                break;
+
+        if ($this->DiocesanCalendar !== null) {
+            $DiocesanCalendarMetadata = array_values(array_filter(
+                $this->Metadata["diocesan_calendars"],
+                fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar
+            ))[0];
+            if (array_key_exists("settings", $DiocesanCalendarMetadata)) {
+                $Settings = self::snakeToPascalCaseArrayKeys($DiocesanCalendarMetadata["settings"]);
+                $this->setVars($Settings);
+            }
         }
+
         if ($this->directAccess) {
             $baseLocale = \Locale::getPrimaryLanguage($this->Locale);
             $localeArray = [
@@ -235,6 +280,5 @@ class LitSettings
         if ($this->DiocesanCalendar !== null) {
             $this->NationalCalendar = array_values(array_filter($this->Metadata["diocesan_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar))[0]["nation"];
         }
-        $this->updateSettingsByNation();
     }
 }
