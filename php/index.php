@@ -41,7 +41,7 @@ $diocesanCalendarOptions = '<option value="">---</option>';
 
 $Metadata = Utilities::retrieveMetadata();
 if ($Metadata !== null) {
-    $litSettings->setMetaData($Metadata, $stagingURL);
+    $litSettings->setMetadata($Metadata, $stagingURL);
     $nationalCalendarOptions = Utilities::buildNationOptions($Metadata["national_calendars_keys"], $litSettings->NationalCalendar, $litSettings->Locale);
     [$diocesanCalendarOptions, $diocesesCount] = Utilities::buildDioceseOptions($Metadata, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar);
 } else {
@@ -177,6 +177,7 @@ echo '<div style="text-align:center;border:2px groove White;border-radius:6px;ma
 echo '<h6><b>' . dgettext('litexmplphp', 'Configurations sent in the request') . '</b></h6>';
 echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false') . ', <b>locale</b>: ' . $litSettings->Locale;
 echo '<br /><b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null');
+echo '<hr>';
 echo '<h6><b>' . dgettext('litexmplphp', 'Configurations received in the response') . '</b></h6>';
 echo '<b>epiphany</b>: ' . ($Settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($Settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($Settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($Settings->eternal_high_priest ? 'true' : 'false') . ', <b>locale</b>: ' . ($Settings->locale ?? 'null');
 echo '<br /><b>year</b>: ' . ($Settings->year ?? 'null') . ', <b>year_type</b>: ' . ($Settings->year_type ?? 'null') . ', <b>nation</b>: ' . ($Settings->national_calendar ?? 'null') . ', <b>diocese</b>: ' . ($Settings->diocesan_calendar ?? 'null');
