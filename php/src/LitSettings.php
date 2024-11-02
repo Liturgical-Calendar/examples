@@ -22,7 +22,7 @@ class LitSettings
     //public ?string $setLocale        = null;
     public ?string $expectedTextDomainPath = null;
     public ?string $currentTextDomainPath = null;
-    private ?array $MetaData         = null;
+    private ?array $Metadata         = null;
     private bool $directAccess       = false;
 
     private const ALLOWED_PARAMS  = [
@@ -46,7 +46,49 @@ class LitSettings
     //The upper limit is determined by the limit of PHP in dealing with DateTime objects
     private const YEAR_UPPER_LIMIT          = 9999;
 
-    private function setVars(array $DATA)
+    /**
+     * Constructor for the LitSettings class.
+     *
+     * Initializes the settings for the liturgical calendar based on input data and direct access flag.
+     * Sets the default year to the current year. Determines the locale from cookies, HTTP headers, or defaults to Latin if unavailable.
+     * Ensures the Locale is canonicalized.
+     * Delegates further variable setting to the setVars method.
+     *
+     * @param array $DATA An array of input parameters to initialize the settings.
+     * @param bool $directAccess A flag indicating if the access is direct, default is false.
+     */
+    public function __construct(array $DATA, bool $directAccess = false)
+    {
+        // set default year value
+        $this->Year = (int)date("Y");
+
+        // set default locale value
+        if (!empty($_COOKIE["currentLocale"])) {
+            $this->Locale = $_COOKIE["currentLocale"];
+        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            $this->Locale = \Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        } else {
+            $this->Locale = LitLocale::LATIN_PRIMARY_LANGUAGE;
+        }
+        $this->Locale = \Locale::canonicalize($this->Locale);
+
+        $this->expectedTextDomainPath = dirname(__DIR__) . "/i18n";
+        $this->currentTextDomainPath = bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
+        $this->directAccess = $directAccess;
+
+        $this->setVars($DATA);
+    }
+
+    /**
+     * Private helper method to set the values of the object based on the GET global variable.
+     *
+     * This method is called by the constructor and sets the values of the object based on the parameters passed in the GET request.
+     * The method iterates over the parameters and sets the values of the object based on the parameter names.
+     * The values are validated to ensure they are within the allowed range and are of the correct type.
+     *
+     * @param array $DATA An associative array containing the parameters from the GET request.
+     */
+    private function setVars(array $DATA): void
     {
         //set values based on the GET global variable
         foreach ($DATA as $key => $value) {
@@ -67,29 +109,29 @@ class LitSettings
                         }
                         break;
                     case "epiphany":
-                        $this->Epiphany      = Epiphany::isValid(strtoupper($value))      ? strtoupper($value) : Epiphany::JAN6;
+                        $this->Epiphany         = Epiphany::isValid($value)      ? $value : Epiphany::JAN6;
                         break;
                     case "ascension":
-                        $this->Ascension     = Ascension::isValid(strtoupper($value))     ? strtoupper($value) : Ascension::THURSDAY;
+                        $this->Ascension        = Ascension::isValid($value)     ? $value : Ascension::THURSDAY;
                         break;
                     case "corpus_christi":
-                        $this->CorpusChristi = CorpusChristi::isValid(strtoupper($value)) ? strtoupper($value) : CorpusChristi::THURSDAY;
+                        $this->CorpusChristi    = CorpusChristi::isValid($value) ? $value : CorpusChristi::THURSDAY;
                         break;
                     case "locale":
                         $value = \Locale::canonicalize($value);
-                        $this->Locale        = LitLocale::isValid($value)                 ? $value             : LitLocale::LATIN_PRIMARY_LANGUAGE;
+                        $this->Locale           = LitLocale::isValid($value)     ? $value : LitLocale::LATIN_PRIMARY_LANGUAGE;
                         break;
                     case "national_calendar":
-                        $this->NationalCalendar = $value !== ""                           ? strtoupper($value) : null;
+                        $this->NationalCalendar = $this->isValidNationalCalendar($value) ? $value : null;
                         break;
                     case "diocesan_calendar":
-                        $this->DiocesanCalendar = $value !== ""                           ? strtoupper($value) : null;
+                        $this->DiocesanCalendar = $this->isValidDiocesanCalendar($value) ? $value : null;
                         break;
                     case "eternal_high_priest":
-                        $this->EternalHighPriest = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                        $this->EternalHighPriest = is_bool($value) ? $value : filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
                         break;
                     case "year_type":
-                        $this->YearType = YearType::isValid($value) ? $value : YearType::LITURGICAL;
+                        $this->YearType         = YearType::isValid($value)      ? $value : YearType::LITURGICAL;
                         break;
                 }
             }
@@ -97,36 +139,27 @@ class LitSettings
     }
 
     /**
-     * Constructor for LitSettings class.
+     * Determines if the given value is a valid national calendar code.
      *
-     * Initializes the settings for the liturgical calendar based on input data and direct access flag.
-     * Sets the default year to the current year. Determines the locale from cookies, HTTP headers, or defaults to Latin if unavailable.
-     * Ensures the Locale is canonicalized.
-     * Delegates further variable setting to the setVars method.
+     * @param string $value The value to check.
      *
-     * @param array $DATA An array of input parameters to initialize the settings.
-     * @param bool $directAccess A flag indicating if the access is direct, default is false.
+     * @return bool True if the value is valid, false otherwise.
      */
-    public function __construct(array $DATA, bool $directAccess = false)
+    private function isValidNationalCalendar($value)
     {
-        //set a few default values
-        $this->Year = (int)date("Y");
+        return $value !== "" && $this->Metadata !== null && in_array($value, $this->Metadata["national_calendars_keys"]);
+    }
 
-        if (!empty($_COOKIE["currentLocale"])) {
-            $this->Locale = $_COOKIE["currentLocale"];
-        } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-            $this->Locale = \Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        } else {
-            $this->Locale = LitLocale::LATIN_PRIMARY_LANGUAGE;
-        }
-        $this->Locale = \Locale::canonicalize($this->Locale);
-
-        $this->expectedTextDomainPath = dirname(__DIR__) . "/i18n";
-        $this->currentTextDomainPath = bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
-        //textdomain("litcal");
-        $this->directAccess = $directAccess;
-
-        $this->setVars($DATA);
+    /**
+     * Determines if the given value is a valid diocesan calendar code.
+     *
+     * @param string $value The value to check.
+     *
+     * @return bool True if the value is valid, false otherwise.
+     */
+    private function isValidDiocesanCalendar($value)
+    {
+        return $value !== "" && $this->Metadata !== null && in_array($value, $this->Metadata["diocesan_calendars_keys"]);
     }
 
     /**
@@ -142,7 +175,7 @@ class LitSettings
     {
         $NationalCalendarMetadata = null;
         if ($this->NationalCalendar !== null && $this->NationalCalendar !== "VA") {
-            $NationalCalendarMetadata = array_values(array_filter($this->MetaData["national_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->NationalCalendar))[0];
+            $NationalCalendarMetadata = array_values(array_filter($this->Metadata["national_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->NationalCalendar))[0];
         }
         switch ($this->NationalCalendar) {
             case "VA":
@@ -190,15 +223,15 @@ class LitSettings
     /**
      * Updates the internal metadata reference and then updates the settings based on the selected nation.
      *
-     * @param array $MetaData A list of metadata about the diocesan calendars available.
-     * @param string $stagingURL The URL of the staging server on which the API is hosted.
+     * @param array $Metadata A list of metadata about the diocesan calendars available.
+     * @param string $stagingURL If the current page is a staging site, this will contain the identifier of the staging site such as "-staging".
      * @return void
      */
-    public function setMetaData(array $MetaData, string $stagingURL)
+    public function setMetadata(array $Metadata, string $stagingURL)
     {
-        $this->MetaData = $MetaData;
+        $this->Metadata = $Metadata;
         if ($this->DiocesanCalendar !== null) {
-            $this->NationalCalendar = array_values(array_filter($this->MetaData["diocesan_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar))[0]["nation"];
+            $this->NationalCalendar = array_values(array_filter($this->Metadata["diocesan_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar))[0]["nation"];
         }
         $this->updateSettingsByNation($stagingURL);
     }
