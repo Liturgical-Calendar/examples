@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-26 01:07+0000\n"
+"POT-Creation-Date: 2024-11-02 13:14+0000\n"
 "PO-Revision-Date: 2024-10-26 00:18+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Slovak <https://translate.johnromanodorazio.com/projects/"
@@ -19,59 +19,65 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:93 php/index.php:169
+#: php/index.php:95 php/index.php:171
 msgid "Generate Roman Calendar"
 msgstr "Generovať rímsky kalendár"
 
-#: php/index.php:109
+#: php/index.php:111
 msgid "Go back"
 msgstr "Vráť sa späť"
 
-#: php/index.php:123
+#: php/index.php:125
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Výpočet liturgického kalendára pre daný rok"
 
-#: php/index.php:124
+#: php/index.php:126
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML prezentácia vypracovaná pomocou PHP s použitím CURL požiadavky na %s"
 
-#: php/index.php:132
+#: php/index.php:134
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr "Žiadate rok pred rokom 1970: nie je možné žiadať roky pred rokom 1970."
 
-#: php/index.php:136
+#: php/index.php:138
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Prispôsobte možnosti na vytvorenie Rímskeho kalendára"
 
-#: php/index.php:164
+#: php/index.php:166
 msgid "Choose a calendar"
 msgstr "Vyber si kalendár"
 
-#: php/index.php:176
-msgid "Configurations used to generate this calendar"
+#: php/index.php:177
+#, fuzzy
+#| msgid "Configurations used to generate this calendar"
+msgid "Configurations sent in the request"
 msgstr "Konfigurácie použité na vytvorenie tohto kalendára"
 
-#: php/index.php:183
+#: php/index.php:180
+msgid "Configurations received in the response"
+msgstr ""
+
+#: php/index.php:187
 msgid "Month"
 msgstr "Mesiac"
 
-#: php/index.php:183
+#: php/index.php:187
 msgid "Date in Gregorian Calendar"
 msgstr "Dátum v gregoriánskom kalendári"
 
-#: php/index.php:183
+#: php/index.php:187
 msgid "General Roman Calendar Festivity"
 msgstr "Všeobecný rímsky kalendár Sviatok"
 
-#: php/index.php:183
+#: php/index.php:187
 msgid "Grade of the Festivity"
 msgstr "Stupeň slávnosti"
 
-#: php/index.php:231
+#: php/index.php:235
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informácie o aktuálnom výpočte liturgického roka"
 
