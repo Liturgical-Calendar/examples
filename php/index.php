@@ -29,7 +29,8 @@ define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/ca
 $directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
 
 $baseLocale = Locale::getPrimaryLanguage(setlocale(LC_ALL, 0));
-$litSettings = new LitSettings($_GET, $directAccess);
+$Metadata = Utilities::retrieveMetadata();
+$litSettings = new LitSettings($_GET, $directAccess, $Metadata);
 
 // debug value of expected textdomain path
 echo '<!-- expected textdomain path: ' . $litSettings->expectedTextDomainPath . ' -->';
@@ -39,9 +40,7 @@ echo '<!-- set textdomain path: ' . $litSettings->currentTextDomainPath . ' -->'
 $nationalCalendarOptions = '<option value="">---</option>';
 $diocesanCalendarOptions = '<option value="">---</option>';
 
-$Metadata = Utilities::retrieveMetadata();
 if ($Metadata !== null) {
-    $litSettings->setMetadata($Metadata, $stagingURL);
     $nationalCalendarOptions = Utilities::buildNationOptions($Metadata["national_calendars_keys"], $litSettings->NationalCalendar, $litSettings->Locale);
     [$diocesanCalendarOptions, $diocesesCount] = Utilities::buildDioceseOptions($Metadata, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar);
 } else {
