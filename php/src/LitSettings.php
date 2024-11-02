@@ -161,7 +161,19 @@ class LitSettings
      */
     private function isValidDiocesanCalendar($value)
     {
-        return $value !== "" && $this->Metadata !== null && in_array($value, $this->Metadata["diocesan_calendars_keys"]);
+        if ($this->NationalCalendar === null) {
+            return $value !== "" && $this->Metadata !== null && in_array($value, $this->Metadata["diocesan_calendars_keys"]);
+        } else {
+            if (null === $this->Metadata) {
+                return false;
+            }
+            $DiocesanCalendarsForNation = array_values(array_filter(
+                $this->Metadata["diocesan_calendars"],
+                fn ($calendar) => $calendar["nation"] === $this->NationalCalendar
+            ));
+            $DiocesanCalendarIds = array_column($DiocesanCalendarsForNation, "calendar_id");
+            return $value !== "" && in_array($value, $DiocesanCalendarIds);
+        }
     }
 
     /**
