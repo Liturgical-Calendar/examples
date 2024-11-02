@@ -39,11 +39,11 @@ echo '<!-- set textdomain path: ' . $litSettings->currentTextDomainPath . ' -->'
 $nationalCalendarOptions = '<option value="">---</option>';
 $diocesanCalendarOptions = '<option value="">---</option>';
 
-$MetaData = Utilities::retrieveMetadata();
-if ($MetaData !== null) {
-    $litSettings->setMetaData($MetaData, $stagingURL);
-    $nationalCalendarOptions = Utilities::buildNationOptions($MetaData["national_calendars_keys"], $litSettings->NationalCalendar, $litSettings->Locale);
-    [$diocesanCalendarOptions, $diocesesCount] = Utilities::buildDioceseOptions($MetaData, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar);
+$Metadata = Utilities::retrieveMetadata();
+if ($Metadata !== null) {
+    $litSettings->setMetaData($Metadata, $stagingURL);
+    $nationalCalendarOptions = Utilities::buildNationOptions($Metadata["national_calendars_keys"], $litSettings->NationalCalendar, $litSettings->Locale);
+    [$diocesanCalendarOptions, $diocesesCount] = Utilities::buildDioceseOptions($Metadata, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar);
 } else {
     echo "There was an error retrieving the Metadata!";
     die();
@@ -63,10 +63,12 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     }
 
     $LitCal = null;
-    if (isset($LitCalData["litcal"])) {
+    $Settings = null;
+    if (isset($LitCalData["litcal"]) && isset($LitCalData["settings"])) {
         $LitCal = $LitCalData["litcal"];
+        $Settings = (object) $LitCalData["settings"];
     } else {
-        echo "We do not have enough information. Returned data has no `litcal` property:" . PHP_EOL;
+        echo "We do not have enough information. Response data has no `litcal` property or no `settings` property:" . PHP_EOL;
         echo "<pre>";
         var_dump($LitCalData);
         echo "</pre>";
@@ -172,10 +174,12 @@ echo '</fieldset>';
 echo '</form>';
 
 echo '<div style="text-align:center;border:2px groove White;border-radius:6px;margin:0px auto;padding-bottom:6px;">';
-
-echo '<h6><b>' . dgettext('litexmplphp', 'Configurations used to generate this calendar') . '</b></h6>';
+echo '<h6><b>' . dgettext('litexmplphp', 'Configurations sent in the request') . '</b></h6>';
 echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false') . ', <b>locale</b>: ' . $litSettings->Locale;
-echo '<br /><b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null') . ', <b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType;
+echo '<br /><b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null');
+echo '<h6><b>' . dgettext('litexmplphp', 'Configurations received in the response') . '</b></h6>';
+echo '<b>epiphany</b>: ' . ($Settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($Settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($Settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($Settings->eternal_high_priest ? 'true' : 'false') . ', <b>locale</b>: ' . ($Settings->locale ?? 'null');
+echo '<br /><b>year</b>: ' . ($Settings->year ?? 'null') . ', <b>year_type</b>: ' . ($Settings->year_type ?? 'null') . ', <b>nation</b>: ' . ($Settings->national_calendar ?? 'null') . ', <b>diocese</b>: ' . ($Settings->diocesan_calendar ?? 'null');
 echo '</div>';
 
 if ($litSettings->Year >= 1970) {
