@@ -165,33 +165,6 @@ class LitSettings
     }
 
     /**
-     * Converts an array's keys from snake_case to PascalCase.
-     *
-     * Given an array, this function will iterate over its keys and convert them from snake_case to PascalCase.
-     * If the value of a key is an array, the function will be called recursively on that array.
-     *
-     * @param array $array The array to convert.
-     * @return array The array with PascalCase keys.
-     */
-    private static function snakeToPascalCaseArrayKeys(array $array): array
-    {
-        $result = [];
-        foreach ($array as $key => $value) {
-            // Convert each key from snake_case to PascalCase
-            $pascalCaseKey = str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-
-            // If the value is an array, apply the function recursively
-            if (is_array($value)) {
-                $value = self::snakeToPascalCaseArrayKeys($value);
-            }
-
-            $result[$pascalCaseKey] = $value;
-        }
-
-        return $result;
-    }
-
-    /**
      * Sets the Epiphany, Ascension, CorpusChristi, and Locale settings based on the selected National or Diocesan Calendar.
      * If the National Calendar is not set, or if it is set to "VA" (Vatican), the settings are set to their default values.
      * If the National Calendar is set to a different value, the settings are set to the corresponding values from the
@@ -233,8 +206,7 @@ class LitSettings
                 fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar
             ))[0];
             if (array_key_exists("settings", $DiocesanCalendarMetadata)) {
-                $Settings = self::snakeToPascalCaseArrayKeys($DiocesanCalendarMetadata["settings"]);
-                $this->setVars($Settings);
+                $this->setVars($DiocesanCalendarMetadata["settings"]);
             }
         }
 
