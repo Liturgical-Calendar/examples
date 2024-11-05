@@ -11,19 +11,18 @@ use LiturgicalCalendar\Examples\Php\Enums\YearType;
 class LitSettings
 {
     public int $Year;
-    public string $Epiphany          = Epiphany::JAN6;
-    public string $Ascension         = Ascension::THURSDAY;
-    public string $CorpusChristi     = CorpusChristi::THURSDAY;
-    public string $YearType          = YearType::LITURGICAL;
-    public bool $EternalHighPriest   = false;
-    public ?string $Locale           = null;
-    public ?string $NationalCalendar = null;
-    public ?string $DiocesanCalendar = null;
-    //public ?string $setLocale        = null;
+    public string $Epiphany                = Epiphany::JAN6;
+    public string $Ascension               = Ascension::THURSDAY;
+    public string $CorpusChristi           = CorpusChristi::THURSDAY;
+    public string $YearType                = YearType::LITURGICAL;
+    public bool $EternalHighPriest         = false;
+    public ?string $Locale                 = null;
+    public ?string $NationalCalendar       = null;
+    public ?string $DiocesanCalendar       = null;
     public ?string $expectedTextDomainPath = null;
-    public ?string $currentTextDomainPath = null;
-    private ?array $Metadata         = null;
-    private bool $directAccess       = false;
+    public ?string $currentTextDomainPath  = null;
+    private ?array $Metadata               = null;
+    private bool $directAccess             = false;
 
     private const ALLOWED_PARAMS  = [
         "year",
@@ -54,10 +53,11 @@ class LitSettings
      * Ensures the Locale is canonicalized.
      * Delegates further variable setting to the setVars method.
      *
-     * @param array $DATA An array of input parameters to initialize the settings.
+     * @param array $formData An array of input parameters to initialize the settings.
+     * @param array $metadata An array of metadata about the national and diocesan calendars available and the supported locales.
      * @param bool $directAccess A flag indicating if the access is direct, default is false.
      */
-    public function __construct(array $DATA, bool $directAccess = false, array|null $Metadata = null)
+    public function __construct(array $formData, array $metadata, bool $directAccess = false)
     {
         // set default year value
         $this->Year = (int)date("Y");
@@ -76,8 +76,8 @@ class LitSettings
         $this->currentTextDomainPath = bindtextdomain("litexmplphp", $this->expectedTextDomainPath);
         $this->directAccess = $directAccess;
 
-        $this->setMetadata($Metadata);
-        $this->setVars($DATA);
+        $this->setMetadata($metadata);
+        $this->setVars($formData);
         $this->updateSettingsByCalendar();
     }
 
@@ -262,7 +262,10 @@ class LitSettings
     {
         $this->Metadata = $Metadata;
         if ($this->DiocesanCalendar !== null) {
-            $this->NationalCalendar = array_values(array_filter($this->Metadata["diocesan_calendars"], fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar))[0]["nation"];
+            $this->NationalCalendar = array_values(array_filter(
+                $this->Metadata["diocesan_calendars"],
+                fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar
+            ))[0]["nation"];
         }
     }
 }

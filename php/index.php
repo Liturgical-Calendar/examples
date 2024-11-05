@@ -16,12 +16,14 @@ require dirname(__FILE__) . '/vendor/autoload.php';
 
 use LiturgicalCalendar\Examples\Php\LitSettings;
 use LiturgicalCalendar\Examples\Php\Utilities;
-use LiturgicalCalendar\Examples\Php\Festivity;
 use LiturgicalCalendar\Components\ApiOptions;
 use LiturgicalCalendar\Components\ApiOptions\Input;
 use LiturgicalCalendar\Components\ApiOptions\PathType;
+use LiturgicalCalendar\Components\CalendarSelect;
+use LiturgicalCalendar\Components\CalendarSelect\OptionsType;
+use LiturgicalCalendar\Components\WebCalendar;
 
-$isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false );
+$isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false || strpos($_SERVER['HTTP_HOST'], "localhost") !== false );
 $stagingURL = $isStaging ? "-staging" : "";
 $endpointV = $isStaging ? "dev" : "v3";
 define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
@@ -29,29 +31,59 @@ define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/ca
 $directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
 
 $baseLocale = Locale::getPrimaryLanguage(setlocale(LC_ALL, 0));
-$Metadata = Utilities::retrieveMetadata();
-$litSettings = new LitSettings($_GET, $directAccess, $Metadata);
+
+$calendarSelectNations = new CalendarSelect();
+$calendarSelectNations->label(true)->labelText('nation')->labelClass('d-block mb-1')
+    ->id('national_calendar')->name('national_calendar')->allowNull()->setOptions(OptionsType::NATIONS)
+    ->locale($baseLocale);
+
+$calendarSelectDioceses = new CalendarSelect();
+$calendarSelectDioceses->label(true)->labelText('diocese')->labelClass('d-block mb-1')
+    ->id('diocesan_calendar')->name('diocesan_calendar')->allowNull()->setOptions(OptionsType::DIOCESES)
+    ->locale($baseLocale);
+
+$apiOptions = new ApiOptions(['locale' => $baseLocale]);
+$apiOptions->acceptHeaderInput->hide();
+Input::setGlobalWrapper('td');
+Input::setGlobalLabelClass('api-option-label');
+
+//$Metadata = Utilities::retrieveMetadata();
+$metadata = CalendarSelect::getMetadata();
+$litSettings = new LitSettings($_POST, $metadata, $directAccess);
+$LitCalData = null;
+
+$primaryLanguage = Locale::getPrimaryLanguage($litSettings->Locale);
+$apiOptions->localeInput->selectedValue($primaryLanguage);
+$apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
+$apiOptions->ascensionInput->selectedValue($litSettings->Ascension);
+$apiOptions->corpusChristiInput->selectedValue($litSettings->CorpusChristi);
+$apiOptions->eternalHighPriestInput->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false');
+$apiOptions->yearTypeInput->selectedValue($litSettings->YearType);
+if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
+    $apiOptions->epiphanyInput->disabled();
+    $apiOptions->ascensionInput->disabled();
+    $apiOptions->corpusChristiInput->disabled();
+    $apiOptions->eternalHighPriestInput->disabled();
+    $apiOptions->localeInput->disabled();
+}
+if ($litSettings->NationalCalendar) {
+    $calendarSelectNations->selectedOption($litSettings->NationalCalendar);
+    $calendarSelectDioceses->nationFilter($litSettings->NationalCalendar)->setOptions(OptionsType::DIOCESES_FOR_NATION);
+}
+if ($litSettings->DiocesanCalendar) {
+    $calendarSelectDioceses->selectedOption($litSettings->DiocesanCalendar);
+}
 
 // debug value of expected textdomain path
 echo '<!-- expected textdomain path: ' . $litSettings->expectedTextDomainPath . ' -->';
 // debug value of set textdomain path
 echo '<!-- set textdomain path: ' . $litSettings->currentTextDomainPath . ' -->';
 
-$nationalCalendarOptions = '<option value="">---</option>';
-$diocesanCalendarOptions = '<option value="">---</option>';
-
-if ($Metadata !== null) {
-    $nationalCalendarOptions = Utilities::buildNationOptions($Metadata["national_calendars_keys"], $litSettings->NationalCalendar, $litSettings->Locale);
-    [$diocesanCalendarOptions, $diocesesCount] = Utilities::buildDioceseOptions($Metadata, $litSettings->NationalCalendar, $litSettings->DiocesanCalendar);
-} else {
-    echo "There was an error retrieving the Metadata!";
-    die();
-}
 
 if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     $queryData  = Utilities::prepareQueryData($litSettings);
     $response   = Utilities::sendAPIRequest($queryData);
-    $LitCalData = json_decode($response, true);
+    $LitCalData = json_decode($response);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
         echo "There was an error decoding the JSON data: " . json_last_error_msg() . PHP_EOL;
@@ -61,23 +93,8 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
         die();
     }
 
-    $LitCal = null;
-    $Settings = null;
-    if (isset($LitCalData["litcal"]) && isset($LitCalData["settings"])) {
-        $LitCal = $LitCalData["litcal"];
-        $Settings = (object) $LitCalData["settings"];
-    } else {
-        echo "We do not have enough information. Response data has no `litcal` property or no `settings` property:" . PHP_EOL;
-        echo "<pre>";
-        var_dump($LitCalData);
-        echo "</pre>";
-        die();
-    }
-
-    foreach ($LitCal as $key => $value) {
-        // retransform each entry from an associative array to a Festivity class object
-        $LitCal[$key] = new Festivity($LitCal[$key]);
-    }
+    $webCalendar = new WebCalendar($LitCalData);
+    $webCalendar->id('LitCalTable');
 }
 
 
@@ -133,39 +150,17 @@ if ($litSettings->Year < 1970) {
     echo dgettext('litexmplphp', 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
     echo '</div>';
 }
-echo '<form method="GET" id="ApiOptionsForm">';
+echo '<form method="POST" id="ApiOptionsForm">';
 echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
 echo '<table style="width:100%;"><tr>';
 
-$apiOptions = new ApiOptions(['locale' => $baseLocale]);
-$apiOptions->acceptHeaderInput->hide();
-Input::setGlobalWrapper('td');
-Input::setGlobalLabelClass('api-option-label');
-$primaryLanguage = Locale::getPrimaryLanguage($litSettings->Locale);
-$apiOptions->localeInput->selectedValue($primaryLanguage);
-$apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
-$apiOptions->ascensionInput->selectedValue($litSettings->Ascension);
-$apiOptions->corpusChristiInput->selectedValue($litSettings->CorpusChristi);
-$apiOptions->eternalHighPriestInput->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false');
-$apiOptions->yearTypeInput->selectedValue($litSettings->YearType);
-if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
-    $apiOptions->epiphanyInput->disabled();
-    $apiOptions->ascensionInput->disabled();
-    $apiOptions->corpusChristiInput->disabled();
-    $apiOptions->eternalHighPriestInput->disabled();
-    $apiOptions->localeInput->disabled();
-}
 echo $apiOptions->getForm(PathType::BASE_PATH);
 echo '</tr>';
 echo '<tr>';
 echo '<td><label>year<br><input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
 echo $apiOptions->getForm(PathType::ALL_PATHS);
-
-echo '</tr><tr>';
-echo '<td colspan="5" style="text-align:center;padding:18px;"><i>' . dgettext('litexmplphp', 'Choose a calendar') . '</i></td>';
-echo '</tr><tr>';
-echo '<td colspan="5" style="text-align:center;"><label>nation<br><select id="national_calendar" name="national_calendar">' . $nationalCalendarOptions . '</select></label>';
-echo '<label style="margin-left: 18px;">diocese<br><select id="diocesan_calendar" name="diocesan_calendar"' . ($diocesesCount < 1 ? ' disabled' : '') . '>' . $diocesanCalendarOptions . '</select></label></td>';
+echo '<td colspan="1">' . $calendarSelectNations->getSelect() . '</td>';
+echo '<td colspan="2">' . $calendarSelectDioceses->getSelect() . '</td>';
 echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;padding:15px;">' . $submitParent . '<input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', 'Generate Roman Calendar')) . '" /></td>';
 echo '</tr></table>';
@@ -181,63 +176,19 @@ if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar ==
 echo '<b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null');
 echo '<hr>';
 echo '<h6><b>' . dgettext('litexmplphp', 'Configurations received in the response') . '</b></h6>';
-echo '<b>epiphany</b>: ' . ($Settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($Settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($Settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($Settings->eternal_high_priest ? 'true' : 'false') . ', <b>locale</b>: ' . ($Settings->locale ?? 'null');
-echo '<br /><b>year</b>: ' . ($Settings->year ?? 'null') . ', <b>year_type</b>: ' . ($Settings->year_type ?? 'null') . ', <b>nation</b>: ' . ($Settings->national_calendar ?? 'null') . ', <b>diocese</b>: ' . ($Settings->diocesan_calendar ?? 'null');
+echo '<b>epiphany</b>: ' . ($LitCalData->settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($LitCalData->settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($LitCalData->settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($LitCalData->settings->eternal_high_priest ? 'true' : 'false') . ', <b>locale</b>: ' . ($LitCalData->settings->locale ?? 'null');
+echo '<br /><b>year</b>: ' . ($LitCalData->settings->year ?? 'null') . ', <b>year_type</b>: ' . ($LitCalData->settings->year_type ?? 'null') . ', <b>nation</b>: ' . ($LitCalData->settings->national_calendar ?? 'null') . ', <b>diocese</b>: ' . ($LitCalData->settings->diocesan_calendar ?? 'null');
 echo '</div>';
 
 if ($litSettings->Year >= 1970) {
-    echo '<table id="LitCalTable">';
-    echo '<thead><tr><th>' . dgettext('litexmplphp', "Month") . '</th><th>' . dgettext('litexmplphp', "Date in Gregorian Calendar") . '</th><th>' . dgettext('litexmplphp', "General Roman Calendar Festivity") . '</th><th>' . dgettext('litexmplphp', "Grade of the Festivity") . '</th></tr></thead>';
-    echo '<tbody>';
-
-
-    $dayCnt = 0;
-    //for($i=1997;$i<=2037;$i++){
-
-    $LitCalKeys = array_keys($LitCal);
-
-    $currentMonth = 0; //1=January, ... 12=December
-    $newMonth = false;
-
-    //print_r($LitCalKeys);
-    //echo count($LitCalKeys);
-    for ($keyindex = 0; $keyindex < count($LitCalKeys); $keyindex++) {
-        $dayCnt++;
-        $keyname = $LitCalKeys[$keyindex];
-        $festivity = $LitCal[$keyname];
-        //If we are at the start of a new month, count how many events we have in that same month, so we can display the Month table cell
-        if ((int) $festivity->date->format('n') !== $currentMonth) {
-            $newMonth = true;
-            $currentMonth = (int) $festivity->date->format('n');
-            $cm = 0;
-            Utilities::countSameMonthEvents($keyindex, $LitCal, $cm);
-        }
-
-        //Let's check if we have more than one event on the same day, such as optional memorials...
-        $cc = 0;
-        Utilities::countSameDayEvents($keyindex, $LitCal, $cc);
-        if ($cc > 0) {
-            for ($ev = 0; $ev <= $cc; $ev++) {
-                $keyname = $LitCalKeys[$keyindex];
-                $festivity = $LitCal[$keyname];
-                Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, $ev);
-                $keyindex++;
-            }
-            $keyindex--;
-        } else {
-            Utilities::buildHTML($festivity, $LitCal, $newMonth, $cc, $cm, $litSettings->Locale, null);
-        }
-    }
-
-    echo '</tbody></table>';
-
-    echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">' . $dayCnt . ' event days created</div>';
+    echo $webCalendar->buildTable();
+    echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">' . $webCalendar->daysCreated() . ' event days created</div>';
 }
 
-if (isset($LitCalData["messages"]) && is_array($LitCalData["messages"]) && count($LitCalData["messages"]) > 0) {
+if (property_exists($LitCalData, 'messages') && is_array($LitCalData->messages) && count($LitCalData->messages) > 0) {
     echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . dgettext('litexmplphp', "Information about the current calculation of the Liturgical Year") . '</th></tr></thead>';
     echo '<tbody>';
-    foreach ($LitCalData["messages"] as $idx => $message) {
+    foreach ($LitCalData->messages as $idx => $message) {
         echo "<tr><td>{$idx}</td><td>{$message}</td></tr>";
     }
     echo '</tbody></table>';
