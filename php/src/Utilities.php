@@ -2,80 +2,13 @@
 
 namespace LiturgicalCalendar\Examples\Php;
 
-use LiturgicalCalendar\Examples\Php\Enums\LitLocale;
 use LiturgicalCalendar\Examples\Php\Enums\StatusCode;
 
 class Utilities
 {
-    public const DAYS_OF_THE_WEEK_LATIN = [
-        "dies Solis",
-        "dies Lunæ",
-        "dies Martis",
-        "dies Mercurii",
-        "dies Iovis",
-        "dies Veneris",
-        "dies Saturni"
-    ];
-
-    public const MONTHS_LATIN = [
-        "",
-        "Ianuarius",
-        "Februarius",
-        "Martius",
-        "Aprilis",
-        "Maius",
-        "Iunius",
-        "Iulius",
-        "Augustus",
-        "September",
-        "October",
-        "November",
-        "December"
-    ];
-
-    /**************************
-     * UTILITY FUNCTIONS
-     *************************/
-
-    /**
-     * Recursively counts the number of subsequent festivities in the same day.
-     *
-     * @param int $currentKeyIndex The current position in the array of festivities.
-     * @param array $EventsArray The array of festivities.
-     * @param int $cc [reference] The count of subsequent festivities in the same day.
-     */
-    public static function countSameDayEvents($currentKeyIndex, $EventsArray, &$cc)
-    {
-        $Keys = array_keys($EventsArray);
-        $currentFestivity = $EventsArray[$Keys[$currentKeyIndex]];
-        if ($currentKeyIndex < count($Keys) - 1) {
-            $nextFestivity = $EventsArray[$Keys[$currentKeyIndex + 1]];
-            if ($nextFestivity->date == $currentFestivity->date) {
-                $cc++;
-                self::countSameDayEvents($currentKeyIndex + 1, $EventsArray, $cc);
-            }
-        }
-    }
-
-    /**
-     * Counts the number of subsequent festivities in the same month.
-     *
-     * @param int $currentKeyIndex
-     * @param array $EventsArray
-     * @param int $cm
-     */
-    public static function countSameMonthEvents($currentKeyIndex, $EventsArray, &$cm)
-    {
-        $Keys = array_keys($EventsArray);
-        $currentFestivity = $EventsArray[$Keys[$currentKeyIndex]];
-        if ($currentKeyIndex < count($Keys) - 1) {
-            $nextFestivity = $EventsArray[$Keys[$currentKeyIndex + 1]];
-            if ($nextFestivity->date->format('n') == $currentFestivity->date->format('n')) {
-                $cm++;
-                self::countSameMonthEvents($currentKeyIndex + 1, $EventsArray, $cm);
-            }
-        }
-    }
+    private static array $requestData    = [];
+    private static array $requestHeaders = [];
+    private static string $requestUrl    = "";
 
     /**
      * Retrieve the metadata from the liturgical calendar API, if available.
@@ -117,11 +50,11 @@ class Utilities
         $url = LITCAL_API_URL;
         $headers = ['Accept: application/json'];
         if (isset($queryData["diocesan_calendar"])) {
-            $url = LITCAL_API_URL . "/diocese/" . $queryData["diocesan_calendar"];
+            $url .= "/diocese/" . $queryData["diocesan_calendar"];
             unset($queryData["diocesan_calendar"]);
             unset($queryData["national_calendar"]);
         } elseif (isset($queryData["national_calendar"])) {
-            $url = LITCAL_API_URL . "/nation/" . $queryData["national_calendar"];
+            $url .= "/nation/" . $queryData["national_calendar"];
             unset($queryData["national_calendar"]);
         } elseif (isset($queryData["locale"])) {
             $headers[] = 'Accept-Language: ' . $queryData["locale"];
@@ -131,6 +64,9 @@ class Utilities
             $url .= "/" . $queryData["year"];
             unset($queryData["year"]);
         }
+        self::$requestData = $queryData;
+        self::$requestHeaders = $headers;
+        self::$requestUrl = $url;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -143,13 +79,21 @@ class Utilities
         } else {
             $resultStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($resultStatus != 200) {
-                header('Content-Type: text/html');
-                $htmlBody = "<body style=\"background-color:pink;color:darkred;\">";
-                $htmlBody .= "<div style=\"text-align:center;padding: 20px;margin: 20px auto;\">";
+                $htmlBody = "<div style=\"text-align:center;padding: 20px;margin: 20px auto;background-color:pink;color:darkred;\">";
                 $htmlBody .= "<h1>Request failed.</h1>";
                 $htmlBody .= "<h2>" . StatusCode::getMessageForCode($resultStatus) . "</h2>";
                 $htmlBody .= "<p>$result</p>";
-                $htmlBody .= "</div></body>";
+                $htmlBody .= '<h3><b>Request URL</b></h3>';
+                $htmlBody .= '<div class="col-12">' . self::$requestUrl . '</div>';
+                $htmlBody .= '<h3><b>Request Data</b></h3>';
+                foreach (self::$requestData as $key => $value) {
+                    $htmlBody .= '<div class="col-2"><b>' . $key . '</b>: ' . ($value === null || empty($value) ? 'null' : $value) . '</div>';
+                }
+                $htmlBody .= '<h3><b>Request Headers</b></h3>';
+                foreach (self::$requestHeaders as $key => $value) {
+                    $htmlBody .= '<div class="col-2"><b>' . $key . '</b>: ' . $value . '</div>';
+                }
+                $htmlBody .= "</div>";
                 die($htmlBody);
             }
         }
@@ -158,50 +102,6 @@ class Utilities
         return $result;
     }
 
-
-    /**
-     * Generates an HTML string for a dropdown list of options for selecting a diocese based on the given list of diocesan calendars.
-     *
-     * @param array $MetaData A list of metadata about the diocesan calendars available.
-     * @param string $NATION The currently selected nation.
-     * @param string $DIOCESE The currently selected diocese.
-     *
-     * @return array A list containing the HTML string for the dropdown options and the number of options that were generated.
-     */
-    public static function buildDioceseOptions($MetaData, $NATION, $DIOCESE)
-    {
-        $options = '<option value=""></option>';
-        $i = 0;
-        if ($MetaData !== null) {
-            foreach ($MetaData["diocesan_calendars"] as $diocesanCalendar) {
-                if ($diocesanCalendar['nation'] === $NATION) {
-                    $options .= "<option value='{$diocesanCalendar['calendar_id']}'" . ( $DIOCESE === $diocesanCalendar['calendar_id'] ? ' selected' : '' ) . ">{$diocesanCalendar['diocese']}</option>";
-                    ++$i;
-                }
-            }
-        }
-        return [$options, $i ];
-    }
-
-    /**
-     * Generates an HTML string for a dropdown list of options for selecting a nation based on the given list of nation codes.
-     *
-     * @param array $nations A list of 2-letter nation codes to include in the dropdown.
-     * @param string|null $NATION The currently selected nation.
-     * @param string $locale The locale to use for displaying the nation names.
-     *
-     * @return string An HTML string for a dropdown list of options.
-     */
-    public static function buildNationOptions(array $nations, ?string $NATION, string $locale)
-    {
-        $options = '<option value="">---</option>';
-        foreach ($nations as $nationVal) {
-            $countryName = \Locale::getDisplayRegion("-{$nationVal}", $locale);
-            $options .= "<option value='{$nationVal}'" . ($nationVal === $NATION ? ' selected' : '') . ">$countryName</option>";
-        }
-        $options .= "<!-- current selected nation is {$NATION} -->";
-        return $options;
-    }
 
     /**
      * Prepares query data for sending API requests based on the given liturgical settings.
@@ -215,13 +115,17 @@ class Utilities
     {
         $queryData = [
             "year"           => $litSettings->Year,
-            "epiphany"       => $litSettings->Epiphany,
-            "ascension"      => $litSettings->Ascension,
-            "corpus_christi" => $litSettings->CorpusChristi,
-            "eternal_high_priest" => ($litSettings->EternalHighPriest ? 'true' : 'false'),
-            "year_type"      => $litSettings->YearType,
-            "locale"         => $litSettings->Locale
+            "year_type"      => $litSettings->YearType
         ];
+        if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar === null) {
+            $queryData = array_merge($queryData, [
+                "epiphany"       => $litSettings->Epiphany,
+                "ascension"      => $litSettings->Ascension,
+                "corpus_christi" => $litSettings->CorpusChristi,
+                "eternal_high_priest" => ($litSettings->EternalHighPriest ? 'true' : 'false'),
+                "locale"         => $litSettings->Locale
+            ]);
+        }
         if ($litSettings->NationalCalendar !== null) {
             $queryData["national_calendar"] = $litSettings->NationalCalendar;
         }
@@ -231,73 +135,35 @@ class Utilities
         return $queryData;
     }
 
+
     /**
-     * Determines the liturgical color for the Liturgical Season, to apply to liturgical events within that season.
+     * Retrieves the request data last sent in an API request.
      *
-     * @param Festivity $festivity The festivity for which the color is determined.
-     * @param array $LitCal The liturgical calendar containing key events and their dates.
-     * @return string The color representing the liturgical season (e.g., "green", "purple", "white").
+     * @return array The request data.
      */
-    public static function getSeasonColor($festivity, $LitCal)
+    public static function getRequestData(): array
     {
-        $SeasonColor = "green";
-        if (($festivity->date > $LitCal["Advent1"]->date  && $festivity->date < $LitCal["Christmas"]->date) || ($festivity->date > $LitCal["AshWednesday"]->date && $festivity->date < $LitCal["Easter"]->date)) {
-            $SeasonColor = "purple";
-        } elseif ($festivity->date > $LitCal["Easter"]->date && $festivity->date < $LitCal["Pentecost"]->date) {
-            $SeasonColor = "white";
-        } elseif ($festivity->date > $LitCal["Christmas"]->date || $festivity->date < $LitCal["BaptismLord"]->date) {
-            $SeasonColor = "white";
-        }
-        return $SeasonColor;
+        return self::$requestData;
     }
 
     /**
-     * Outputs a table row for the given festivity from the requested Liturgical Calendar
+     * Retrieves the HTTP headers sent in the last API request.
      *
-     * @param Festivity $festivity The festivity to display
-     * @param array $LitCal The Liturgical Calendar
-     * @param bool $newMonth Whether we are starting a new month
-     * @param int $cc Count of Celebrations on the same day
-     * @param int $cm Count of Celebrations on the same month
-     * @param string $locale The locale to use for date and month formatting
-     * @param int $ev Whether we need to set the rowspan based on the number of liturgical events within the same day. If null, we are displaying only a single liturgical event and we do not need to set rowspan, otherwise we set the rowspan on the the first liturgical event based on how many liturgical events there are in the given day.
+     * @return array An array of HTTP headers.
      */
-    public static function buildHTML($festivity, $LitCal, &$newMonth, $cc, $cm, $locale, $ev = null)
+    public static function getRequestHeaders(): array
     {
-        $monthFmt = \IntlDateFormatter::create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, 'UTC', \IntlDateFormatter::GREGORIAN, 'MMMM');
-        $dateFmt  = \IntlDateFormatter::create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, 'UTC', \IntlDateFormatter::GREGORIAN, 'EEEE d MMMM yyyy');
-        $highContrast = ['purple', 'red', 'green'];
-        $SeasonColor = self::getSeasonColor($festivity, $LitCal);
-        echo '<tr style="background-color:' . $SeasonColor . ';' . (in_array($SeasonColor, $highContrast) ? 'color:white;' : '') . '">';
-        if ($newMonth) {
-            $monthRwsp = $cm + 1;
-            echo '<td class="rotate" rowspan = "' . $monthRwsp . '"><div>' . ($locale === LitLocale::LATIN || $locale === LitLocale::LATIN_PRIMARY_LANGUAGE ? strtoupper(self::MONTHS_LATIN[ (int)$festivity->date->format('n') ]) : strtoupper($monthFmt->format($festivity->date->format('U'))) ) . '</div></td>';
-            $newMonth = false;
-        }
-        $dateString = "";
-        switch (explode('_', $locale)[0]) {
-            case LitLocale::LATIN_PRIMARY_LANGUAGE:
-                $dayOfTheWeek = (int)$festivity->date->format('w'); //w = 0-Sunday to 6-Saturday
-                $dayOfTheWeekLatin = self::DAYS_OF_THE_WEEK_LATIN[$dayOfTheWeek];
-                $month = (int)$festivity->date->format('n'); //n = 1-January to 12-December
-                $monthLatin = self::MONTHS_LATIN[$month];
-                $dateString = $dayOfTheWeekLatin . ' ' . $festivity->date->format('j') . ' ' . $monthLatin . ' ' . $festivity->date->format('Y');
-                break;
-            case 'en':
-                $dateString = $festivity->date->format('D, F jS, Y');
-                break;
-            default:
-                $dateString = $dateFmt->format($festivity->date->format('U'));
-        }
-        if ($ev === null) {
-            echo '<td class="dateEntry">' . $dateString . '</td>';
-        } elseif ($ev === 0) {
-            echo '<td class="dateEntry" rowspan="' . ($cc + 1) . '">' . $dateString . '</td>';
-        }
-        $currentCycle = property_exists($festivity, "liturgical_year") && $festivity->liturgical_year !== null && $festivity->liturgical_year !== "" ? " (" . $festivity->liturgical_year . ")" : "";
-        echo '<td style="background-color:' . $festivity->color[0] . ';' . (in_array($festivity->color[0], $highContrast) ? 'color:white;' : 'color:black;') . '">' . $festivity->name . $currentCycle . ' - <i>' . implode(' ' . dgettext('litexmplphp', 'or') . ' ', $festivity->color_lcl) . '</i><br /><i>' . $festivity->common_lcl . '</i></td>';
-        echo '<td style="background-color:' . $festivity->color[0] . ';' . (in_array($festivity->color[0], $highContrast) ? 'color:white;' : 'color:black;') . '">' . ($festivity->display_grade !== '' ? $festivity->display_grade : $festivity->grade_lcl) . '</td>';
-        echo '</tr>';
+        return self::$requestHeaders;
+    }
+
+    /**
+     * Retrieves the URL of the last API request.
+     *
+     * @return string The URL of the last API request.
+     */
+    public static function getRequestUrl(): string
+    {
+        return self::$requestUrl;
     }
 
     /**
