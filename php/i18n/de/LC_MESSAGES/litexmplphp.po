@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-05 09:08+0000\n"
+"POT-Creation-Date: 2024-11-08 16:49+0000\n"
 "PO-Revision-Date: 2024-11-02 16:01+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: German <https://translate.johnromanodorazio.com/projects/"
@@ -22,26 +22,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:111 php/index.php:165
+#: php/index.php:117 php/index.php:171
 msgid "Generate Roman Calendar"
 msgstr "Römischen Kalender generieren"
 
-#: php/index.php:127
+#: php/index.php:133
 msgid "Go back"
 msgstr "Zurück"
 
-#: php/index.php:141
+#: php/index.php:147
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Berechnung des liturgischen Kalenders für ein bestimmtes Jahr"
 
-#: php/index.php:142
+#: php/index.php:148
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML-Präsentation, die von PHP unter Verwendung einer CURL-Anfrage an einen "
 "%s erstellt wurde"
 
-#: php/index.php:150
+#: php/index.php:156
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
@@ -49,19 +49,19 @@ msgstr ""
 "Sie fordern ein Jahr vor 1970 an: Es ist nicht möglich, Jahre vor 1970 "
 "anzufordern."
 
-#: php/index.php:154
+#: php/index.php:160
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Optionen zum Generieren des römischen Kalenders anpassen"
 
-#: php/index.php:171
+#: php/index.php:177
 msgid "Configurations sent in the request"
 msgstr "Konfigurationen, die in der Anfrage gesendet wurden"
 
-#: php/index.php:178
+#: php/index.php:184
 msgid "Configurations received in the response"
 msgstr "Konfigurationen in der Antwort erhalten"
 
-#: php/index.php:189
+#: php/index.php:195
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informationen zur aktuellen Berechnung des liturgischen Jahres"
 
