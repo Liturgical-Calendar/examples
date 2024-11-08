@@ -30,7 +30,13 @@ define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/
 define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
 $directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
 
-$baseLocale = Locale::getPrimaryLanguage(setlocale(LC_ALL, 0) ?? 'en-US');
+$envLocale = setlocale(LC_TIME, 0);
+if (null === $envLocale || 'C' === $envLocale) {
+    setlocale(LC_ALL, 'en_US.UTF-8');
+    $envLocale = setlocale(LC_ALL, 0);
+}
+
+$baseLocale = Locale::getPrimaryLanguage($envLocale);
 
 $calendarSelectNations = new CalendarSelect();
 $calendarSelectNations->label(true)->labelText('nation')->labelClass('d-block mb-1')
