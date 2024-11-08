@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "liturgical-calendar/components",
-            "version": "v3.0.2",
+            "version": "v3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Liturgical-Calendar/liturgy-components-php.git",
-                "reference": "fbfd9654198fe5069886b27e2747bcd074eff13d"
+                "reference": "e9905c6adff3dd83d50bbd9ee8b6b2e9c36643db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Liturgical-Calendar/liturgy-components-php/zipball/fbfd9654198fe5069886b27e2747bcd074eff13d",
-                "reference": "fbfd9654198fe5069886b27e2747bcd074eff13d",
+                "url": "https://api.github.com/repos/Liturgical-Calendar/liturgy-components-php/zipball/e9905c6adff3dd83d50bbd9ee8b6b2e9c36643db",
+                "reference": "e9905c6adff3dd83d50bbd9ee8b6b2e9c36643db",
                 "shasum": ""
             },
             "require": {
@@ -45,9 +45,9 @@
             "description": "Reusable frontend components for the Liturgical Calendar API",
             "support": {
                 "issues": "https://github.com/Liturgical-Calendar/liturgy-components-php/issues",
-                "source": "https://github.com/Liturgical-Calendar/liturgy-components-php/tree/v3.0.2"
+                "source": "https://github.com/Liturgical-Calendar/liturgy-components-php/tree/v3.0.4"
             },
-            "time": "2024-11-05T08:34:57+00:00"
+            "time": "2024-11-05T10:38:23+00:00"
         }
     ],
     "packages-dev": [
