@@ -22,6 +22,10 @@ use LiturgicalCalendar\Components\ApiOptions\PathType;
 use LiturgicalCalendar\Components\CalendarSelect;
 use LiturgicalCalendar\Components\CalendarSelect\OptionsType;
 use LiturgicalCalendar\Components\WebCalendar;
+use LiturgicalCalendar\Components\WebCalendar\Grouping;
+use LiturgicalCalendar\Components\WebCalendar\ColorAs;
+use LiturgicalCalendar\Components\WebCalendar\Column;
+use LiturgicalCalendar\Components\WebCalendar\DateFormat;
 
 $isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false || strpos($_SERVER['HTTP_HOST'], "localhost") !== false );
 $stagingURL = $isStaging ? "-staging" : "";
@@ -100,7 +104,16 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     }
 
     $webCalendar = new WebCalendar($LitCalData);
-    $webCalendar->id('LitCalTable');
+    $webCalendar->id('LitCalTable')
+                ->firstColumnGrouping(Grouping::BY_LITURGICAL_SEASON)
+                ->psalterWeekGrouping()
+                ->removeHeaderRow()
+                ->seasonColor(ColorAs::CSS_CLASS)
+                ->seasonColorColumns(Column::LITURGICAL_SEASON)
+                ->eventColor(ColorAs::INDICATOR)
+                ->eventColorColumns(Column::EVENT)
+                ->monthHeader()
+                ->dateFormat(DateFormat::DAY_ONLY);
 }
 
 
