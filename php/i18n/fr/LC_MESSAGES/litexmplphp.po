@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-08 16:49+0000\n"
+"POT-Creation-Date: 2024-11-14 15:07+0000\n"
 "PO-Revision-Date: 2024-11-02 16:01+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
@@ -21,25 +21,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:117 php/index.php:171
+#: php/index.php:130 php/index.php:184
 msgid "Generate Roman Calendar"
 msgstr "Générer le Calendrier Romain"
 
-#: php/index.php:133
+#: php/index.php:146
 msgid "Go back"
 msgstr "Retourner"
 
-#: php/index.php:147
+#: php/index.php:160
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Calcul du calendrier liturgique pour une année donnée"
 
-#: php/index.php:148
+#: php/index.php:161
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "Présentation HTML élaborée par PHP en utilisant une requête CURL à un %s"
 
-#: php/index.php:156
+#: php/index.php:169
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
@@ -47,19 +47,19 @@ msgstr ""
 "Vous demandez une année antérieure à 1970 : il n'est pas possible de "
 "demander des années antérieures à 1970."
 
-#: php/index.php:160
+#: php/index.php:173
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Personnaliser les options pour générer le Calendrier Romain"
 
-#: php/index.php:177
+#: php/index.php:190
 msgid "Configurations sent in the request"
 msgstr "Configurations envoyées dans la demande"
 
-#: php/index.php:184
+#: php/index.php:197
 msgid "Configurations received in the response"
 msgstr "Configurations reçues dans la réponse"
 
-#: php/index.php:195
+#: php/index.php:208
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informations sur le calcul actuel de l'Année Liturgique"
 
