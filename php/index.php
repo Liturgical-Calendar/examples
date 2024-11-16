@@ -13,6 +13,9 @@ ini_set('error_reporting', E_ALL);
 ini_set("display_errors", 1);
 
 require dirname(__FILE__) . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, ['.env', '.env.local', '.env.development', '.env.production'], false);
+//$dotenv->required(['APP_ENV', 'API_PROTOCOL', 'API_HOST', 'API_PORT']);
+$dotenv->safeLoad();
 
 use LiturgicalCalendar\Examples\Php\LitSettings;
 use LiturgicalCalendar\Examples\Php\Utilities;
@@ -30,8 +33,17 @@ use LiturgicalCalendar\Components\WebCalendar\DateFormat;
 $isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false || strpos($_SERVER['HTTP_HOST'], "localhost") !== false );
 $stagingURL = $isStaging ? "-staging" : "";
 $endpointV = $isStaging ? "dev" : "v3";
-define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
-define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
+if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'development') {
+    if (false === isset($_ENV['API_PROTOCOL']) || false === isset($_ENV['API_HOST']) || false === isset($_ENV['API_PORT'])) {
+        die("API_PROTOCOL, API_HOST and API_PORT must be defined in .env.development or similar dotenv when APP_ENV is development");
+    }
+    define("LITCAL_API_URL", "{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}:{$_ENV['API_PORT']}/calendar");
+    define("METADATA_URL", "{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}:{$_ENV['API_PORT']}/calendars");
+} else {
+    define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
+    define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
+}
+
 $directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
 
 $envLocale = setlocale(LC_TIME, 0);
@@ -41,18 +53,25 @@ if (null === $envLocale || 'C' === $envLocale) {
 }
 
 $baseLocale = Locale::getPrimaryLanguage($envLocale);
-
-$calendarSelectNations = new CalendarSelect();
+$options = [
+    'url' => METADATA_URL
+];
+$calendarSelectNations = new CalendarSelect($options);
 $calendarSelectNations->label(true)->labelText('nation')->labelClass('d-block mb-1')
     ->id('national_calendar')->name('national_calendar')->allowNull()->setOptions(OptionsType::NATIONS)
     ->locale($baseLocale);
 
-$calendarSelectDioceses = new CalendarSelect();
+$calendarSelectDioceses = new CalendarSelect($options);
 $calendarSelectDioceses->label(true)->labelText('diocese')->labelClass('d-block mb-1')
     ->id('diocesan_calendar')->name('diocesan_calendar')->allowNull()->setOptions(OptionsType::DIOCESES)
     ->locale($baseLocale);
 
-$apiOptions = new ApiOptions(['locale' => $baseLocale]);
+$options = [
+    'url' => rtrim(METADATA_URL, '/calendars'),
+    'locale' => $baseLocale
+];
+
+$apiOptions = new ApiOptions($options);
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('td');
 Input::setGlobalLabelClass('api-option-label');
