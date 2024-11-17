@@ -102,7 +102,7 @@
 }
 
 #LitCalTable .liturgicalGrade.liturgicalGrade_0 {
-    visibility: invisible;
+    visibility: hidden;
 }
 
 #LitCalTable .liturgicalGrade_0, #LitCalTable .liturgicalGrade_1, #LitCalTable .liturgicalGrade_2 {
