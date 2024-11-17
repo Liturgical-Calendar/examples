@@ -28,7 +28,9 @@ use LiturgicalCalendar\Components\WebCalendar;
 use LiturgicalCalendar\Components\WebCalendar\Grouping;
 use LiturgicalCalendar\Components\WebCalendar\ColorAs;
 use LiturgicalCalendar\Components\WebCalendar\Column;
+use LiturgicalCalendar\Components\WebCalendar\ColumnOrder;
 use LiturgicalCalendar\Components\WebCalendar\DateFormat;
+use LiturgicalCalendar\Components\WebCalendar\GradeDisplay;
 
 $isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false || strpos($_SERVER['HTTP_HOST'], "localhost") !== false );
 $stagingURL = $isStaging ? "-staging" : "";
@@ -132,7 +134,9 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
                 ->eventColor(ColorAs::INDICATOR)
                 ->eventColorColumns(Column::EVENT)
                 ->monthHeader()
-                ->dateFormat(DateFormat::DAY_ONLY);
+                ->dateFormat(DateFormat::DAY_ONLY)
+                ->columnOrder(ColumnOrder::GRADE_FIRST)
+                ->gradeDisplay(GradeDisplay::ABBREVIATED);
 }
 
 
