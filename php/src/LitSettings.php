@@ -55,7 +55,7 @@ class LitSettings
      *
      * @param array $formData An array of input parameters to initialize the settings.
      * @param array $metadata An array of metadata about the national and diocesan calendars available and the supported locales.
-     * @param bool $directAccess A flag indicating if the access is direct, default is false.
+     * @param bool $directAccess A flag indicating whether the PHP example is included within another page or being accessed directly.
      */
     public function __construct(array $formData, array $metadata, bool $directAccess = false)
     {
@@ -78,7 +78,7 @@ class LitSettings
 
         $this->setMetadata($metadata);
         $this->setVars($formData);
-        $this->updateSettingsByCalendar();
+        $this->updateSettingsByCalendarMetadata();
     }
 
     /**
@@ -184,7 +184,7 @@ class LitSettings
      * If the directAccess flag is set to true, the function also sets the locale for the current PHP script using the
      * setlocale() function, and sets a cookie to store the current locale.
      */
-    private function updateSettingsByCalendar(): void
+    private function updateSettingsByCalendarMetadata(): void
     {
         if (null === $this->Metadata) {
             return;
@@ -198,16 +198,15 @@ class LitSettings
             switch ($this->NationalCalendar) {
                 case "VA":
                 case null:
-                    $this->Epiphany         = Epiphany::JAN6;
-                    $this->Ascension        = Ascension::THURSDAY;
-                    $this->CorpusChristi    = CorpusChristi::THURSDAY;
-                    $this->Locale           = LitLocale::LATIN_PRIMARY_LANGUAGE;
+                    $this->Epiphany          = Epiphany::JAN6;
+                    $this->Ascension         = Ascension::THURSDAY;
+                    $this->CorpusChristi     = CorpusChristi::THURSDAY;
+                    $this->EternalHighPriest = false;
+                    $this->Locale            = LitLocale::LATIN_PRIMARY_LANGUAGE;
                     break;
                 default:
-                    $this->Epiphany         = $NationalCalendarMetadata["settings"]["epiphany"];
-                    $this->Ascension        = $NationalCalendarMetadata["settings"]["ascension"];
-                    $this->CorpusChristi    = $NationalCalendarMetadata["settings"]["corpus_christi"];
-                    $this->Locale           = $NationalCalendarMetadata["settings"]["locale"];
+                    $this->setVars($NationalCalendarMetadata["settings"]);
+                    $this->Locale            = $NationalCalendarMetadata["locales"][0];
                     break;
             }
         }
@@ -217,6 +216,7 @@ class LitSettings
                 $this->Metadata["diocesan_calendars"],
                 fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar
             ))[0];
+            $this->Locale = $DiocesanCalendarMetadata["locales"][0];
             if (array_key_exists("settings", $DiocesanCalendarMetadata)) {
                 $this->setVars($DiocesanCalendarMetadata["settings"]);
             }
