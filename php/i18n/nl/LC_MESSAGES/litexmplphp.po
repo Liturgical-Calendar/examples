@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-17 09:07+0000\n"
+"POT-Creation-Date: 2024-12-07 17:20+0000\n"
 "PO-Revision-Date: 2024-11-02 16:01+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Dutch <https://translate.johnromanodorazio.com/projects/"
@@ -19,46 +19,46 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:153 php/index.php:207
+#: php/index.php:155 php/index.php:209
 msgid "Generate Roman Calendar"
 msgstr "Genereer de Romeinse kalender"
 
-#: php/index.php:169
+#: php/index.php:171
 msgid "Go back"
 msgstr "Ga terug"
 
-#: php/index.php:183
+#: php/index.php:185
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Berekening van de liturgische kalender voor een bepaald jaar"
 
-#: php/index.php:184
+#: php/index.php:186
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "HTML-presentatie uitgewerkt door PHP met behulp van een CURL-verzoek naar "
 "een %s"
 
-#: php/index.php:192
+#: php/index.php:194
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 "U hebt een jaar vóór 1970 aangevraagd: U kunt geen jaren vóór 1970 aanvragen."
 
-#: php/index.php:196
+#: php/index.php:198
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 "Configureer de instellingen voor het genereren van de Romeinse kalender"
 
-#: php/index.php:213
+#: php/index.php:215
 msgid "Configurations sent in the request"
 msgstr "Configuraties verzonden in de aanvraag"
 
-#: php/index.php:220
+#: php/index.php:222
 msgid "Configurations received in the response"
 msgstr "Configuraties ontvangen in de reactie"
 
-#: php/index.php:231
+#: php/index.php:233
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informatie over de huidige berekening van het liturgisch jaar"
 
