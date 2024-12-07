@@ -3,6 +3,7 @@
 namespace LiturgicalCalendar\Examples\Php;
 
 use LiturgicalCalendar\Examples\Php\Enums\StatusCode;
+use LiturgicalCalendar\Examples\Php\LitSettings;
 
 class Utilities
 {
@@ -45,7 +46,7 @@ class Utilities
      * @return string The response from the API request.
      * @throws Exception If the request fails or the HTTP response status is not 200.
      */
-    public static function sendAPIRequest($queryData)
+    public static function sendAPIRequest(array $queryData)
     {
         $url = LITCAL_API_URL;
         $headers = ['Accept: application/json'];
@@ -112,19 +113,21 @@ class Utilities
      * @return array An associative array containing query parameters such as year, epiphany, ascension,
      *               corpus christi, eternal high priest, year type, locale, and optionally national and diocesan calendars.
      */
-    public static function prepareQueryData($litSettings)
+    public static function prepareQueryData(LitSettings $litSettings)
     {
         $queryData = [
             "year"           => $litSettings->Year,
-            "year_type"      => $litSettings->YearType
+            "year_type"      => $litSettings->YearType,
+            "locale"         => $litSettings->Locale
         ];
+        // If no national or diocesan calendar is selected, use the form selected values for Epiphany, Ascension, Corpus Christi, and Eternal High Priest
+        // (if a national or diocesan calendar is selected, these values are not required, because they are built into the calendar)
         if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar === null) {
             $queryData = array_merge($queryData, [
                 "epiphany"       => $litSettings->Epiphany,
                 "ascension"      => $litSettings->Ascension,
                 "corpus_christi" => $litSettings->CorpusChristi,
                 "eternal_high_priest" => ($litSettings->EternalHighPriest ? 'true' : 'false'),
-                "locale"         => $litSettings->Locale
             ]);
         }
         if ($litSettings->NationalCalendar !== null) {

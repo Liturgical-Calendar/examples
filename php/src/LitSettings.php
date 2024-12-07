@@ -206,7 +206,6 @@ class LitSettings
                     break;
                 default:
                     $this->setVars($NationalCalendarMetadata["settings"]);
-                    $this->Locale            = $NationalCalendarMetadata["locales"][0];
                     break;
             }
         }
@@ -216,7 +215,6 @@ class LitSettings
                 $this->Metadata["diocesan_calendars"],
                 fn ($calendar) => $calendar["calendar_id"] === $this->DiocesanCalendar
             ))[0];
-            $this->Locale = $DiocesanCalendarMetadata["locales"][0];
             if (array_key_exists("settings", $DiocesanCalendarMetadata)) {
                 $this->setVars($DiocesanCalendarMetadata["settings"]);
             }
