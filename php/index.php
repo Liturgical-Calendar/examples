@@ -173,7 +173,7 @@ if ($directAccess) {
     // The file is being included in another PHP script
     // We need to make sure that the submit will submit to the parent script
     $submitParent = '<input type="hidden" name="example" value="PHP">';
-    // We need to inline the styles
+    // We need to inline the styles because we don't have access to the <head> of the main script
     ?>
 <style>
     <?php include 'styles.css'; ?>
@@ -213,10 +213,10 @@ echo '</form>';
 echo '<div style="text-align:center;border:2px groove White;border-radius:6px;margin:0px auto;padding-bottom:6px;">';
 echo '<h6><b>' . dgettext('litexmplphp', 'Configurations sent in the request') . '</b></h6>';
 if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar === null) {
-    echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false') . ', <b>locale</b>: ' . $litSettings->Locale;
+    echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false');
     echo '<br>';
 }
-echo '<b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null');
+echo '<b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null') . ', <b>locale</b>: ' . $litSettings->Locale;
 echo '<hr>';
 echo '<h6><b>' . dgettext('litexmplphp', 'Configurations received in the response') . '</b></h6>';
 echo '<b>epiphany</b>: ' . ($LitCalData->settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($LitCalData->settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($LitCalData->settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($LitCalData->settings->eternal_high_priest ? 'true' : 'false') . ', <b>locale</b>: ' . ($LitCalData->settings->locale ?? 'null');
