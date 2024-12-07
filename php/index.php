@@ -105,7 +105,6 @@ if ($litSettings->DiocesanCalendar) {
     $calendarSelectDioceses->selectedOption($litSettings->DiocesanCalendar);
     $apiOptions->localeInput->setOptionsForCalendar('diocese', $selectedDiocese);
 }
-$apiOptions->localeInput->selectedValue($litSettings->Locale);
 
 // debug value of expected textdomain path
 echo '<!-- expected textdomain path: ' . $litSettings->expectedTextDomainPath . ' -->';
@@ -125,7 +124,7 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
         echo "</pre>";
         die();
     }
-
+    $apiOptions->localeInput->selectedValue($LitCalData->settings->locale);
     $webCalendar = new WebCalendar($LitCalData);
     $webCalendar->id('LitCalTable')
                 ->firstColumnGrouping(Grouping::BY_LITURGICAL_SEASON)
