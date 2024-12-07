@@ -103,7 +103,7 @@ if ($litSettings->NationalCalendar) {
 }
 if ($litSettings->DiocesanCalendar) {
     $calendarSelectDioceses->selectedOption($litSettings->DiocesanCalendar);
-    $apiOptions->localeInput->setOptionsForCalendar('diocese', $selectedDiocese);
+    $apiOptions->localeInput->setOptionsForCalendar('diocese', $litSettings->DiocesanCalendar);
 }
 
 // debug value of expected textdomain path
