@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-02 15:57+0000\n"
+"POT-Creation-Date: 2024-12-07 17:24+0000\n"
 "PO-Revision-Date: 2024-11-02 16:01+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: French <https://translate.johnromanodorazio.com/projects/"
@@ -21,25 +21,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.6.1\n"
 
-#: php/index.php:94 php/index.php:170
+#: php/index.php:154 php/index.php:208
 msgid "Generate Roman Calendar"
 msgstr "Générer le Calendrier Romain"
 
-#: php/index.php:110
+#: php/index.php:170
 msgid "Go back"
 msgstr "Retourner"
 
-#: php/index.php:124
+#: php/index.php:184
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr "Calcul du calendrier liturgique pour une année donnée"
 
-#: php/index.php:125
+#: php/index.php:185
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 "Présentation HTML élaborée par PHP en utilisant une requête CURL à un %s"
 
-#: php/index.php:133
+#: php/index.php:193
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
@@ -47,45 +47,39 @@ msgstr ""
 "Vous demandez une année antérieure à 1970 : il n'est pas possible de "
 "demander des années antérieures à 1970."
 
-#: php/index.php:137
+#: php/index.php:197
 msgid "Customize options for generating the Roman Calendar"
 msgstr "Personnaliser les options pour générer le Calendrier Romain"
 
-#: php/index.php:165
-msgid "Choose a calendar"
-msgstr "Choisissez un calendrier"
-
-#: php/index.php:176
+#: php/index.php:214
 msgid "Configurations sent in the request"
 msgstr "Configurations envoyées dans la demande"
 
-#: php/index.php:183
+#: php/index.php:221
 msgid "Configurations received in the response"
 msgstr "Configurations reçues dans la réponse"
 
-#: php/index.php:190
-msgid "Month"
-msgstr "Mois"
-
-#: php/index.php:190
-msgid "Date in Gregorian Calendar"
-msgstr "Date dans le Calendrier Grégorien"
-
-#: php/index.php:190
-msgid "General Roman Calendar Festivity"
-msgstr "Fête du Calendrier Romain Général"
-
-#: php/index.php:190
-msgid "Grade of the Festivity"
-msgstr "Grade de la Fête"
-
-#: php/index.php:238
+#: php/index.php:232
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr "Informations sur le calcul actuel de l'Année Liturgique"
 
-#: php/src/Utilities.php:298
-msgid "or"
-msgstr "ou"
+#~ msgid "Choose a calendar"
+#~ msgstr "Choisissez un calendrier"
+
+#~ msgid "Month"
+#~ msgstr "Mois"
+
+#~ msgid "Date in Gregorian Calendar"
+#~ msgstr "Date dans le Calendrier Grégorien"
+
+#~ msgid "General Roman Calendar Festivity"
+#~ msgstr "Fête du Calendrier Romain Général"
+
+#~ msgid "Grade of the Festivity"
+#~ msgstr "Grade de la Fête"
+
+#~ msgid "or"
+#~ msgstr "ou"
 
 #~ msgid "Choose the desired calendar from the list"
 #~ msgstr "Choisissez le calendrier souhaité dans la liste"
