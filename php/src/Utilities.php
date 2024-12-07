@@ -56,7 +56,8 @@ class Utilities
         } elseif (isset($queryData["national_calendar"])) {
             $url .= "/nation/" . $queryData["national_calendar"];
             unset($queryData["national_calendar"]);
-        } elseif (isset($queryData["locale"])) {
+        }
+        if (isset($queryData["locale"])) {
             $headers[] = 'Accept-Language: ' . $queryData["locale"];
             unset($queryData["locale"]);
         }
