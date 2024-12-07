@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 17:20+0000\n"
+"POT-Creation-Date: 2024-12-07 17:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: php/index.php:155 php/index.php:209
+#: php/index.php:154 php/index.php:208
 msgid "Generate Roman Calendar"
 msgstr ""
 
-#: php/index.php:171
+#: php/index.php:170
 msgid "Go back"
 msgstr ""
 
-#: php/index.php:185
+#: php/index.php:184
 msgid "Liturgical Calendar Calculation for a Given Year"
 msgstr ""
 
-#: php/index.php:186
+#: php/index.php:185
 #, php-format
 msgid "HTML presentation elaborated by PHP using a CURL request to a %s"
 msgstr ""
 
-#: php/index.php:194
+#: php/index.php:193
 msgid ""
 "You are requesting a year prior to 1970: it is not possible to request years "
 "prior to 1970."
 msgstr ""
 
-#: php/index.php:198
+#: php/index.php:197
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 
-#: php/index.php:215
+#: php/index.php:214
 msgid "Configurations sent in the request"
 msgstr ""
 
-#: php/index.php:222
+#: php/index.php:221
 msgid "Configurations received in the response"
 msgstr ""
 
-#: php/index.php:233
+#: php/index.php:232
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr ""
