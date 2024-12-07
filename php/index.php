@@ -83,8 +83,6 @@ $metadata = CalendarSelect::getMetadata();
 $litSettings = new LitSettings($_POST, $metadata, $directAccess);
 $LitCalData = null;
 
-$primaryLanguage = Locale::getPrimaryLanguage($litSettings->Locale);
-$apiOptions->localeInput->selectedValue($primaryLanguage);
 $apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
 $apiOptions->ascensionInput->selectedValue($litSettings->Ascension);
 $apiOptions->corpusChristiInput->selectedValue($litSettings->CorpusChristi);
@@ -95,15 +93,19 @@ if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !=
     $apiOptions->ascensionInput->disabled();
     $apiOptions->corpusChristiInput->disabled();
     $apiOptions->eternalHighPriestInput->disabled();
-    $apiOptions->localeInput->disabled();
 }
 if ($litSettings->NationalCalendar) {
     $calendarSelectNations->selectedOption($litSettings->NationalCalendar);
     $calendarSelectDioceses->nationFilter($litSettings->NationalCalendar)->setOptions(OptionsType::DIOCESES_FOR_NATION);
+    if ($litSettings->DiocesanCalendar === null) {
+        $apiOptions->localeInput->setOptionsForCalendar('nation', $litSettings->NationalCalendar);
+    }
 }
 if ($litSettings->DiocesanCalendar) {
     $calendarSelectDioceses->selectedOption($litSettings->DiocesanCalendar);
+    $apiOptions->localeInput->setOptionsForCalendar('diocese', $selectedDiocese);
 }
+$apiOptions->localeInput->selectedValue($litSettings->Locale);
 
 // debug value of expected textdomain path
 echo '<!-- expected textdomain path: ' . $litSettings->expectedTextDomainPath . ' -->';
