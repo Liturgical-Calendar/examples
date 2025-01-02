@@ -5,7 +5,7 @@ Input.setGlobalLabelClass('form-label d-block mb-1');
 Input.setGlobalWrapper('div');
 Input.setGlobalWrapperClass('form-group col col-md-3');
 
-ApiClient.init('http://localhost:8000').then( (apiClient) => {
+ApiClient.init().then( (apiClient) => {
     const calendarSelect = new CalendarSelect( document.documentElement.lang || 'en-US' );
     calendarSelect.allowNull()
         .label({
