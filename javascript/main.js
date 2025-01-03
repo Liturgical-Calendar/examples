@@ -16,7 +16,7 @@ ApiClient.init().then( (apiClient) => {
         .appendTo( '#calendarOptions');
 
     const apiOptions = new ApiOptions( document.documentElement.lang || 'en-US' );
-    apiOptions._localeInput.defaultValue( 'en' );
+    apiOptions._localeInput.defaultValue( document.documentElement.lang || 'en' );
     apiOptions._acceptHeaderInput.hide();
     apiOptions._yearInput.class( 'form-control' ); // override the global input class
     apiOptions.linkToCalendarSelect( calendarSelect ).appendTo( '#calendarOptions' );

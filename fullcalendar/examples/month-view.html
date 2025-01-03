@@ -2,61 +2,68 @@
 <html>
 
 <head>
-  <meta charset='utf-8' />
-  <title>{TITLE PLACEHOLDER}</title>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
-  <meta name="msapplication-TileColor" content="#ffffff" />
-  <meta name="msapplication-TileImage" content="../../../assets/easter-egg-5-144-279148.png">
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../../assets/img/easter-egg-5-152-279148.png">
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../assets/img/easter-egg-5-144-279148.png">
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../../assets/img/easter-egg-5-120-279148.png">
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../assets/img/easter-egg-5-114-279148.png">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../assets/img/easter-egg-5-72-279148.png">
-  <link rel="apple-touch-icon-precomposed" href="../../../assets/img/easter-egg-5-57-279148.png">
-  <link rel="icon" href="../../../assets/img/easter-egg-5-32-279148.png" sizes="32x32">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
-  <link href="styles.css" rel="stylesheet" />
+    <meta charset='utf-8' />
+    <title>{TITLE PLACEHOLDER}</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="../../../assets/easter-egg-5-144-279148.png">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../../assets/easter-egg-5-152-279148.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../assets/easter-egg-5-144-279148.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../../assets/easter-egg-5-120-279148.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../assets/easter-egg-5-114-279148.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../assets/easter-egg-5-72-279148.png">
+    <link rel="apple-touch-icon-precomposed" href="../../../assets/easter-egg-5-57-279148.png">
+    <link rel="icon" href="../../../assets/easter-egg-5-32-279148.png" sizes="32x32">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css' rel='stylesheet'>
+    <link href="styles.css" rel="stylesheet" />
 </head>
 
 <body>
-  <div id="spinnerWrapper">
-    <div class="lds-roller">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div id="spinnerWrapper">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
-  </div>
-  <div><a class="backNav" href="https://litcal.johnromanodorazio.com/usage.php">↩ Go back ↩</a></div>
-  <span class="material-icons" id="openSettings">settings</span>
-  <header></header>
+    <header>
+      <div id="calendarOptions" class="row mb-4"></div>
+    </header>
 
-  <div id='calendar'></div>
+    <div id='calendar'></div>
 
-  <footer></footer>
+    <footer></footer>
 
-  <table id="LitCalMessages">
-    <thead></thead>
-    <tbody></tbody>
-  </table>
+    <table id="LitCalMessages">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
 
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js'></script>
-  <script src='la.js'></script>
-  <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
-  <script src="https://cdn.jsdelivr.net/npm/tooltip.js@1.3.3/dist/umd/tooltip.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.min.js" integrity="sha512-iewyUmLNmAZBOOtFnG+GlGeGudYzwDjE1SX3l9SWpGUs0qJTzdeVgGFeBeU7/BIyOZdDy6DpILikEBBvixqO9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="LitGrade.js"></script>
-  <script src="script.js"></script>
+
+    <script type='importmap'>
+        {
+          "imports": {
+            "@fullcalendar/core": "https://cdn.skypack.dev/@fullcalendar/core@6.1.15",
+            "@fullcalendar/core/": "https://cdn.skypack.dev/@fullcalendar/core@6.1.15/",
+            "@fullcalendar/daygrid": "https://cdn.skypack.dev/@fullcalendar/daygrid@6.1.15",
+            "@fullcalendar/list": "https://cdn.skypack.dev/@fullcalendar/list@6.1.15",
+            "@fullcalendar/bootstrap5": "https://cdn.skypack.dev/@fullcalendar/bootstrap5@6.1.15",
+            "@liturgical-calendar/components-js": "https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@1.0.7/+esm"
+          }
+        }
+    </script>
+    <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/tooltip.js@1.3.3/dist/umd/tooltip.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/latest/js.cookie.min.js" integrity="sha512-iewyUmLNmAZBOOtFnG+GlGeGudYzwDjE1SX3l9SWpGUs0qJTzdeVgGFeBeU7/BIyOZdDy6DpILikEBBvixqO9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="script.js"></script>
 
 </body>
 

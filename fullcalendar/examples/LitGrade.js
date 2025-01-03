@@ -22,8 +22,7 @@ class LitGrade {
         return LitGrade.values.includes( value );
     };
     static strWTags = ( value ) => {
-        let grade,
-            tags;
+        let tags;
         switch( value ) {
             case LitGrade.WEEKDAY:
                 tags = ['<i>','</i>'];
@@ -55,3 +54,5 @@ class LitGrade {
         return { "strVal": LitGrade.valueToString[value], "tags": tags };
     }
 }
+
+export default LitGrade;

@@ -8,64 +8,15 @@ body {
  #calendar {
     max-width: 1200px;
     margin: 40px auto;
-    background-color: beige;
+    background-color: whitesmoke;
     padding: 24px;
     border-radius: 16px;
     border: 5px solid gray;
  }
 
-
-.backNav {
-    background-color: yellow;
-    font-size: 1.1em;
-    text-align: center;
-    cursor: pointer;
-    text-decoration: none;
-    width: 95%;
-    margin: 0 auto;
-    border-bottom: 2px outset LightBlue;
-    display: block;
-    padding: 12px 24px;
-    font-weight: bold;
-}
-
-.backNav:hover {
-    background-color: gold;
-    color: DarkBlue;
-}
-
-#LitCalTable {
-    width: 75%;
-    margin: 30px auto;
-    border: 1px solid Blue;
-    border-radius: 6px;
-    padding: 10px;
-    background: LightBlue;
-}
-
-#LitCalTable td {
-    padding: 8px 6px;
-}
-
-td.rotate {
-    width: 1.5em;
-    white-space: nowrap;
-    text-align: center;
-    vertical-align: middle;
-}
-
-td.rotate div {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1.8em;
-    font-weight: bold;
-    writing-mode: vertical-rl;
-    transform: rotate(180.0deg);
-}
-
-.dateEntry {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: .7em;
-    font-weight: bold;
+.custom-tooltip {
+    --bs-tooltip-bg: var(--bs-secondary);
+    --bs-tooltip-zindex: 9999;
 }
 
 .lds-roller {
@@ -187,50 +138,6 @@ td.rotate div {
     height: 100%;
 }
 
-#calSettings {
-    width: 70%;
-    margin: 0 auto;
-    border-collapse: collapse;
-}
-
-#calSettings tr:first-child {
-    border-bottom: 1px groove White;
-}
-
-#calSettings tr:last-child {
-    border-top: 1px groove White;
-}
-
-#calSettings tr td {
-    padding: 12px;
-}
-
-#calSettings tr td:first-child {
-    text-align: right;
-    padding-right: 18px;
-}
-#calSettings tr td:nth-child(3) {
-    border-left: 1px groove white;
-    padding-left: 18px;
-    text-align: right;
-}
-
-#openSettings {
-    position: absolute;
-    display: block;
-    top: 70px;
-    right: 24px;
-    color: steelblue;
-    cursor: pointer;
-    background-color: palegoldenrod;
-    padding: 6px;
-    border: 1px groove white;
-}
-
-#openSettings:hover {
-    color: darkslategray;
-    background-color: lightyellow;
-}
 
 #LitCalMessages {
     width: 75%;
@@ -254,94 +161,3 @@ td.rotate div {
     border-right: 1px groove White;
 }
 
-.popper,
-.tooltip {
-  position: absolute;
-  z-index: 9999;
-  background: #fff9e5;
-  color: black;
-  width: 150px;
-  border-radius: 3px;
-  box-shadow: 0 0 6px rgba(0,0,0,0.5);
-  padding: 10px;
-  text-align: center;
-}
-
-.popper .popper__arrow,
-.tooltip .tooltip-arrow {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  position: absolute;
-  margin: 5px;
-  box-shadow: -1 0 6px rgba(0,0,0,0.5);
-  border-color: #fff9e5;
-}
-
-.popper[x-placement^="top"],
-.tooltip[x-placement^="top"] {
-  margin-bottom: 5px;
-}
-
-.popper[x-placement^="top"] .popper__arrow,
-.tooltip[x-placement^="top"] .tooltip-arrow {
-  border-width: 5px 5px 0;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.popper[x-placement^="bottom"],
-.tooltip[x-placement^="bottom"] {
-  margin-top: 5px;
-}
-
-.tooltip[x-placement^="bottom"] .tooltip-arrow,
-.popper[x-placement^="bottom"] .popper__arrow {
-  border-width: 0 5px 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: transparent;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.tooltip[x-placement^="right"],
-.popper[x-placement^="right"] {
-  margin-left: 5px;
-}
-
-.popper[x-placement^="right"] .popper__arrow,
-.tooltip[x-placement^="right"] .tooltip-arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.popper[x-placement^="left"],
-.tooltip[x-placement^="left"] {
-  margin-right: 5px;
-}
-
-.popper[x-placement^="left"] .popper__arrow,
-.tooltip[x-placement^="left"] .tooltip-arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
