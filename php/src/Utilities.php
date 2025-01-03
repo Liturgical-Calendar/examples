@@ -46,10 +46,31 @@ class Utilities
      * @return string The response from the API request.
      * @throws Exception If the request fails or the HTTP response status is not 200.
      */
-    public static function sendAPIRequest(array $queryData)
+    public static function sendAPIRequest(array $queryData, array $metadata)
     {
         $url = LITCAL_API_URL;
         $headers = ['Accept: application/json'];
+        if (isset($queryData["locale"])) {
+            if (isset($queryData["diocesan_calendar"])) {
+                $diocesanCalendarMetadata = array_values(array_filter($metadata['diocesan_calendars'], fn($calendar) => $queryData["diocesan_calendar"] === $calendar["calendar_id"]))[0];
+                if (!in_array($queryData["locale"], $diocesanCalendarMetadata["locales"])) {
+                    $queryData["locale"] = $diocesanCalendarMetadata["locales"][0];
+                }
+            }
+            elseif (isset($queryData["national_calendar"])) {
+                $nationalCalendarMetadata = array_values(array_filter($metadata['national_calendars'], fn($calendar) => $queryData["national_calendar"] === $calendar["calendar_id"]))[0];
+                if (!in_array($queryData["locale"], $nationalCalendarMetadata["locales"])) {
+                    $queryData["locale"] = $nationalCalendarMetadata["locales"][0];
+                }
+            }
+            else {
+                if (!in_array($queryData["locale"], $metadata['locales'])) {
+                    $queryData["locale"] = $metadata['locales'][0];
+                }
+            }
+            $headers[] = 'Accept-Language: ' . $queryData["locale"];
+            unset($queryData["locale"]);
+        }
         if (isset($queryData["diocesan_calendar"])) {
             $url .= "/diocese/" . $queryData["diocesan_calendar"];
             unset($queryData["diocesan_calendar"]);
@@ -57,10 +78,6 @@ class Utilities
         } elseif (isset($queryData["national_calendar"])) {
             $url .= "/nation/" . $queryData["national_calendar"];
             unset($queryData["national_calendar"]);
-        }
-        if (isset($queryData["locale"])) {
-            $headers[] = 'Accept-Language: ' . $queryData["locale"];
-            unset($queryData["locale"]);
         }
         if (isset($queryData["year"])) {
             $url .= "/" . $queryData["year"];
