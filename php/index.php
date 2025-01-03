@@ -34,7 +34,7 @@ use LiturgicalCalendar\Components\WebCalendar\GradeDisplay;
 
 $isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false || strpos($_SERVER['HTTP_HOST'], "localhost") !== false );
 $stagingURL = $isStaging ? "-staging" : "";
-$endpointV = $isStaging ? "dev" : "v3";
+$endpointV = $isStaging ? "dev" : "v4";
 if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'development') {
     if (false === isset($_ENV['API_PROTOCOL']) || false === isset($_ENV['API_HOST']) || false === isset($_ENV['API_PORT'])) {
         die("API_PROTOCOL, API_HOST and API_PORT must be defined in .env.development or similar dotenv when APP_ENV is development");
@@ -56,7 +56,7 @@ if (null === $envLocale || 'C' === $envLocale) {
 
 $baseLocale = Locale::getPrimaryLanguage($envLocale);
 $options = [
-    'url' => METADATA_URL
+    'url' => rtrim(METADATA_URL, '/calendars')
 ];
 $calendarSelectNations = new CalendarSelect($options);
 $calendarSelectNations->label(true)->labelText('nation')->labelClass('d-block mb-1')
