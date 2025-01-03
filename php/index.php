@@ -195,16 +195,17 @@ if ($litSettings->Year < 1970) {
 }
 echo '<form method="POST" id="ApiOptionsForm">';
 echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
-echo '<table style="width:100%;"><tr>';
-
+echo '<table style="width:100%;">';
+echo '<tr>';
+echo '<td colspan="1">' . $calendarSelectNations->getSelect() . '</td>';
+echo '<td colspan="2">' . $calendarSelectDioceses->getSelect() . '</td>';
+echo $apiOptions->getForm(PathType::ALL_PATHS);
+echo '<td><label>year<br><input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
+echo '</tr>';
+echo '<tr>';
 echo $apiOptions->getForm(PathType::BASE_PATH);
 echo '</tr>';
 echo '<tr>';
-echo '<td><label>year<br><input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
-echo $apiOptions->getForm(PathType::ALL_PATHS);
-echo '<td colspan="1">' . $calendarSelectNations->getSelect() . '</td>';
-echo '<td colspan="2">' . $calendarSelectDioceses->getSelect() . '</td>';
-echo '</tr><tr>';
 echo '<td colspan="5" style="text-align:center;padding:15px;">' . $submitParent . '<input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', 'Generate Roman Calendar')) . '" /></td>';
 echo '</tr></table>';
 echo '</fieldset>';
