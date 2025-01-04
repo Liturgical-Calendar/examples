@@ -200,7 +200,6 @@ echo '<tr>';
 echo '<td colspan="1">' . $calendarSelectNations->getSelect() . '</td>';
 echo '<td colspan="2">' . $calendarSelectDioceses->getSelect() . '</td>';
 echo $apiOptions->getForm(PathType::ALL_PATHS);
-echo '<td><label>year<br><input type="number" name="year" id="year" min="1970" max="9999" value="' . $litSettings->Year . '" /></label></td>';
 echo '</tr>';
 echo '<tr>';
 echo $apiOptions->getForm(PathType::BASE_PATH);
