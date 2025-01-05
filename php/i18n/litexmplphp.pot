@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-03 23:23+0000\n"
+"POT-Creation-Date: 2025-01-05 01:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: php/index.php:154 php/index.php:209
+#: php/index.php:154 php/index.php:208
 msgid "Generate Roman Calendar"
 msgstr ""
 
@@ -44,14 +44,14 @@ msgstr ""
 msgid "Customize options for generating the Roman Calendar"
 msgstr ""
 
-#: php/index.php:215
+#: php/index.php:214
 msgid "Configurations sent in the request"
 msgstr ""
 
-#: php/index.php:222
+#: php/index.php:221
 msgid "Configurations received in the response"
 msgstr ""
 
-#: php/index.php:233
+#: php/index.php:232
 msgid "Information about the current calculation of the Liturgical Year"
 msgstr ""
