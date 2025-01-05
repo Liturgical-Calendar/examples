@@ -26,10 +26,10 @@ This example also implements bootstrap for some basic CSS styling.
 
 No need for `node` or `yarn` or `pnp`! All javascript is imported as ES modules right in the browser.
 
-To use your local instance of the API, set the API url in `fullcalendar/examples/script.js` by passing it as a parameter to `ApiClient.init('http://localhost:8000')`,
-then open `fullcalendar/examples/month-view.html` in your browser.
+To use your local instance of the API, set the API url in `fullcalendar/script.js` by passing it as a parameter to `ApiClient.init('http://localhost:8000')`,
+then open `fullcalendar/month-view.html` in your browser.
 If you are using VSCode, the easiest way to do this is to install the recommended `ms-vscode.live-server` (Live Preview by Microsoft),
-then select `fullcalendar/examples/month-view.html` and launch the Live Preview task (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>,
+then select `fullcalendar/month-view.html` and launch the Live Preview task (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>,
 then type "Live Preview" and choose "Live Preview: Show Preview (External Browser)").
 
 ## [Javascript](https://litcal.johnromanodorazio.com/examples/javascript)
