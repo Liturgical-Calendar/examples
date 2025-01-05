@@ -17,6 +17,47 @@ body {
 .custom-tooltip {
     --bs-tooltip-bg: var(--bs-secondary);
     --bs-tooltip-zindex: 9999;
+    --bs-tooltip-opacity: 1;
+}
+
+.custom-tooltip .tooltip-inner {
+    background-color: var(--bs-tooltip-bg);
+}
+
+.custom-tooltip.show {
+    opacity: var(--bs-tooltip-opacity);
+}
+
+.custom-tooltip.bs-tooltip-auto[data-popper-placement^=top] .tooltip-inner {
+    box-shadow: 2px -2px 5px black;
+}
+
+.custom-tooltip.bs-tooltip-auto[data-popper-placement^=bottom] .tooltip-inner {
+    box-shadow: -2px 2px 5px black;
+}
+
+.custom-tooltip.bs-tooltip-auto[data-popper-placement^=left] .tooltip-inner {
+    box-shadow: -2px 2px 5px black;
+}
+
+.custom-tooltip.bs-tooltip-auto[data-popper-placement^=right] .tooltip-inner {
+    box-shadow: 2px -2px 5px black;
+}
+
+.custom-tooltip.bs-tooltip-top .tooltip-arrow::before, .custom-tooltip.bs-tooltip-auto[data-popper-placement^=top] .tooltip-arrow::before {
+    border-top-color: var(--bs-tooltip-bg);
+}
+
+.custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before, .custom-tooltip.bs-tooltip-auto[data-popper-placement^=bottom] .tooltip-arrow::before {
+    border-bottom-color: var(--bs-tooltip-bg);
+}
+
+.custom-tooltip.bs-tooltip-start .tooltip-arrow::before, .custom-tooltip.bs-tooltip-auto[data-popper-placement^=left] .tooltip-arrow::before {
+    border-left-color: var(--bs-tooltip-bg);
+}
+
+.custom-tooltip.bs-tooltip-end .tooltip-arrow::before, .custom-tooltip.bs-tooltip-auto[data-popper-placement^=right] .tooltip-arrow::before {
+    border-right-color: var(--bs-tooltip-bg);
 }
 
 .lds-roller {
