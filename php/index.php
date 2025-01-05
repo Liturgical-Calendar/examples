@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Liturgical Calendar display script using CURL and PHP
+ * Liturgical Calendar display script using cURL and PHP
  * Author: John Romano D'Orazio
  * Email: priest@johnromanodorazio.com
  * Licensed under the Apache 2.0 License

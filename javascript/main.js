@@ -22,6 +22,16 @@ ApiClient.init().then( (apiClient) => {
     apiOptions.linkToCalendarSelect( calendarSelect ).appendTo( '#calendarOptions' );
 
     apiClient.listenTo( calendarSelect ).listenTo( apiOptions );
+    apiClient._eventBus.on( 'calendarFetched', (LitCalData) => {
+        if (LitCalData.hasOwnProperty('messages')) {
+            const messagesHtml = LitCalData.messages.map((message, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${idx}</td><td>${message}</td>`;
+                return tr;
+            });
+            document.querySelector('#LitCalMessages tbody').replaceChildren(...messagesHtml);
+        }
+    });
 
     const webCalendar = new WebCalendar();
     webCalendar.id('LitCalTable')

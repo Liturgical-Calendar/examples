@@ -1,5 +1,5 @@
 <!--
-  Liturgical Calendar display script using AJAX and Javascript
+  Liturgical Calendar display script using Javascript
   Author: John Romano D'Orazio
   Email: priest@johnromanodorazio.com
   Licensed under the Apache 2.0 License
@@ -12,35 +12,27 @@
 <head>
     <title>{TITLE PLACEHOLDER}</title>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-TileImage" content="../../assets/easter-egg-5-144-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../assets/easter-egg-5-152-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/easter-egg-5-144-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../assets/easter-egg-5-120-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/easter-egg-5-114-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/easter-egg-5-72-279148.png">
-    <link rel="apple-touch-icon-precomposed" href="../../assets/easter-egg-5-57-279148.png">
-    <link rel="icon" href="../../assets/easter-egg-5-32-279148.png" sizes="32x32">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
     <link href="styles.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-
 </head>
 
-<body>
-    <span class="material-icons" id="openSettings">settings</span>
-    <header>
-    </header>
+<body class="p-4">
+    <form id="litcalForm">
+        <div class="row mb-4" id="calendarOptions">
+            <h2>Liturgical Calendar as an HTML table produced by Javascript</h2>
+        </div>
+    </form>
+
     <div id="litcalWebcalendar"></div>
-    <div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;"><span id="dayCnt"></span> event days created</div>
+
     <table id="LitCalMessages">
         <thead></thead>
         <tbody></tbody>
     </table>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
 
     <script type="module" src="main.js"></script>
 </body>
