@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "481626e8fdb159002af9c52007af20bf",
+    "content-hash": "3f44058c69e643059f8877d1618bc870",
     "packages": [
         {
             "name": "liturgical-calendar/components",

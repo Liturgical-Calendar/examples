@@ -59,13 +59,13 @@ $options = [
     'url' => rtrim(METADATA_URL, '/calendars')
 ];
 $calendarSelectNations = new CalendarSelect($options);
-$calendarSelectNations->label(true)->labelText('nation')->labelClass('d-block mb-1')
-    ->id('national_calendar')->name('national_calendar')->allowNull()->setOptions(OptionsType::NATIONS)
+$calendarSelectNations->label(true)->labelText('nation')->labelClass('form-label')
+    ->id('national_calendar')->name('national_calendar')->class('form-select')->allowNull()->setOptions(OptionsType::NATIONS)
     ->locale($baseLocale);
 
 $calendarSelectDioceses = new CalendarSelect($options);
-$calendarSelectDioceses->label(true)->labelText('diocese')->labelClass('d-block mb-1')
-    ->id('diocesan_calendar')->name('diocesan_calendar')->allowNull()->setOptions(OptionsType::DIOCESES)
+$calendarSelectDioceses->label(true)->labelText('diocese')->labelClass('form-label')
+    ->id('diocesan_calendar')->name('diocesan_calendar')->class('form-select')->allowNull()->setOptions(OptionsType::DIOCESES)
     ->locale($baseLocale);
 
 $options = [
@@ -75,8 +75,10 @@ $options = [
 
 $apiOptions = new ApiOptions($options);
 $apiOptions->acceptHeaderInput->hide();
-Input::setGlobalWrapper('td');
-Input::setGlobalLabelClass('api-option-label');
+Input::setGlobalWrapper('div');
+Input::setGlobalWrapperClass('form-group col col-md-3');
+Input::setGlobalLabelClass('form-label');
+Input::setGlobalInputClass('form-select');
 
 //$Metadata = Utilities::retrieveMetadata();
 $metadata = CalendarSelect::getMetadata();
@@ -87,7 +89,8 @@ $apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
 $apiOptions->ascensionInput->selectedValue($litSettings->Ascension);
 $apiOptions->corpusChristiInput->selectedValue($litSettings->CorpusChristi);
 $apiOptions->eternalHighPriestInput->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false');
-$apiOptions->yearTypeInput->selectedValue($litSettings->YearType);
+$apiOptions->yearTypeInput->selectedValue($litSettings->YearType)->wrapperClass('col col-md-2');
+$apiOptions->yearInput->class('form-control')->wrapperClass('col col-md-2');
 if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
     $apiOptions->epiphanyInput->disabled();
     $apiOptions->ascensionInput->disabled();
@@ -151,7 +154,7 @@ if ($directAccess) {
 <!doctype html>
 
 <head>
-    <title><?php echo dgettext('litexmplphp', "Generate Roman Calendar") ?></title>
+    <title><?php echo _("Generate Roman Calendar") ?></title>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff" />
@@ -167,7 +170,6 @@ if ($directAccess) {
 </head>
 
 <body>
-    <div><a class="backNav" href="https://litcal<?php echo $stagingURL; ?>.johnromanodorazio.com/usage.php">↩      <?php echo dgettext('litexmplphp', "Go back") ?>      ↩</a></div>
     <?php
 } else {
     // The file is being included in another PHP script
@@ -181,8 +183,11 @@ if ($directAccess) {
     <?php
 }
 
-echo '<h1 style="text-align:center;">' . dgettext('litexmplphp', 'Liturgical Calendar Calculation for a Given Year') . ' (' . $litSettings->Year . ')</h1>';
-echo '<h2 style="text-align:center;">' . sprintf(dgettext('litexmplphp', 'HTML presentation elaborated by PHP using a CURL request to a %s'), "<a href=\"" . LITCAL_API_URL . "\">PHP engine</a>") . '</h2>';
+echo '<h1 style="text-align:center;">' . _('Liturgical Calendar Calculation for a Given Year') . ' (' . $litSettings->Year . ')</h1>';
+echo '<h2 style="text-align:center;">' . sprintf(
+    _('HTML presentation elaborated by PHP using a CURL request to a %s'),
+    "<a href=\"" . LITCAL_API_URL . "\">PHP engine</a>"
+    ) . '</h2>';
 
 if ($litSettings->Year > 9999) {
     $litSettings->Year = 9999;
@@ -190,38 +195,26 @@ if ($litSettings->Year > 9999) {
 
 if ($litSettings->Year < 1970) {
     echo '<div style="text-align:center;border:3px ridge Green;background-color:LightBlue;width:75%;margin:10px auto;padding:10px;">';
-    echo dgettext('litexmplphp', 'You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
+    echo _('You are requesting a year prior to 1970: it is not possible to request years prior to 1970.');
     echo '</div>';
 }
 echo '<form method="POST" id="ApiOptionsForm">';
-echo '<fieldset style="margin-bottom:6px;"><legend>' . dgettext('litexmplphp', 'Customize options for generating the Roman Calendar') . '</legend>';
-echo '<table style="width:100%;">';
-echo '<tr>';
-echo '<td colspan="1">' . $calendarSelectNations->getSelect() . '</td>';
-echo '<td colspan="2">' . $calendarSelectDioceses->getSelect() . '</td>';
+echo '<fieldset style="margin-bottom:6px;"><legend>' . _('Customize options for generating the Roman Calendar') . '</legend>';
+echo '<div class="row">';
+echo '<div class="form-group col col-md-2">' . $calendarSelectNations->getSelect() . '</div>';
+echo '<div class="form-group col col-md-3">' . $calendarSelectDioceses->getSelect() . '</div>';
 echo $apiOptions->getForm(PathType::ALL_PATHS);
-echo '</tr>';
-echo '<tr>';
+echo '</div>';
+echo '<div class="row mb-2">';
 echo $apiOptions->getForm(PathType::BASE_PATH);
-echo '</tr>';
-echo '<tr>';
-echo '<td colspan="5" style="text-align:center;padding:15px;">' . $submitParent . '<input type="SUBMIT" value="' . strtoupper(dgettext('litexmplphp', 'Generate Roman Calendar')) . '" /></td>';
-echo '</tr></table>';
+echo '</div>';
+echo '<div class="row">';
+echo '<div class="form-group col col-md-3 mx-auto">';
+echo $submitParent . '<input type="SUBMIT" class="btn btn-primary" value="' . strtoupper(_('Generate Roman Calendar')) . '" />';
+echo '</div>';
+echo '</div>';
 echo '</fieldset>';
 echo '</form>';
-
-echo '<div style="text-align:center;border:2px groove White;border-radius:6px;margin:0px auto;padding-bottom:6px;">';
-echo '<h6><b>' . dgettext('litexmplphp', 'Configurations sent in the request') . '</b></h6>';
-if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar === null) {
-    echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false');
-    echo '<br>';
-}
-echo '<b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null') . ', <b>locale</b>: ' . $litSettings->Locale;
-echo '<hr>';
-echo '<h6><b>' . dgettext('litexmplphp', 'Configurations received in the response') . '</b></h6>';
-echo '<b>epiphany</b>: ' . ($LitCalData->settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($LitCalData->settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($LitCalData->settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($LitCalData->settings->eternal_high_priest ? 'true' : 'false') . ', <b>locale</b>: ' . ($LitCalData->settings->locale ?? 'null');
-echo '<br /><b>year</b>: ' . ($LitCalData->settings->year ?? 'null') . ', <b>year_type</b>: ' . ($LitCalData->settings->year_type ?? 'null') . ', <b>nation</b>: ' . ($LitCalData->settings->national_calendar ?? 'null') . ', <b>diocese</b>: ' . ($LitCalData->settings->diocesan_calendar ?? 'null');
-echo '</div>';
 
 if ($litSettings->Year >= 1970) {
     echo $webCalendar->buildTable();
@@ -229,13 +222,29 @@ if ($litSettings->Year >= 1970) {
 }
 
 if (property_exists($LitCalData, 'messages') && is_array($LitCalData->messages) && count($LitCalData->messages) > 0) {
-    echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . dgettext('litexmplphp', "Information about the current calculation of the Liturgical Year") . '</th></tr></thead>';
+    echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . _("Information about the current calculation of the Liturgical Year") . '</th></tr></thead>';
     echo '<tbody>';
     foreach ($LitCalData->messages as $idx => $message) {
         echo "<tr><td>{$idx}</td><td>{$message}</td></tr>";
     }
     echo '</tbody></table>';
 }
+
+echo '<div style="text-align:center;border:2px groove White;border-radius:6px;margin:0px auto;padding-bottom:6px;">';
+echo '<h6><b>' . _('Configurations sent in the request') . '</b></h6>';
+echo '<b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null') . ', <b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>locale</b>: ' . $litSettings->Locale;
+if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar === null) {
+    echo '<br>';
+    echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false');
+}
+
+echo '<hr>';
+
+echo '<h6><b>' . _('Configurations received in the response') . '</b></h6>';
+echo '<b>nation</b>: ' . ($LitCalData->settings->national_calendar ?? 'null') . ', <b>diocese</b>: ' . ($LitCalData->settings->diocesan_calendar ?? 'null') . ', <b>year</b>: ' . ($LitCalData->settings->year ?? 'null') . ', <b>year_type</b>: ' . ($LitCalData->settings->year_type ?? 'null') . ', <b>locale</b>: ' . ($LitCalData->settings->locale ?? 'null');
+echo '<br>';
+echo '<b>epiphany</b>: ' . ($LitCalData->settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($LitCalData->settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($LitCalData->settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($LitCalData->settings->eternal_high_priest ? 'true' : 'false');
+echo '</div>';
 
 if ($directAccess) {
     // The file is being accessed directly
