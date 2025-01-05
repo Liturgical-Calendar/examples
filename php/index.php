@@ -154,19 +154,15 @@ if ($directAccess) {
 <!doctype html>
 
 <head>
-    <title><?php echo _("Generate Roman Calendar") ?></title>
+    <title><?php echo "Generate Roman Calendar"; ?></title>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-TileImage" content="../../assets/easter-egg-5-144-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../assets/easter-egg-5-152-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/easter-egg-5-144-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../../assets/easter-egg-5-120-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../assets/easter-egg-5-114-279148.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../assets/easter-egg-5-72-279148.png">
-    <link rel="apple-touch-icon-precomposed" href="../../assets/easter-egg-5-57-279148.png">
-    <link rel="icon" href="../../assets/easter-egg-5-32-279148.png" sizes="32x32">
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -175,12 +171,6 @@ if ($directAccess) {
     // The file is being included in another PHP script
     // We need to make sure that the submit will submit to the parent script
     $submitParent = '<input type="hidden" name="example" value="PHP">';
-    // We need to inline the styles because we don't have access to the <head> of the main script
-    ?>
-<style>
-    <?php include 'styles.css'; ?>
-</style>
-    <?php
 }
 
 echo '<h1 style="text-align:center;">' . _('Liturgical Calendar Calculation for a Given Year') . ' (' . $litSettings->Year . ')</h1>';
@@ -209,7 +199,7 @@ echo '<div class="row mb-2">';
 echo $apiOptions->getForm(PathType::BASE_PATH);
 echo '</div>';
 echo '<div class="row">';
-echo '<div class="form-group col col-md-3 mx-auto">';
+echo '<div class="form-group col col-md-3 mx-auto text-center">';
 echo $submitParent . '<input type="SUBMIT" class="btn btn-primary" value="' . strtoupper(_('Generate Roman Calendar')) . '" />';
 echo '</div>';
 echo '</div>';
