@@ -5,6 +5,14 @@ Input.setGlobalLabelClass('form-label d-block mb-1');
 Input.setGlobalWrapper('div');
 Input.setGlobalWrapperClass('form-group col col-md-3');
 
+function setHolyDaysOfObligationBgColor(calendarSelectValue) {
+    if (calendarSelectValue === '') {
+        $('#holydays_of_obligation').multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
+    } else {
+        $('#holydays_of_obligation').parent().find('button.multiselect').css('background-color', '#e9ecef');
+    }
+}
+
 ApiClient.init().then( (apiClient) => {
     const calendarSelect = new CalendarSelect( document.documentElement.lang || 'en-US' );
     calendarSelect.allowNull()
@@ -19,6 +27,9 @@ ApiClient.init().then( (apiClient) => {
     apiOptions._localeInput.defaultValue( document.documentElement.lang || 'en' );
     apiOptions._acceptHeaderInput.hide();
     apiOptions._yearInput.class( 'form-control' ); // override the global input class
+    apiOptions._ascensionInput.wrapperClass( 'form-group col col-md-2' );
+    apiOptions._corpusChristiInput.wrapperClass( 'form-group col col-md-2' );
+    apiOptions._eternalHighPriestInput.wrapperClass( 'form-group col col-md-2' );
     apiOptions.linkToCalendarSelect( calendarSelect ).appendTo( '#calendarOptions' );
 
     apiClient.listenTo( calendarSelect ).listenTo( apiOptions );
@@ -48,5 +59,21 @@ ApiClient.init().then( (apiClient) => {
     .gradeDisplay(GradeDisplay.ABBREVIATED)
     .attachTo( '#litcalWebcalendar' ) // the element in which the web calendar will be rendered, every time the calendar is updated
     .listenTo(apiClient);
+
+    $('#holydays_of_obligation').multiselect({
+        buttonWidth: '100%',
+        buttonClass: 'form-select',
+        templates: {
+            button: '<button type="button" class="multiselect dropdown-toggle" data-bs-toggle="dropdown"><span class="multiselect-selected-text"></span></button>'
+        },
+    });
+
+    setHolyDaysOfObligationBgColor(calendarSelect._domElement.value);
+
+    calendarSelect._domElement.addEventListener('change', (ev) => {
+        $('#holydays_of_obligation').multiselect('rebuild');
+        setHolyDaysOfObligationBgColor(ev.target.value);
+    });
+
     apiClient.fetchNationalCalendar('VA');
 });
