@@ -9,7 +9,7 @@ class Utilities
 {
     private static array $requestData    = [];
     private static array $requestHeaders = [];
-    private static string $requestUrl    = "";
+    private static string $requestUrl    = '';
 
     /**
      * Retrieve the metadata from the liturgical calendar API, if available.
@@ -18,7 +18,7 @@ class Utilities
     public static function retrieveMetadata()
     {
         $metadata = null;
-        $ch = curl_init();
+        $ch       = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, METADATA_URL);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
@@ -27,7 +27,7 @@ class Utilities
             $metadata = json_decode($metadataRaw, true);
         }
         curl_close($ch);
-        return $metadata !== null ? $metadata["litcal_metadata"] : null;
+        return $metadata !== null ? $metadata['litcal_metadata'] : null;
     }
 
     /**
@@ -48,45 +48,45 @@ class Utilities
      */
     public static function sendAPIRequest(array $queryData, array $metadata)
     {
-        $url = LITCAL_API_URL;
+        $url     = LITCAL_API_URL;
         $headers = ['Accept: application/json'];
-        if (isset($queryData["locale"])) {
-            if (isset($queryData["diocesan_calendar"])) {
-                $diocesanCalendarMetadata = array_values(array_filter($metadata['diocesan_calendars'], fn($calendar) => $queryData["diocesan_calendar"] === $calendar["calendar_id"]))[0];
-                if (!in_array($queryData["locale"], $diocesanCalendarMetadata["locales"])) {
-                    $queryData["locale"] = $diocesanCalendarMetadata["locales"][0];
+        if (isset($queryData['locale'])) {
+            if (isset($queryData['diocesan_calendar'])) {
+                $diocesanCalendarMetadata = array_values(array_filter($metadata['diocesan_calendars'], fn($calendar) => $queryData['diocesan_calendar'] === $calendar['calendar_id']))[0];
+                if (!in_array($queryData['locale'], $diocesanCalendarMetadata['locales'])) {
+                    $queryData['locale'] = $diocesanCalendarMetadata['locales'][0];
                 }
             }
-            elseif (isset($queryData["national_calendar"])) {
-                $nationalCalendarMetadata = array_values(array_filter($metadata['national_calendars'], fn($calendar) => $queryData["national_calendar"] === $calendar["calendar_id"]))[0];
-                if (!in_array($queryData["locale"], $nationalCalendarMetadata["locales"])) {
-                    $queryData["locale"] = $nationalCalendarMetadata["locales"][0];
+            elseif (isset($queryData['national_calendar'])) {
+                $nationalCalendarMetadata = array_values(array_filter($metadata['national_calendars'], fn($calendar) => $queryData['national_calendar'] === $calendar['calendar_id']))[0];
+                if (!in_array($queryData['locale'], $nationalCalendarMetadata['locales'])) {
+                    $queryData['locale'] = $nationalCalendarMetadata['locales'][0];
                 }
             }
             else {
-                if (!in_array($queryData["locale"], $metadata['locales'])) {
-                    $queryData["locale"] = $metadata['locales'][0];
+                if (!in_array($queryData['locale'], $metadata['locales'])) {
+                    $queryData['locale'] = $metadata['locales'][0];
                 }
             }
-            $headers[] = 'Accept-Language: ' . $queryData["locale"];
-            unset($queryData["locale"]);
+            $headers[] = 'Accept-Language: ' . $queryData['locale'];
+            unset($queryData['locale']);
         }
-        if (isset($queryData["diocesan_calendar"])) {
-            $url .= "/diocese/" . $queryData["diocesan_calendar"];
-            unset($queryData["diocesan_calendar"]);
-            unset($queryData["national_calendar"]);
-        } elseif (isset($queryData["national_calendar"])) {
-            $url .= "/nation/" . $queryData["national_calendar"];
-            unset($queryData["national_calendar"]);
+        if (isset($queryData['diocesan_calendar'])) {
+            $url .= '/diocese/' . $queryData['diocesan_calendar'];
+            unset($queryData['diocesan_calendar']);
+            unset($queryData['national_calendar']);
+        } elseif (isset($queryData['national_calendar'])) {
+            $url .= '/nation/' . $queryData['national_calendar'];
+            unset($queryData['national_calendar']);
         }
-        if (isset($queryData["year"])) {
-            $url .= "/" . $queryData["year"];
-            unset($queryData["year"]);
+        if (isset($queryData['year'])) {
+            $url .= '/' . $queryData['year'];
+            unset($queryData['year']);
         }
-        self::$requestData = $queryData;
+        self::$requestData    = $queryData;
         self::$requestHeaders = $headers;
-        self::$requestUrl = $url;
-        $ch = curl_init();
+        self::$requestUrl     = $url;
+        $ch                   = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -94,25 +94,25 @@ class Utilities
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($queryData));
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
-            die("Could not send request. Curl error: " . curl_error($ch));
+            die('Could not send request. Curl error: ' . curl_error($ch));
         } else {
             $resultStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($resultStatus != 200) {
-                $htmlBody = "<div style=\"text-align:center;padding: 20px;margin: 20px auto;background-color:pink;color:darkred;\">";
-                $htmlBody .= "<h1>Request failed.</h1>";
-                $htmlBody .= "<h2>" . StatusCode::getMessageForCode($resultStatus) . "</h2>";
+                $htmlBody  = '<div style="text-align:center;padding: 20px;margin: 20px auto;background-color:rose;color:darkred;">';
+                $htmlBody .= '<h1>Request failed.</h1>';
+                $htmlBody .= '<h2>' . StatusCode::getMessageForCode($resultStatus) . '</h2>';
                 $htmlBody .= "<p>$result</p>";
                 $htmlBody .= '<h3><b>Request URL</b></h3>';
                 $htmlBody .= '<div class="col-12">' . self::$requestUrl . '</div>';
                 $htmlBody .= '<h3><b>Request Data</b></h3>';
                 foreach (self::$requestData as $key => $value) {
-                    $htmlBody .= '<div class="col-2"><b>' . $key . '</b>: ' . ($value === null || empty($value) ? 'null' : $value) . '</div>';
+                    $htmlBody .= '<div class="col-2"><b>' . $key . '</b>: ' . ( $value === null || empty($value) ? 'null' : $value ) . '</div>';
                 }
                 $htmlBody .= '<h3><b>Request Headers</b></h3>';
                 foreach (self::$requestHeaders as $key => $value) {
                     $htmlBody .= '<div class="col-2"><b>' . $key . '</b>: ' . $value . '</div>';
                 }
-                $htmlBody .= "</div>";
+                $htmlBody .= '</div>';
                 die($htmlBody);
             }
         }
@@ -133,25 +133,25 @@ class Utilities
     public static function prepareQueryData(LitSettings $litSettings)
     {
         $queryData = [
-            "year"           => $litSettings->Year,
-            "year_type"      => $litSettings->YearType,
-            "locale"         => $litSettings->Locale
+            'year'      => $litSettings->Year,
+            'year_type' => $litSettings->YearType,
+            'locale'    => $litSettings->Locale
         ];
         // If no national or diocesan calendar is selected, use the form selected values for Epiphany, Ascension, Corpus Christi, and Eternal High Priest
         // (if a national or diocesan calendar is selected, these values are not required, because they are built into the calendar)
         if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar === null) {
             $queryData = array_merge($queryData, [
-                "epiphany"       => $litSettings->Epiphany,
-                "ascension"      => $litSettings->Ascension,
-                "corpus_christi" => $litSettings->CorpusChristi,
-                "eternal_high_priest" => ($litSettings->EternalHighPriest ? 'true' : 'false'),
+                'epiphany'            => $litSettings->Epiphany,
+                'ascension'           => $litSettings->Ascension,
+                'corpus_christi'      => $litSettings->CorpusChristi,
+                'eternal_high_priest' => ( $litSettings->EternalHighPriest ? 'true' : 'false' ),
             ]);
         }
         if ($litSettings->NationalCalendar !== null) {
-            $queryData["national_calendar"] = $litSettings->NationalCalendar;
+            $queryData['national_calendar'] = $litSettings->NationalCalendar;
         }
         if ($litSettings->DiocesanCalendar !== null) {
-            $queryData["diocesan_calendar"] = $litSettings->DiocesanCalendar;
+            $queryData['diocesan_calendar'] = $litSettings->DiocesanCalendar;
         }
         return $queryData;
     }

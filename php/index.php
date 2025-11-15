@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:disable PSR1.Files.SideEffects
 /**
  * Liturgical Calendar display script using cURL and PHP
  * Author: John Romano D'Orazio
@@ -10,7 +10,7 @@
  */
 
 ini_set('error_reporting', E_ALL);
-ini_set("display_errors", 1);
+ini_set('display_errors', 1);
 
 require dirname(__FILE__) . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, ['.env', '.env.local', '.env.development', '.env.production'], false);
@@ -32,21 +32,21 @@ use LiturgicalCalendar\Components\WebCalendar\ColumnOrder;
 use LiturgicalCalendar\Components\WebCalendar\DateFormat;
 use LiturgicalCalendar\Components\WebCalendar\GradeDisplay;
 
-$isStaging = ( strpos($_SERVER['HTTP_HOST'], "-staging") !== false || strpos($_SERVER['HTTP_HOST'], "localhost") !== false );
-$stagingURL = $isStaging ? "-staging" : "";
-$endpointV = $isStaging ? "dev" : "v4";
+$isStaging  = ( strpos($_SERVER['HTTP_HOST'], '-staging') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false );
+$stagingURL = $isStaging ? '-staging' : '';
+$endpointV  = $isStaging ? 'dev' : 'v4';
 if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'development') {
     if (false === isset($_ENV['API_PROTOCOL']) || false === isset($_ENV['API_HOST']) || false === isset($_ENV['API_PORT'])) {
-        die("API_PROTOCOL, API_HOST and API_PORT must be defined in .env.development or similar dotenv when APP_ENV is development");
+        die('API_PROTOCOL, API_HOST and API_PORT must be defined in .env.development or similar dotenv when APP_ENV is development');
     }
-    define("LITCAL_API_URL", "{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}:{$_ENV['API_PORT']}/calendar");
-    define("METADATA_URL", "{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}:{$_ENV['API_PORT']}/calendars");
+    define('LITCAL_API_URL', "{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}:{$_ENV['API_PORT']}/calendar");
+    define('METADATA_URL', "{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}:{$_ENV['API_PORT']}/calendars");
 } else {
-    define("LITCAL_API_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
-    define("METADATA_URL", "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
+    define('LITCAL_API_URL', "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendar");
+    define('METADATA_URL', "https://litcal.johnromanodorazio.com/api/{$endpointV}/calendars");
 }
 
-$directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
+$directAccess = ( basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']) );
 
 $envLocale = setlocale(LC_TIME, 0);
 if (null === $envLocale || 'C' === $envLocale) {
@@ -54,8 +54,8 @@ if (null === $envLocale || 'C' === $envLocale) {
     $envLocale = setlocale(LC_ALL, 0);
 }
 
-$baseLocale = Locale::getPrimaryLanguage($envLocale);
-$options = [
+$baseLocale            = Locale::getPrimaryLanguage($envLocale);
+$options               = [
     'url' => rtrim(METADATA_URL, '/calendars')
 ];
 $calendarSelectNations = new CalendarSelect($options);
@@ -69,7 +69,7 @@ $calendarSelectDioceses->label(true)->labelText('diocese')->labelClass('form-lab
     ->locale($baseLocale);
 
 $options = [
-    'url' => rtrim(METADATA_URL, '/calendars'),
+    'url'    => rtrim(METADATA_URL, '/calendars'),
     'locale' => $baseLocale
 ];
 
@@ -81,9 +81,9 @@ Input::setGlobalLabelClass('form-label');
 Input::setGlobalInputClass('form-select');
 
 //$Metadata = Utilities::retrieveMetadata();
-$metadata = CalendarSelect::getMetadata();
+$metadata    = CalendarSelect::getMetadata();
 $litSettings = new LitSettings($_POST, $metadata, $directAccess);
-$LitCalData = null;
+$LitCalData  = null;
 
 $apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
 $apiOptions->ascensionInput->selectedValue($litSettings->Ascension);
@@ -121,10 +121,10 @@ if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     $LitCalData = json_decode($response);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
-        echo "There was an error decoding the JSON data: " . json_last_error_msg() . PHP_EOL;
-        echo "<pre>";
+        echo 'There was an error decoding the JSON data: ' . json_last_error_msg() . PHP_EOL;
+        echo '<pre>';
         var_dump($response);
-        echo "</pre>";
+        echo '</pre>';
         die();
     }
     $apiOptions->localeInput->selectedValue($LitCalData->settings->locale);
@@ -154,7 +154,7 @@ if ($directAccess) {
 <!doctype html>
 
 <head>
-    <title><?php echo "Generate Roman Calendar"; ?></title>
+    <title><?php echo 'Generate Roman Calendar'; ?></title>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff" />
@@ -176,8 +176,8 @@ if ($directAccess) {
 echo '<h1 style="text-align:center;">' . _('Liturgical Calendar Calculation for a Given Year') . ' (' . $litSettings->Year . ')</h1>';
 echo '<h2 style="text-align:center;">' . sprintf(
     _('HTML presentation elaborated by PHP using a CURL request to a %s'),
-    "<a href=\"" . LITCAL_API_URL . "\">PHP engine</a>"
-    ) . '</h2>';
+    '<a href="' . LITCAL_API_URL . '">PHP engine</a>'
+) . '</h2>';
 
 if ($litSettings->Year > 9999) {
     $litSettings->Year = 9999;
@@ -212,7 +212,7 @@ if ($litSettings->Year >= 1970) {
 }
 
 if (property_exists($LitCalData, 'messages') && is_array($LitCalData->messages) && count($LitCalData->messages) > 0) {
-    echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . _("Information about the current calculation of the Liturgical Year") . '</th></tr></thead>';
+    echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . _('Information about the current calculation of the Liturgical Year') . '</th></tr></thead>';
     echo '<tbody>';
     foreach ($LitCalData->messages as $idx => $message) {
         echo "<tr><td>{$idx}</td><td>{$message}</td></tr>";
@@ -222,18 +222,18 @@ if (property_exists($LitCalData, 'messages') && is_array($LitCalData->messages) 
 
 echo '<div style="text-align:center;border:2px groove White;border-radius:6px;margin:0px auto;padding-bottom:6px;">';
 echo '<h6><b>' . _('Configurations sent in the request') . '</b></h6>';
-echo '<b>nation</b>: ' . ($litSettings->NationalCalendar ?? 'null') . ', <b>diocese</b>: ' . ($litSettings->DiocesanCalendar ?? 'null') . ', <b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>locale</b>: ' . $litSettings->Locale;
+echo '<b>nation</b>: ' . ( $litSettings->NationalCalendar ?? 'null' ) . ', <b>diocese</b>: ' . ( $litSettings->DiocesanCalendar ?? 'null' ) . ', <b>year</b>: ' . $litSettings->Year . ', <b>year_type</b>: ' . $litSettings->YearType . ', <b>locale</b>: ' . $litSettings->Locale;
 if ($litSettings->NationalCalendar === null && $litSettings->DiocesanCalendar === null) {
     echo '<br>';
-    echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ($litSettings->EternalHighPriest ? 'true' : 'false');
+    echo '<b>epiphany</b>: ' . $litSettings->Epiphany . ', <b>ascension</b>: ' . $litSettings->Ascension . ', <b>corpus_christi</b>: ' . $litSettings->CorpusChristi . ', <b>eternal_high_priest</b>: ' . ( $litSettings->EternalHighPriest ? 'true' : 'false' );
 }
 
 echo '<hr>';
 
 echo '<h6><b>' . _('Configurations received in the response') . '</b></h6>';
-echo '<b>nation</b>: ' . ($LitCalData->settings->national_calendar ?? 'null') . ', <b>diocese</b>: ' . ($LitCalData->settings->diocesan_calendar ?? 'null') . ', <b>year</b>: ' . ($LitCalData->settings->year ?? 'null') . ', <b>year_type</b>: ' . ($LitCalData->settings->year_type ?? 'null') . ', <b>locale</b>: ' . ($LitCalData->settings->locale ?? 'null');
+echo '<b>nation</b>: ' . ( $LitCalData->settings->national_calendar ?? 'null' ) . ', <b>diocese</b>: ' . ( $LitCalData->settings->diocesan_calendar ?? 'null' ) . ', <b>year</b>: ' . ( $LitCalData->settings->year ?? 'null' ) . ', <b>year_type</b>: ' . ( $LitCalData->settings->year_type ?? 'null' ) . ', <b>locale</b>: ' . ( $LitCalData->settings->locale ?? 'null' );
 echo '<br>';
-echo '<b>epiphany</b>: ' . ($LitCalData->settings->epiphany ?? 'null') . ', <b>ascension</b>: ' . ($LitCalData->settings->ascension ?? 'null') . ', <b>corpus_christi</b>: ' . ($LitCalData->settings->corpus_christi ?? 'null') . ', <b>eternal_high_priest</b>: ' . ($LitCalData->settings->eternal_high_priest ? 'true' : 'false');
+echo '<b>epiphany</b>: ' . ( $LitCalData->settings->epiphany ?? 'null' ) . ', <b>ascension</b>: ' . ( $LitCalData->settings->ascension ?? 'null' ) . ', <b>corpus_christi</b>: ' . ( $LitCalData->settings->corpus_christi ?? 'null' ) . ', <b>eternal_high_priest</b>: ' . ( $LitCalData->settings->eternal_high_priest ? 'true' : 'false' );
 echo '</div>';
 
 if ($directAccess) {

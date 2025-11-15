@@ -7,10 +7,30 @@ import listPlugin from '@fullcalendar/list';
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import la from './la.js';
 
+/**
+ * Filter an object based on a predicate function.
+ * @param {Object} obj - The object to filter.
+ * @param {Function} predicate - A function that takes an object value and returns a boolean.
+ * @returns {Object} - A new object containing only the key-value pairs for which the predicate function returned true.
+ */
 Object.filter = (obj, predicate) =>
-Object.keys(obj)
-    .filter( key => predicate(obj[key]) )
-    .reduce( (res, key) => (res[key] = obj[key], res), {} );
+    Object.keys(obj)
+        .filter( key => predicate(obj[key]) )
+        .reduce( (res, key) => (res[key] = obj[key], res), {} );
+
+/**
+ * Sets the background color of the holy days of obligation select button based on the value of the calendar select element.
+ * If the value is empty, the background color is removed.
+ * If the value is not empty, the background color is set to #e9ecef.
+ * @param {string} calendarSelectValue - The value of the calendar select element.
+ */
+function setHolyDaysOfObligationBgColor(calendarSelectValue) {
+    if (calendarSelectValue === '') {
+        $('#holydays_of_obligation').multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
+    } else {
+        $('#holydays_of_obligation').parent().find('button.multiselect').css('background-color', '#e9ecef');
+    }
+}
 
 Input.setGlobalInputClass('form-select');
 Input.setGlobalLabelClass('form-label d-block mb-1');
@@ -18,6 +38,7 @@ Input.setGlobalWrapper('div');
 Input.setGlobalWrapperClass('form-group col col-md-3');
 
 const currentLocale = Cookies.get('currentLocale') ?? 'en';
+let calendar = null;
 
 let today = new Date(),
     currentYear = today.getFullYear(),
@@ -51,27 +72,27 @@ let today = new Date(),
     },
     pad = n => n < 10 ? '0' + n : n,
     litCalDataToEvents = LitCal => {
-        return LitCal.map( (Festivity, index) => {
-            Festivity.date = new Date(Festivity.date * 1000);
-            const DayOfTheWeek = (Festivity.date.getDay() === 0 ? 7 : Festivity.date.getDay()); // get the day of the week
-            const CSScolor = Festivity.color[0];
-            const textColor = (CSScolor === 'white' || CSScolor === 'pink' ? 'black' : 'white');
+        return LitCal.map( (liturgical_event) => {
+            liturgical_event.date = new Date(liturgical_event.date);
+            const DayOfTheWeek = (liturgical_event.date.getDay() === 0 ? 7 : liturgical_event.date.getDay()); // get the day of the week
+            const CSScolor = liturgical_event.color[0];
+            const textColor = (CSScolor === 'white' || CSScolor === 'rose' ? 'black' : 'white');
             let festivityGrade = '';
-            if (Festivity.hasOwnProperty('grade_display') && Festivity.grade_display !== null) {
-                festivityGrade = Festivity.grade_display === '' ? '' : Festivity.grade_display + ', ';
+            if (liturgical_event.hasOwnProperty('grade_display') && liturgical_event.grade_display !== null) {
+                festivityGrade = liturgical_event.grade_display === '' ? '' : liturgical_event.grade_display + ', ';
             }
-            else if (DayOfTheWeek !== 7 || Festivity.grade > 3) {
-                const { tags } = LitGrade.strWTags( Festivity.grade );
-                festivityGrade = tags[0] + Festivity.grade_lcl + tags[1] + ', ';
+            else if (DayOfTheWeek !== 7 || liturgical_event.grade > 3) {
+                const { tags } = LitGrade.strWTags( liturgical_event.grade );
+                festivityGrade = tags[0] + liturgical_event.grade_lcl + tags[1] + ', ';
             }
-            let description = '<b>' + Festivity.name + '</b><br>' + festivityGrade + '<i>' + Festivity.color_lcl + '</i><br><i style="font-size:.8em;">' + Festivity.common_lcl + '</i>' + (Festivity.hasOwnProperty('liturgical_year') ? '<br>' + Festivity.liturgical_year : '');
+            let description = '<b>' + liturgical_event.name + '</b><br>' + festivityGrade + '<i>' + liturgical_event.color_lcl + '</i><br><i style="font-size:.8em;">' + liturgical_event.common_lcl + '</i>' + (liturgical_event.hasOwnProperty('liturgical_year') ? '<br>' + liturgical_event.liturgical_year : '');
             return {
-                title: Festivity.name,
-                start: Festivity.date.getUTCFullYear() + '-' + pad(Festivity.date.getUTCMonth() + 1) + '-' + pad(Festivity.date.getUTCDate()),
+                title: liturgical_event.name,
+                start: liturgical_event.date.getUTCFullYear() + '-' + pad(liturgical_event.date.getUTCMonth() + 1) + '-' + pad(liturgical_event.date.getUTCDate()),
                 backgroundColor: CSScolor,
                 textColor: textColor,
                 description: description,
-                idx: Festivity.event_idx
+                idx: liturgical_event.event_idx
             };
         });
     },
@@ -91,7 +112,7 @@ let today = new Date(),
         fullCalendarSettings.events = events;
     };
 
-ApiClient.init().then( apiClient => {
+ApiClient.init(BaseURL ?? 'https://litcal.johnromanodorazio.com/api/dev/').then( apiClient => {
     if (false === apiClient || false === apiClient instanceof ApiClient) {
         alert('Error initializing the Liturgical Calendar API Client');
     } else {
@@ -107,6 +128,9 @@ ApiClient.init().then( apiClient => {
         const apiOptions = new ApiOptions( currentLocale );
         apiOptions._acceptHeaderInput.hide()
         apiOptions._yearInput.class( 'form-control' );
+        apiOptions._ascensionInput.wrapperClass('form-group col col-md-2');
+        apiOptions._corpusChristiInput.wrapperClass('form-group col col-md-2');
+        apiOptions._eternalHighPriestInput.wrapperClass('form-group col col-md-2');
         apiOptions.linkToCalendarSelect( calendarSelect ).appendTo( '#calendarOptions' );
 
         apiClient.listenTo( calendarSelect ).listenTo( apiOptions );
@@ -116,7 +140,13 @@ ApiClient.init().then( apiClient => {
             if (LitCalData.hasOwnProperty("litcal")) {
                 const events = litCalDataToEvents( LitCalData.litcal );
                 updateFCSettings( events );
-                const calendar = new Calendar(document.getElementById('calendar'), fullCalendarSettings);
+                const calendarEl = document.getElementById('calendar');
+                if (false === calendar instanceof Calendar) {
+                    calendar = new Calendar(calendarEl, fullCalendarSettings);
+                } else {
+                    calendar.destroy();
+                    calendar = new Calendar(calendarEl, fullCalendarSettings);
+                }
                 calendar.render();
                 document.querySelector('#spinnerWrapper').style.display = 'none';
                 //even though the following code works for Latin, the Latin however is not removed for successive renders
@@ -129,7 +159,6 @@ ApiClient.init().then( apiClient => {
                     });
                 }
                 */
-
             }
             if (LitCalData.hasOwnProperty('messages')) {
                 const messagesHtml = LitCalData.messages.map((message, idx) => {
@@ -140,6 +169,23 @@ ApiClient.init().then( apiClient => {
                 document.querySelector('#LitCalMessages tbody').replaceChildren(...messagesHtml);
             }
         });
+
+        $('#holydays_of_obligation').multiselect({
+            buttonWidth: '100%',
+            buttonClass: 'form-select',
+            templates: {
+                button: '<button type="button" class="multiselect dropdown-toggle" data-bs-toggle="dropdown"><span class="multiselect-selected-text"></span></button>'
+            },
+        });
+
+        setHolyDaysOfObligationBgColor(calendarSelect._domElement.value);
+
+        calendarSelect._domElement.addEventListener('change', (ev) => {
+            $('#holydays_of_obligation').multiselect('rebuild');
+            setHolyDaysOfObligationBgColor(ev.target.value);
+        });
+
+
         // fetch a default calendar here
         apiClient.fetchNationalCalendar(calendarSelect._domElement.value);
     }

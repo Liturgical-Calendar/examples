@@ -8,27 +8,27 @@ namespace LiturgicalCalendar\Examples\Php\Enums;
 class StatusCode
 {
     // [Informational 1xx]
-    public const HTTP_CONTINUE                        = 100;
-    public const HTTP_SWITCHING_PROTOCOLS             = 101;
+    public const HTTP_CONTINUE            = 100;
+    public const HTTP_SWITCHING_PROTOCOLS = 101;
 
     // [Successful 2xx]
-    public const HTTP_OK                              = 200;
-    public const HTTP_CREATED                         = 201;
-    public const HTTP_ACCEPTED                        = 202;
-    public const HTTP_NONAUTHORITATIVE_INFORMATION    = 203;
-    public const HTTP_NO_CONTENT                      = 204;
-    public const HTTP_RESET_CONTENT                   = 205;
-    public const HTTP_PARTIAL_CONTENT                 = 206;
+    public const HTTP_OK                           = 200;
+    public const HTTP_CREATED                      = 201;
+    public const HTTP_ACCEPTED                     = 202;
+    public const HTTP_NONAUTHORITATIVE_INFORMATION = 203;
+    public const HTTP_NO_CONTENT                   = 204;
+    public const HTTP_RESET_CONTENT                = 205;
+    public const HTTP_PARTIAL_CONTENT              = 206;
 
     // [Redirection 3xx]
-    public const HTTP_MULTIPLE_CHOICES                = 300;
-    public const HTTP_MOVED_PERMANENTLY               = 301;
-    public const HTTP_FOUND                           = 302;
-    public const HTTP_SEE_OTHER                       = 303;
-    public const HTTP_NOT_MODIFIED                    = 304;
-    public const HTTP_USE_PROXY                       = 305;
-    public const HTTP_UNUSED                          = 306;
-    public const HTTP_TEMPORARY_REDIRECT              = 307;
+    public const HTTP_MULTIPLE_CHOICES   = 300;
+    public const HTTP_MOVED_PERMANENTLY  = 301;
+    public const HTTP_FOUND              = 302;
+    public const HTTP_SEE_OTHER          = 303;
+    public const HTTP_NOT_MODIFIED       = 304;
+    public const HTTP_USE_PROXY          = 305;
+    public const HTTP_UNUSED             = 306;
+    public const HTTP_TEMPORARY_REDIRECT = 307;
 
     // [Client Error 4xx]
     public const HTTP_BAD_REQUEST                     = 400;
@@ -51,12 +51,12 @@ class StatusCode
     public const HTTP_EXPECTATION_FAILED              = 417;
 
     // [Server Error 5xx]
-    public const HTTP_INTERNAL_SERVER_ERROR           = 500;
-    public const HTTP_NOT_IMPLEMENTED                 = 501;
-    public const HTTP_BAD_GATEWAY                     = 502;
-    public const HTTP_SERVICE_UNAVAILABLE             = 503;
-    public const HTTP_GATEWAY_TIMEOUT                 = 504;
-    public const HTTP_VERSION_NOT_SUPPORTED           = 505;
+    public const HTTP_INTERNAL_SERVER_ERROR = 500;
+    public const HTTP_NOT_IMPLEMENTED       = 501;
+    public const HTTP_BAD_GATEWAY           = 502;
+    public const HTTP_SERVICE_UNAVAILABLE   = 503;
+    public const HTTP_GATEWAY_TIMEOUT       = 504;
+    public const HTTP_VERSION_NOT_SUPPORTED = 505;
 
     private static $messages = [
         // [Informational 1xx]
@@ -130,7 +130,7 @@ class StatusCode
     {
         return
             // True if not in 100s
-            ($code < self::HTTP_CONTINUE || $code >= self::HTTP_OK)
+            ( $code < self::HTTP_CONTINUE || $code >= self::HTTP_OK )
             && // and not 204 NO CONTENT
             $code != self::HTTP_NO_CONTENT
             && // and not 304 NOT MODIFIED

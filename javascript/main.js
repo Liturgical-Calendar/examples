@@ -5,6 +5,12 @@ Input.setGlobalLabelClass('form-label d-block mb-1');
 Input.setGlobalWrapper('div');
 Input.setGlobalWrapperClass('form-group col col-md-3');
 
+/**
+ * Sets the background color of the holy days of obligation select button based on the value of the calendar select element.
+ * If the value is empty, the background color is removed.
+ * If the value is not empty, the background color is set to #e9ecef.
+ * @param {string} calendarSelectValue - The value of the calendar select element.
+ */
 function setHolyDaysOfObligationBgColor(calendarSelectValue) {
     if (calendarSelectValue === '') {
         $('#holydays_of_obligation').multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
@@ -13,7 +19,7 @@ function setHolyDaysOfObligationBgColor(calendarSelectValue) {
     }
 }
 
-ApiClient.init().then( (apiClient) => {
+ApiClient.init(BaseURL ?? 'https://litcal.johnromanodorazio.com/api/v5/').then( (apiClient) => {
     const calendarSelect = new CalendarSelect( document.documentElement.lang || 'en-US' );
     calendarSelect.allowNull()
         .label({
