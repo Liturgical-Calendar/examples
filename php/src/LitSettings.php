@@ -2,6 +2,8 @@
 
 namespace LiturgicalCalendar\Examples\Php;
 
+use LiturgicalCalendar\Components\Models\Index\CalendarIndex;
+use LiturgicalCalendar\Components\Models\Index\NationalCalendarSettings;
 use LiturgicalCalendar\Examples\Php\Enums\Epiphany;
 use LiturgicalCalendar\Examples\Php\Enums\Ascension;
 use LiturgicalCalendar\Examples\Php\Enums\CorpusChristi;
@@ -21,7 +23,7 @@ class LitSettings
     public ?string $DiocesanCalendar       = null;
     public ?string $expectedTextDomainPath = null;
     public ?string $currentTextDomainPath  = null;
-    private ?array $Metadata               = null;
+    private ?CalendarIndex $Metadata               = null;
     private bool $directAccess             = false;
 
     private const ALLOWED_PARAMS = [
@@ -54,10 +56,10 @@ class LitSettings
      * Delegates further variable setting to the setVars method.
      *
      * @param array $formData An array of input parameters to initialize the settings.
-     * @param array $metadata An array of metadata about the national and diocesan calendars available and the supported locales.
+     * @param CalendarIndex $metadata An array of metadata about the national and diocesan calendars available and the supported locales.
      * @param bool $directAccess A flag indicating whether the PHP example is included within another page or being accessed directly.
      */
-    public function __construct(array $formData, array $metadata, bool $directAccess = false)
+    public function __construct(array $formData, CalendarIndex $metadata, bool $directAccess = false)
     {
         // set default year value
         $this->Year = (int) date('Y');
@@ -149,7 +151,7 @@ class LitSettings
      */
     private function isValidNationalCalendar($value)
     {
-        return $value !== '' && $this->Metadata !== null && in_array($value, $this->Metadata['national_calendars_keys']);
+        return $value !== '' && $this->Metadata !== null && in_array($value, $this->Metadata->nationalCalendarsKeys);
     }
 
     /**
@@ -162,13 +164,13 @@ class LitSettings
     private function isValidDiocesanCalendar($value)
     {
         if ($this->NationalCalendar === null) {
-            return $value !== '' && $this->Metadata !== null && in_array($value, $this->Metadata['diocesan_calendars_keys']);
+            return $value !== '' && $this->Metadata !== null && in_array($value, $this->Metadata->diocesanCalendarsKeys);
         } else {
             if (null === $this->Metadata) {
                 return false;
             }
             $DiocesanCalendarsForNation = array_values(array_filter(
-                $this->Metadata['diocesan_calendars'],
+                $this->Metadata->diocesanCalendars,
                 fn ($calendar) => $calendar['nation'] === $this->NationalCalendar
             ));
             $DiocesanCalendarIds        = array_column($DiocesanCalendarsForNation, 'calendar_id');
@@ -192,7 +194,7 @@ class LitSettings
 
         if ($this->NationalCalendar !== null && $this->NationalCalendar !== 'VA') {
             $NationalCalendarMetadata = array_values(array_filter(
-                $this->Metadata['national_calendars'],
+                $this->Metadata->nationalCalendars,
                 fn ($calendar) => $calendar['calendar_id'] === $this->NationalCalendar
             ))[0];
             switch ($this->NationalCalendar) {
@@ -205,18 +207,18 @@ class LitSettings
                     $this->Locale            = LitLocale::LATIN_PRIMARY_LANGUAGE;
                     break;
                 default:
-                    $this->setVars($NationalCalendarMetadata['settings']);
+                    $this->setVars($NationalCalendarMetadata->settings->toArray());
                     break;
             }
         }
 
         if ($this->DiocesanCalendar !== null) {
             $DiocesanCalendarMetadata = array_values(array_filter(
-                $this->Metadata['diocesan_calendars'],
+                $this->Metadata->diocesanCalendars,
                 fn ($calendar) => $calendar['calendar_id'] === $this->DiocesanCalendar
             ))[0];
-            if (array_key_exists('settings', $DiocesanCalendarMetadata)) {
-                $this->setVars($DiocesanCalendarMetadata['settings']);
+            if ($DiocesanCalendarMetadata->settings !== null) {
+                $this->setVars($DiocesanCalendarMetadata->settings);
             }
         }
 
@@ -253,15 +255,15 @@ class LitSettings
     /**
      * Updates the internal metadata reference and then updates the settings based on the selected nation.
      *
-     * @param array $Metadata A list of metadata about the diocesan calendars available.
+     * @param CalendarIndex $Metadata A list of metadata about the diocesan calendars available.
      * @return void
      */
-    public function setMetadata(array $Metadata)
+    public function setMetadata(CalendarIndex $Metadata)
     {
         $this->Metadata = $Metadata;
         if ($this->DiocesanCalendar !== null) {
             $this->NationalCalendar = array_values(array_filter(
-                $this->Metadata['diocesan_calendars'],
+                $this->Metadata->diocesanCalendars,
                 fn ($calendar) => $calendar['calendar_id'] === $this->DiocesanCalendar
             ))[0]['nation'];
         }
