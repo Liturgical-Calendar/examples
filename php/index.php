@@ -54,23 +54,24 @@ if (null === $envLocale || 'C' === $envLocale) {
     $envLocale = setlocale(LC_ALL, 0);
 }
 
-$baseLocale            = Locale::getPrimaryLanguage($envLocale);
+$normalizedLocale      = strtok($envLocale, '.') ?: $envLocale;
+$baseLocale            = Locale::getPrimaryLanguage($normalizedLocale);
 $options               = [
     'url' => rtrim(METADATA_URL, '/calendars')
 ];
 $calendarSelectNations = new CalendarSelect($options);
 $calendarSelectNations->label(true)->labelText('nation')->labelClass('form-label')
     ->id('national_calendar')->name('national_calendar')->class('form-select')->allowNull()->setOptions(OptionsType::NATIONS)
-    ->locale($baseLocale);
+    ->locale($normalizedLocale);
 
 $calendarSelectDioceses = new CalendarSelect($options);
 $calendarSelectDioceses->label(true)->labelText('diocese')->labelClass('form-label')
     ->id('diocesan_calendar')->name('diocesan_calendar')->class('form-select')->allowNull()->setOptions(OptionsType::DIOCESES)
-    ->locale($baseLocale);
+    ->locale($normalizedLocale);
 
 $options = [
     'url'    => rtrim(METADATA_URL, '/calendars'),
-    'locale' => $baseLocale
+    'locale' => $normalizedLocale
 ];
 
 $apiOptions = new ApiOptions($options);
