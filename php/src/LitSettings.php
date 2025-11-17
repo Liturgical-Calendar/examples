@@ -3,6 +3,7 @@
 namespace LiturgicalCalendar\Examples\Php;
 
 use LiturgicalCalendar\Components\Models\Index\CalendarIndex;
+use LiturgicalCalendar\Components\Models\Index\DiocesanCalendar;
 use LiturgicalCalendar\Components\Models\Index\NationalCalendarSettings;
 use LiturgicalCalendar\Examples\Php\Enums\Epiphany;
 use LiturgicalCalendar\Examples\Php\Enums\Ascension;
@@ -171,7 +172,7 @@ class LitSettings
             }
             $DiocesanCalendarsForNation = array_values(array_filter(
                 $this->Metadata->diocesanCalendars,
-                fn ($calendar) => $calendar['nation'] === $this->NationalCalendar
+                fn (DiocesanCalendar $calendar) => $calendar->nation === $this->NationalCalendar
             ));
             $DiocesanCalendarIds        = array_column($DiocesanCalendarsForNation, 'calendar_id');
             return $value !== '' && in_array($value, $DiocesanCalendarIds);

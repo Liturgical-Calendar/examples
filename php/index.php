@@ -87,9 +87,9 @@ $litSettings = new LitSettings($_POST, $metadata, $directAccess);
 $LitCalData  = null;
 
 $apiOptions->epiphanyInput->selectedValue($litSettings->Epiphany);
-$apiOptions->ascensionInput->selectedValue($litSettings->Ascension);
-$apiOptions->corpusChristiInput->selectedValue($litSettings->CorpusChristi);
-$apiOptions->eternalHighPriestInput->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false');
+$apiOptions->ascensionInput->selectedValue($litSettings->Ascension)->wrapperClass('col col-md-2');
+$apiOptions->corpusChristiInput->selectedValue($litSettings->CorpusChristi)->wrapperClass('col col-md-2');
+$apiOptions->eternalHighPriestInput->selectedValue($litSettings->EternalHighPriest ? 'true' : 'false')->wrapperClass('col col-md-2');
 $apiOptions->yearTypeInput->selectedValue($litSettings->YearType)->wrapperClass('col col-md-2');
 $apiOptions->yearInput->class('form-control')->wrapperClass('col col-md-2');
 if ($litSettings->NationalCalendar !== null || $litSettings->DiocesanCalendar !== null) {
