@@ -118,7 +118,7 @@ echo '<!-- set textdomain path: ' . $litSettings->currentTextDomainPath . ' -->'
 
 if ($litSettings->Year >= 1970 && $litSettings->Year <= 9999) {
     $queryData  = Utilities::prepareQueryData($litSettings);
-    $response   = Utilities::sendAPIRequest($queryData, $metadata);
+    $response   = Utilities::sendAPIRequest($queryData, $metadata->toArray());
     $LitCalData = json_decode($response);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
