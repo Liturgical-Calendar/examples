@@ -4,6 +4,7 @@ namespace LiturgicalCalendar\Examples\Php;
 
 use LiturgicalCalendar\Components\Models\Index\CalendarIndex;
 use LiturgicalCalendar\Components\Models\Index\DiocesanCalendar;
+use LiturgicalCalendar\Components\Models\Index\NationalCalendar;
 use LiturgicalCalendar\Components\Models\Index\NationalCalendarSettings;
 use LiturgicalCalendar\Examples\Php\Enums\Epiphany;
 use LiturgicalCalendar\Examples\Php\Enums\Ascension;
@@ -196,7 +197,7 @@ class LitSettings
         if ($this->NationalCalendar !== null && $this->NationalCalendar !== 'VA') {
             $NationalCalendarMetadata = array_values(array_filter(
                 $this->Metadata->nationalCalendars,
-                fn ($calendar) => $calendar['calendar_id'] === $this->NationalCalendar
+                fn (NationalCalendar $calendar) => $calendar->calendarId === $this->NationalCalendar
             ))[0];
             switch ($this->NationalCalendar) {
                 case 'VA':
