@@ -674,7 +674,7 @@ if ($directAccess) {
 ?>
 
 <div class="container-fluid">
-    <!-- Header (only for direct access) -->
+    <!-- Header -->
     <?php if ($directAccess) : ?>
     <div class="row mb-4">
         <div class="col-12">
@@ -685,6 +685,9 @@ if ($directAccess) {
             <p class="text-center text-muted"><?php echo dgettext('litexmplphp', 'Bootstrap 5 Example with PSR-Compliant HTTP Client'); ?></p>
         </div>
     </div>
+    <?php else: ?>
+    <h1 style="text-align:center;"><?php echo dgettext('litexamplphp', 'Liturgical Calendar Calculation for a Given Year'); ?></h1>
+    <h2 style="text-align:center;"><?php echo dgettext('litexamplphp', 'PHP example'); ?></h2>
     <?php endif; ?>
 
     <!-- Calendar Options Card -->
@@ -798,6 +801,16 @@ if ($directAccess) {
             <?php echo $webCalendarHtml; ?>
         </div>
     </div>
+    <?php
+    if (property_exists($LiturgicalCalendar, 'messages') && is_array($LiturgicalCalendar->messages) && count($LiturgicalCalendar->messages) > 0) {
+        echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . dgettext('litexamplphp', 'Information about the current calculation of the Liturgical Year') . '</th></tr></thead>';
+        echo '<tbody>';
+        foreach ($LiturgicalCalendar->messages as $idx => $message) {
+            echo "<tr><td>{$idx}</td><td>{$message}</td></tr>";
+        }
+        echo '</tbody></table>';
+    }
+    ?>
     <?php else : ?>
     <div class="alert alert-primary text-center" role="alert">
         <i class="fas fa-arrow-up me-2"></i>
