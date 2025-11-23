@@ -112,7 +112,7 @@ let today = new Date(),
         fullCalendarSettings.events = events;
     };
 
-ApiClient.init(BaseURL ?? 'https://litcal.johnromanodorazio.com/api/dev/').then( apiClient => {
+ApiClient.init(BaseUrl ?? 'https://litcal.johnromanodorazio.com/api/dev/').then( apiClient => {
     if (false === apiClient || false === apiClient instanceof ApiClient) {
         alert('Error initializing the Liturgical Calendar API Client');
     } else {

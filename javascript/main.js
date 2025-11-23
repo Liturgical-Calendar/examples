@@ -19,7 +19,7 @@ function setHolyDaysOfObligationBgColor(calendarSelectValue) {
     }
 }
 
-ApiClient.init(BaseURL ?? 'https://litcal.johnromanodorazio.com/api/v5/').then( (apiClient) => {
+ApiClient.init(BaseUrl ?? 'https://litcal.johnromanodorazio.com/api/v5/').then( (apiClient) => {
     const calendarSelect = new CalendarSelect( document.documentElement.lang || 'en-US' );
     calendarSelect.allowNull()
         .label({

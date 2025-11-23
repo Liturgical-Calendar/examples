@@ -13,81 +13,6 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 
 // ============================================================================
-// Locate autoloader by walking up the directory tree
-// ============================================================================
-$currentDir = __DIR__;
-$autoloaderPath = null;
-$vendorDir = null;
-
-// Walk up directories looking for vendor/autoload.php
-$level = 0;
-while (true) {
-    $candidatePath = $currentDir . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-
-    if (file_exists($candidatePath)) {
-        $autoloaderPath = $candidatePath;
-        $vendorDir = dirname($candidatePath);
-        break;
-    }
-
-    // Don't look more than 10 levels up
-    if ($level > 10) {
-        break;
-    }
-
-    $parentDir = dirname($currentDir);
-    if ($parentDir === $currentDir) { // Reached the filesystem root
-        break;
-    }
-
-    ++$level;
-    $currentDir = $parentDir;
-}
-
-if (null === $autoloaderPath) {
-    die('Error: Unable to locate vendor/autoload.php. Please run `composer install` in the project root.');
-}
-
-require_once $autoloaderPath;
-
-// ============================================================================
-// Environment Configuration
-// ============================================================================
-// Load environment variables if Dotenv is available
-if (class_exists('Dotenv\Dotenv')) {
-    // Search for .env files in multiple locations
-    $envLocations = [
-        __DIR__,  // Current directory
-        dirname($vendorDir)  // Directory containing vendor folder
-    ];
-
-    foreach ($envLocations as $envLocation) {
-        if (is_dir($envLocation)) {
-            $dotenv = Dotenv\Dotenv::createImmutable(
-                $envLocation,
-                ['.env', '.env.local', '.env.development', '.env.production'],
-                false
-            );
-            $dotenv->ifPresent(['API_PROTOCOL', 'API_HOST'])->notEmpty();
-            $dotenv->ifPresent(['API_PORT'])->isInteger();
-            $dotenv->safeLoad();
-            break; // Use first valid location
-        }
-    }
-}
-
-// Set default environment variables for production (only if not already set)
-$debugMode = filter_var($_ENV['DEBUG_MODE'] ?? 'false', FILTER_VALIDATE_BOOLEAN);
-$_ENV['API_PROTOCOL'] = $_ENV['API_PROTOCOL'] ?? 'https';
-$_ENV['API_HOST'] = $_ENV['API_HOST'] ?? 'litcal.johnromanodorazio.com';
-$_ENV['API_PORT'] = $_ENV['API_PORT'] ?? '';
-$_ENV['API_BASE_PATH'] = $_ENV['API_BASE_PATH'] ?? '/api/dev';
-
-// Build Base API URL
-$apiPort = !empty($_ENV['API_PORT']) ? ":{$_ENV['API_PORT']}" : '';
-$apiBaseUrl = rtrim("{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}{$apiPort}{$_ENV['API_BASE_PATH']}", '/');
-
-// ============================================================================
 // Import Required Classes
 // ============================================================================
 use LiturgicalCalendar\Components\ApiClient;
@@ -108,75 +33,153 @@ use LiturgicalCalendar\Components\Http\HttpClientFactory;
 use LiturgicalCalendar\Components\Cache\ArrayCache;
 
 // ============================================================================
-// Setup PSR-Compliant HTTP Client with Production Features
-// ============================================================================
-
-// 1. Setup Logger (Monolog) - if available
-$logger = null;
-
-if (class_exists('Monolog\Logger')) {
-    $logsDir = __DIR__ . '/logs';
-
-    if (!is_dir($logsDir)) {
-        if ($debugMode) {
-            error_log('Creating logs directory: ' . $logsDir);
-        }
-        $result = mkdir($logsDir, 0755, true);
-        if (!$result) {
-            $lastError = error_get_last();
-            $errorMsg = $lastError['message'] ?? 'unknown';
-            error_log('Failed to create logs directory: ' . $errorMsg);
-        }
-    }
-
-    try {
-        $logger = new Monolog\Logger('liturgical-calendar');
-        $logger->pushHandler(new Monolog\Handler\StreamHandler(
-            $logsDir . '/litcal.log',
-            Monolog\Level::Debug
-        ));
-        if ($debugMode) {
-            error_log('Logger initialized successfully');
-        }
-        $logger->info('Logger initialized successfully');
-    } catch (\Exception $e) {
-        error_log('Error creating logger: ' . $e->getMessage());
-    }
-} elseif ($debugMode) {
-    error_log('Monolog not found - run `composer install` to enable logging');
-}
-
-// 2. Setup Cache - Filesystem cache (if available) or ArrayCache fallback
-if (class_exists('Symfony\Component\Cache\Adapter\FilesystemAdapter')) {
-    $filesystemAdapter = new Symfony\Component\Cache\Adapter\FilesystemAdapter(
-        'litcal',
-        3600 * 24,
-        __DIR__ . '/cache'
-    );
-    $cache = new Symfony\Component\Cache\Psr16Cache($filesystemAdapter);
-} else {
-    $cache = new ArrayCache();
-}
-
-// 3. Create Production-Ready HTTP Client
-$httpClient = HttpClientFactory::createProductionClient(
-    cache: $cache,
-    logger: $logger,
-    cacheTtl: 3600 * 24,
-    maxRetries: 3,
-    failureThreshold: 5
-);
-
-// 4. Initialize ApiClient Singleton
-$apiClient = ApiClient::getInstance([
-    'apiUrl' => $apiBaseUrl,
-    'httpClient' => $httpClient
-]);
-
-// ============================================================================
 // Detect Direct Access vs. Included
 // ============================================================================
 $directAccess = (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME']));
+
+if ($directAccess) {
+    // ============================================================================
+    // Locate autoloader by walking up the directory tree
+    // ============================================================================
+    $currentDir = __DIR__;
+    $autoloaderPath = null;
+    $vendorDir = null;
+
+    // Walk up directories looking for vendor/autoload.php
+    $level = 0;
+    while (true) {
+        $candidatePath = $currentDir . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+
+        if (file_exists($candidatePath)) {
+            $autoloaderPath = $candidatePath;
+            $vendorDir = dirname($candidatePath);
+            break;
+        }
+
+        // Don't look more than 10 levels up
+        if ($level > 10) {
+            break;
+        }
+
+        $parentDir = dirname($currentDir);
+        if ($parentDir === $currentDir) { // Reached the filesystem root
+            break;
+        }
+
+        ++$level;
+        $currentDir = $parentDir;
+    }
+
+    if (null === $autoloaderPath) {
+        die('Error: Unable to locate vendor/autoload.php. Please run `composer install` in the project root.');
+    }
+
+    require_once $autoloaderPath;
+
+    // ============================================================================
+    // Environment Configuration
+    // ============================================================================
+    // Load environment variables if Dotenv is available
+    if (class_exists('Dotenv\Dotenv')) {
+        // Search for .env files in multiple locations
+        $envLocations = [
+            __DIR__,  // Current directory
+            dirname($vendorDir)  // Directory containing vendor folder
+        ];
+
+        foreach ($envLocations as $envLocation) {
+            if (is_dir($envLocation)) {
+                $dotenv = Dotenv\Dotenv::createImmutable(
+                    $envLocation,
+                    ['.env', '.env.local', '.env.development', '.env.production'],
+                    false
+                );
+                $dotenv->ifPresent(['API_PROTOCOL', 'API_HOST', 'API_BASE_PATH'])->notEmpty();
+                $dotenv->ifPresent(['API_PORT'])->isInteger();
+                $dotenv->safeLoad();
+                break; // Use first valid location
+            }
+        }
+    }
+
+    // Set default environment variables if not already set
+    $_ENV['API_PROTOCOL'] = $_ENV['API_PROTOCOL'] ?? 'https';
+    $_ENV['API_HOST'] = $_ENV['API_HOST'] ?? 'litcal.johnromanodorazio.com';
+    $_ENV['API_PORT'] = $_ENV['API_PORT'] ?? '';
+    $_ENV['API_BASE_PATH'] = $_ENV['API_BASE_PATH'] ?? '/api/dev';
+
+    // Build Base API URL
+    $apiPort    = !empty($_ENV['API_PORT']) ? ":{$_ENV['API_PORT']}" : '';
+    $apiBaseUrl = rtrim("{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}{$apiPort}{$_ENV['API_BASE_PATH']}", '/');
+    $debugMode  = filter_var($_ENV['DEBUG_MODE'] ?? 'false', FILTER_VALIDATE_BOOLEAN);
+
+    // ============================================================================
+    // Setup PSR-Compliant HTTP Client with Production Features
+    // ============================================================================
+
+    // 1. Setup Logger (Monolog) - if available
+    $logger = null;
+
+    if (class_exists('Monolog\Logger')) {
+        $logsDir = __DIR__ . '/logs';
+
+        if (!is_dir($logsDir)) {
+            if ($debugMode) {
+                error_log('Creating logs directory: ' . $logsDir);
+            }
+            $result = mkdir($logsDir, 0755, true);
+            if (!$result) {
+                $lastError = error_get_last();
+                $errorMsg = $lastError['message'] ?? 'unknown';
+                error_log('Failed to create logs directory: ' . $errorMsg);
+            }
+        }
+
+        try {
+            $logger = new Monolog\Logger('liturgical-calendar');
+            $logger->pushHandler(new Monolog\Handler\StreamHandler(
+                $logsDir . '/litcal.log',
+                Monolog\Level::Debug
+            ));
+            if ($debugMode) {
+                error_log('Logger initialized successfully');
+            }
+            $logger->info('Logger initialized successfully');
+        } catch (\Exception $e) {
+            error_log('Error creating logger: ' . $e->getMessage());
+        }
+    } elseif ($debugMode) {
+        error_log('Monolog not found - run `composer install` to enable logging');
+    }
+
+    // 2. Setup Cache - Filesystem cache (if available) or ArrayCache fallback
+    if (class_exists('Symfony\Component\Cache\Adapter\FilesystemAdapter')) {
+        $filesystemAdapter = new Symfony\Component\Cache\Adapter\FilesystemAdapter(
+            'litcal',
+            3600 * 24,
+            __DIR__ . '/cache'
+        );
+        $cache = new Symfony\Component\Cache\Psr16Cache($filesystemAdapter);
+    } else {
+        $cache = new ArrayCache();
+    }
+
+    // 3. Create Production-Ready HTTP Client
+    $httpClient = HttpClientFactory::createProductionClient(
+        cache: $cache,
+        logger: $logger,
+        cacheTtl: 3600 * 24,
+        maxRetries: 3,
+        failureThreshold: 5
+    );
+
+    // 4. Initialize ApiClient Singleton
+    $apiClient = ApiClient::getInstance([
+        'apiUrl' => $apiBaseUrl,
+        'httpClient' => $httpClient
+    ]);
+}
+
 
 // ============================================================================
 // Locale Handling & Inheritance
@@ -231,7 +234,7 @@ if ($directAccess && function_exists('bindtextdomain')) {
     }
 }
 
-// Fallback _() function if gettext not available
+// Fallback dgettext() function if gettext not available
 if (!function_exists('dgettext')) {
     function dgettext(string $_textdomain, string $text)
     {
