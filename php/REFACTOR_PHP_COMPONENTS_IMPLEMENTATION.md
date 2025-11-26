@@ -2,7 +2,8 @@
 
 ## Overview
 
-Refactor `LiturgicalCalendarFrontend/examples/php/index.php` from a custom class-based approach to a modern, component-based architecture aligned with the `liturgy-components-php/examples/webcalendar/bootstrap.php` pattern.
+Refactor `LiturgicalCalendarFrontend/examples/php/index.php` from a custom class-based approach to a modern,
+component-based architecture aligned with the `liturgy-components-php/examples/webcalendar/bootstrap.php` pattern.
 
 ## Goals
 

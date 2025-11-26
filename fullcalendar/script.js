@@ -22,13 +22,14 @@ Object.filter = (obj, predicate) =>
  * Sets the background color of the holy days of obligation select button based on the value of the calendar select element.
  * If the value is empty, the background color is removed.
  * If the value is not empty, the background color is set to #e9ecef.
+ * @param {HTMLSelectElement} hdobInput - The holy days of obligation select element.
  * @param {string} calendarSelectValue - The value of the calendar select element.
  */
-function setHolyDaysOfObligationBgColor(calendarSelectValue) {
+function setHolyDaysOfObligationBgColor(hdobInput, calendarSelectValue) {
     if (calendarSelectValue === '') {
-        $('#holydays_of_obligation').multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
+        $(hdobInput).multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
     } else {
-        $('#holydays_of_obligation').parent().find('button.multiselect').css('background-color', '#e9ecef');
+        $(hdobInput).parent().find('button.multiselect').css('background-color', '#e9ecef');
     }
 }
 
@@ -112,7 +113,7 @@ let today = new Date(),
         fullCalendarSettings.events = events;
     };
 
-ApiClient.init(BaseUrl ?? 'https://litcal.johnromanodorazio.com/api/dev/').then( apiClient => {
+ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnromanodorazio.com/api/dev').then( apiClient => {
     if (false === apiClient || false === apiClient instanceof ApiClient) {
         alert('Error initializing the Liturgical Calendar API Client');
     } else {
@@ -170,7 +171,7 @@ ApiClient.init(BaseUrl ?? 'https://litcal.johnromanodorazio.com/api/dev/').then(
             }
         });
 
-        $('#holydays_of_obligation').multiselect({
+        $(apiOptions._holydaysOfObligationInput._domElement).multiselect({
             buttonWidth: '100%',
             buttonClass: 'form-select',
             templates: {
@@ -178,11 +179,11 @@ ApiClient.init(BaseUrl ?? 'https://litcal.johnromanodorazio.com/api/dev/').then(
             },
         });
 
-        setHolyDaysOfObligationBgColor(calendarSelect._domElement.value);
+        setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, calendarSelect._domElement.value);
 
         calendarSelect._domElement.addEventListener('change', (ev) => {
-            $('#holydays_of_obligation').multiselect('rebuild');
-            setHolyDaysOfObligationBgColor(ev.target.value);
+            $(apiOptions._holydaysOfObligationInput._domElement).multiselect('rebuild');
+            setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, ev.target.value);
         });
 
 

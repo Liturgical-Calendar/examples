@@ -91,7 +91,7 @@ if ($directAccess) {
             if (is_dir($envLocation)) {
                 $dotenv = Dotenv\Dotenv::createImmutable(
                     $envLocation,
-                    ['.env', '.env.local', '.env.development', '.env.production'],
+                    ['.env', '.env.local', '.env.development', '.env.staging', '.env.production'],
                     false
                 );
                 $dotenv->ifPresent(['API_PROTOCOL', 'API_HOST', 'API_BASE_PATH'])->notEmpty();
@@ -195,7 +195,7 @@ if (!$directAccess) {
     }
 } else {
     // 2. Check POST data
-    if (!$detectedLocale && isset($_POST['locale']) && !empty($_POST['locale'])) {
+    if (isset($_POST['locale']) && !empty($_POST['locale'])) {
         $detectedLocale = $_POST['locale'];
     }
     // 3. Check cookie
@@ -210,24 +210,31 @@ if (!$directAccess) {
 
 // 5. Default to English
 if (!$detectedLocale) {
-    $detectedLocale = 'en';
+    $detectedLocale = 'en_US';
 }
 
 $detectedLocale = \Locale::canonicalize($detectedLocale);
-$baseLocale = \Locale::getPrimaryLanguage($detectedLocale);
+$baseLocale     = \Locale::getPrimaryLanguage($detectedLocale);
+$region         = \Locale::getRegion($detectedLocale);
+if (null === $region || empty($region)) {
+    $region = strtoupper($baseLocale); // make an attempt at a possible region code
+}
+$fullLocale = $baseLocale . '_' . $region;
 
 // Setup gettext if running standalone AND function exists
 if ($directAccess && function_exists('bindtextdomain')) {
     $textDomainPath = __DIR__ . '/i18n';
     if (is_dir($textDomainPath)) {
         bindtextdomain('litexmplphp', $textDomainPath);
-        //textdomain('litexmplphp');
+        textdomain('litexmplphp');
 
         // Set locale for gettext
         $localeArray = [
-            $detectedLocale . '.utf8',
-            $detectedLocale . '.UTF-8',
-            $baseLocale . '_' . strtoupper($baseLocale) . '.UTF-8',
+            $baseLocale . '_' . $region . '.utf8',
+            $baseLocale . '_' . $region . '.UTF-8',
+            $baseLocale . '_' . $region,
+            $baseLocale . '.utf8',
+            $baseLocale . '.UTF-8',
             $baseLocale
         ];
         setlocale(LC_ALL, $localeArray);
@@ -242,7 +249,7 @@ if (!function_exists('dgettext')) {
     }
 }
 
-$options = ['locale' => $detectedLocale];
+$options = ['locale' => $fullLocale];
 
 // ============================================================================
 // Initialize Components
@@ -537,6 +544,7 @@ if ($directAccess) {
         integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@2.0.0/dist/css/bootstrap-multiselect.min.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -832,6 +840,9 @@ if ($directAccess) {
         integrity="sha512-1JkMy1LR9bTo3psH+H4SV5bO2dFylgOy+UJhMus1zF4VEFuZVu5lsi4I6iIndE4N9p01z1554ZDcvMSjMaqCBQ=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@2.0.0/dist/js/bootstrap-multiselect.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
 <?php
