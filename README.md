@@ -32,7 +32,7 @@ and launch a local instance of the API from the repo folder with:
 >
 > If you use VSCode, you can type <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>B</kbd> and select the `php-server` "build" task to launch the API.
 
-## [Fullcalendar](https://litcal.johnromanodorazio.com/examples/fullcalendar)
+## [Fullcalendar](https://litcal.johnromanodorazio.com/examples.php?example=FullCalendar)
 
 A [Fullcalendar](https://github.com/fullcalendar/fullcalendar) rendering of Liturgical events from the Liturgical Calendar API.
 This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@latest/+esm`,
@@ -49,7 +49,7 @@ If you are using VSCode, the easiest way to do this is to install the recommende
 then select `fullcalendar/month-view.html` and launch the Live Preview task (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>,
 then type "Live Preview" and choose "Live Preview: Show Preview (External Browser)").
 
-## [Javascript](https://litcal.johnromanodorazio.com/examples/javascript)
+## [Javascript](https://litcal.johnromanodorazio.com/examples.php?example=JavaScript)
 
 A simple rendering of a calendar with Liturgical events from the Liturgical Calendar API.
 This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@latest/+esm`,
@@ -63,7 +63,7 @@ If you are using VSCode, the easiest way to do this is to install the recommende
 then select `javascript/index.html` and launch the Live Preview task (<kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>,
 then type "Live Preview" and choose "Live Preview: Show Preview (External Browser)").
 
-## [PHP](https://litcal.johnromanodorazio.com/examples/php)
+## [PHP](https://litcal.johnromanodorazio.com/examples.php?example=PHP)
 
 A simple rendering of a calendar with Liturgical events from the Liturgical Calendar API, using PHP to make a cURL request to the Liturgical Calendar API.
 This example makes use of the composer package `liturgical-calendar/components`, which takes care of building the Calendar select,
