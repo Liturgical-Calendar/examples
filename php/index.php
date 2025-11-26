@@ -812,7 +812,13 @@ if ($directAccess) {
         </div>
     </div>
         <?php
-        if (property_exists($LiturgicalCalendar, 'messages') && is_array($LiturgicalCalendar->messages) && count($LiturgicalCalendar->messages) > 0) {
+        if (
+            isset($LiturgicalCalendar)
+            && is_object($LiturgicalCalendar)
+            && property_exists($LiturgicalCalendar, 'messages')
+            && is_array($LiturgicalCalendar->messages)
+            && count($LiturgicalCalendar->messages) > 0
+        ) {
             echo '<table id="LitCalMessages"><thead><tr><th colspan=2 style="text-align:center;">' . dgettext('litexamplphp', 'Information about the current calculation of the Liturgical Year') . '</th></tr></thead>';
             echo '<tbody>';
             foreach ($LiturgicalCalendar->messages as $idx => $message) {
