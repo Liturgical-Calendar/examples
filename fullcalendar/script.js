@@ -76,17 +76,17 @@ let today = new Date(),
         return LitCal.map( (liturgical_event) => {
             liturgical_event.date = new Date(liturgical_event.date);
             const DayOfTheWeek = (liturgical_event.date.getDay() === 0 ? 7 : liturgical_event.date.getDay()); // get the day of the week
-            const CSScolor = liturgical_event.color[0];
-            const textColor = (CSScolor === 'white' || CSScolor === 'rose' ? 'black' : 'white');
-            let festivityGrade = '';
+            const CSScolor = liturgical_event.color[0] === 'rose' ? 'pink' : liturgical_event.color[0]; // map 'rose' to 'pink' for CSS
+            const textColor = (CSScolor === 'white' || CSScolor === 'pink' ? 'black' : 'white');
+            let eventGrade = '';
             if (liturgical_event.hasOwnProperty('grade_display') && liturgical_event.grade_display !== null) {
-                festivityGrade = liturgical_event.grade_display === '' ? '' : liturgical_event.grade_display + ', ';
+                eventGrade = liturgical_event.grade_display === '' ? '' : liturgical_event.grade_display + ', ';
             }
             else if (DayOfTheWeek !== 7 || liturgical_event.grade > 3) {
                 const { tags } = LitGrade.strWTags( liturgical_event.grade );
-                festivityGrade = tags[0] + liturgical_event.grade_lcl + tags[1] + ', ';
+                eventGrade = tags[0] + liturgical_event.grade_lcl + tags[1] + ', ';
             }
-            let description = '<b>' + liturgical_event.name + '</b><br>' + festivityGrade + '<i>' + liturgical_event.color_lcl + '</i><br><i style="font-size:.8em;">' + liturgical_event.common_lcl + '</i>' + (liturgical_event.hasOwnProperty('liturgical_year') ? '<br>' + liturgical_event.liturgical_year : '');
+            let description = '<b>' + liturgical_event.name + '</b><br>' + eventGrade + '<i>' + liturgical_event.color_lcl + '</i><br><i style="font-size:.8em;">' + liturgical_event.common_lcl + '</i>' + (liturgical_event.hasOwnProperty('liturgical_year') ? '<br>' + liturgical_event.liturgical_year : '');
             return {
                 title: liturgical_event.name,
                 start: liturgical_event.date.getUTCFullYear() + '-' + pad(liturgical_event.date.getUTCMonth() + 1) + '-' + pad(liturgical_event.date.getUTCDate()),
