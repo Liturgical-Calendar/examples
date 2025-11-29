@@ -7,16 +7,6 @@ import listPlugin from '@fullcalendar/list';
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import la from './la.js';
 
-/**
- * Filter an object based on a predicate function.
- * @param {Object} obj - The object to filter.
- * @param {Function} predicate - A function that takes an object value and returns a boolean.
- * @returns {Object} - A new object containing only the key-value pairs for which the predicate function returned true.
- */
-Object.filter = (obj, predicate) =>
-    Object.keys(obj)
-        .filter( key => predicate(obj[key]) )
-        .reduce( (res, key) => (res[key] = obj[key], res), {} );
 
 /**
  * Sets the background color of the holy days of obligation select button based on the value of the calendar select element.
@@ -39,39 +29,9 @@ Input.setGlobalWrapper('div');
 Input.setGlobalWrapperClass('form-group col col-md-3');
 
 const currentLocale = Cookies.get('currentLocale') ?? 'en';
-let calendar = null;
-
-let today = new Date(),
-    currentYear = today.getFullYear(),
-    fullCalendarSettings = {
-        locales: allLocales,
-        locale: 'en',
-        plugins: [ dayGridPlugin, listPlugin, bootstrap5Plugin ],
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,listMonth'
-        },
-        dayMaxEvents: true,
-        firstDay: 0,
-        eventOrder: 'idx',
-        eventDidMount: info => {
-            info.el.title = info.event.extendedProps.description;
-            info.el.setAttribute('data-bs-toggle', "tooltip");
-            info.el.setAttribute('data-bs-html', "true");
-            info.el.setAttribute('data-bs-container', "body");
-            info.el.setAttribute('data-bs-custom-class', "custom-tooltip")
-            new bootstrap.Tooltip(info.el);
-            // Add black outline to white dots when in listMonth view
-            const dotEl = info.el.getElementsByClassName('fc-list-event-dot')[0];
-            if (dotEl && dotEl.style.borderColor === 'white') {
-                dotEl.style.outline = '1px solid black';
-            }
-        },
-        themeSystem: 'bootstrap5'
-    },
-    pad = n => n < 10 ? '0' + n : n,
+const today = Object.freeze(new Date());
+//const FC_CONTROL = true;
+const pad = n => n < 10 ? '0' + n : n,
     litCalDataToEvents = LitCal => {
         return LitCal.map( (liturgical_event) => {
             liturgical_event.date = new Date(liturgical_event.date);
@@ -97,7 +57,7 @@ let today = new Date(),
             };
         });
     },
-    updateFCSettings = events => {
+    updateFCSettings = (events, setYearView = true) => {
         if (currentLocale !== 'en') {
             const locale = currentLocale.replaceAll('_', '-');
             let baseLocale = locale.split('-')[0];
@@ -107,11 +67,44 @@ let today = new Date(),
                 fullCalendarSettings.locale = baseLocale;
             }
         }
-        if (parseInt(currentYear) !== today.getFullYear()) {
+        if (setYearView && parseInt(currentYear) !== today.getFullYear()) {
             fullCalendarSettings.initialDate = currentYear + '-01-01';
         }
         fullCalendarSettings.events = events;
     };
+
+let calendar,
+    currentYear = today.getFullYear(),
+    fullCalendarSettings = {
+        locales: allLocales,
+        locale: 'en',
+        plugins: [ dayGridPlugin, listPlugin, bootstrap5Plugin ],
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listMonth'
+        },
+        dayMaxEvents: true,
+        firstDay: 0,
+        eventOrder: 'idx',
+        eventDidMount: info => {
+            info.el.title = info.event.extendedProps.description;
+            info.el.setAttribute('data-bs-toggle', 'tooltip');
+            info.el.setAttribute('data-bs-html', 'true');
+            info.el.setAttribute('data-bs-container', 'body');
+            info.el.setAttribute('data-bs-custom-class', 'custom-tooltip');
+            info.el.classList.add('p-1');
+            new bootstrap.Tooltip(info.el);
+            // Add black outline to white dots when in listMonth view
+            const dotEl = info.el.getElementsByClassName('fc-list-event-dot')[0];
+            if (dotEl && dotEl.style.borderColor === 'white') {
+                dotEl.style.outline = '1px solid black';
+            }
+        },
+        themeSystem: 'bootstrap5'
+    },
+    shouldSetYearView = true;
 
 ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnromanodorazio.com/api/dev').then( apiClient => {
     if (false === apiClient || false === apiClient instanceof ApiClient) {
@@ -132,12 +125,13 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         apiOptions._ascensionInput.wrapperClass('form-group col col-md-2');
         apiOptions._corpusChristiInput.wrapperClass('form-group col col-md-2');
         apiOptions._eternalHighPriestInput.wrapperClass('form-group col col-md-2');
+        apiOptions._yearTypeInput.defaultValue('CIVIL');
         apiOptions.linkToCalendarSelect( calendarSelect ).appendTo( '#calendarOptions' );
 
         apiClient.listenTo( calendarSelect ).listenTo( apiOptions );
         apiClient._eventBus.on( 'calendarFetched', LitCalData => {
-            currentYear = apiOptions._yearInput._domElement.value;
-            console.log(`currentYear is ${currentYear}`);
+            currentYear = parseInt(apiOptions._yearInput._domElement.value);
+            //console.log(`currentYear is ${currentYear}`);
             if (LitCalData.hasOwnProperty("litcal")) {
                 const events = litCalDataToEvents( LitCalData.litcal );
                 updateFCSettings( events );
@@ -186,8 +180,28 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
             setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, ev.target.value);
         });
 
-
-        // fetch a default calendar here
-        apiClient.fetchNationalCalendar(calendarSelect._domElement.value);
+        if (typeof FC_CONTROL !== 'undefined' && FC_CONTROL) {
+            if (today.getMonth() === 11) {
+                apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
+            }
+            fullCalendarSettings.datesSet = (dateInfo) => {
+                const currentData = dateInfo.view.getCurrentData();
+                const { currentViewType, currentDate } = currentData;
+                console.log('current view', currentViewType);
+                const viewedDate = new Date(currentDate);
+                const viewedMonth = viewedDate.getMonth();
+                console.log('current month: ', viewedMonth);
+                if (viewedMonth === 11 && apiOptions._yearTypeInput._domElement.value === 'CIVIL') {
+                    apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
+                    shouldSetYearView = false;
+                    fullCalendarSettings.initialDate = `${currentYear}-12-01`;
+                    apiClient.yearType(apiOptions._yearTypeInput._domElement.value).year(currentYear+1).refetchCalendarData();
+                } else {
+                    shouldSetYearView = true;
+                }
+            };
+        }
+        apiClient.yearType(apiOptions._yearTypeInput._domElement.value).fetchNationalCalendar(calendarSelect._domElement.value);
     }
 });
+
