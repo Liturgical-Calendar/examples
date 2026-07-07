@@ -111,6 +111,18 @@ if ($directAccess) {
     // Build Base API URL
     $apiPort    = !empty($_ENV['API_PORT']) ? ":{$_ENV['API_PORT']}" : '';
     $apiBaseUrl = rtrim("{$_ENV['API_PROTOCOL']}://{$_ENV['API_HOST']}{$apiPort}{$_ENV['API_BASE_PATH']}", '/');
+
+    // This request runs server-side. When an internal API URL is provided (e.g.
+    // API_INTERNAL_URL=http://litcal-api:8000 inside a Docker network), it must
+    // win over the browser-facing API_HOST (typically 'localhost'), which is not
+    // reachable from within the container. Mirrors the parent frontend's
+    // API_INTERNAL_URL convention; a no-op when unset (standalone use, or
+    // production where the API is reached over a real public host).
+    $apiInternalUrl = $_ENV['API_INTERNAL_URL'] ?? getenv('API_INTERNAL_URL');
+    if (!empty($apiInternalUrl)) {
+        $apiBaseUrl = rtrim($apiInternalUrl . $_ENV['API_BASE_PATH'], '/');
+    }
+
     $debugMode  = filter_var($_ENV['DEBUG_MODE'] ?? 'false', FILTER_VALIDATE_BOOLEAN);
 
     // ============================================================================
