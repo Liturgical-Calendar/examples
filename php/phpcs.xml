@@ -3,7 +3,7 @@
     <rule ref="PSR12"> <!-- ruleset standard -->
         <exclude name="Generic.Files.LineLength"/>
     </rule>
-    <file>./php</file> <!-- directory you want to analyze -->
+    <file>./src</file> <!-- directory you want to analyze -->
     <exclude-pattern>/vendor/</exclude-pattern>
     <exclude-pattern>*Test.php</exclude-pattern>
     <arg name="encoding" value="utf-8"/>

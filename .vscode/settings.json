@@ -1,0 +1,9 @@
+{
+    "phpcs.composerJsonPath": "php/composer.json",
+    "phpcs.autoConfigSearch": true,
+    "phpcs.enable": true,
+    "phpcs.ignorePatterns": [
+        "**/vendor/*"
+    ],
+    "phpcs.phpcbfOnSave": true
+}
