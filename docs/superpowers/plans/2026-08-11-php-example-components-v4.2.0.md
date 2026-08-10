@@ -47,55 +47,56 @@ is out of scope per the spec. In its place, every task below has a mechanical pa
 served over HTTP and the response asserted with `curl` and `grep`. Write the check, watch it fail, implement,
 watch it pass — the TDD cycle, with `grep` as the assertion.
 
-### Verification harness — set up once, before Task 1
+### Verification harness — already running, read before Task 1
 
-Two servers must be running. Use two spare terminals, or background both.
+**`localhost:3000` is the LiturgicalCalendarFrontend docker stack, not this example.** Do not point any check
+at it: it serves the Frontend's own pages, and `examples.php?example=PHP` renders no calendar selects at all.
+Nothing there reflects edits to `php/index.php`.
 
-- [ ] **Start the API** (from wherever `LiturgicalCalendarAPI` is checked out):
+The two endpoints this plan uses:
 
-```bash
-cd /home/johnrdorazio/development/LiturgicalCalendar/LiturgicalCalendarAPI
-PHP_CLI_SERVER_WORKERS=6 php -S localhost:8000
-```
+| Endpoint                | What it is                       | State                            |
+| ----------------------- | -------------------------------- | -------------------------------- |
+| `http://localhost:8000` | Liturgical Calendar API (docker) | Already running                  |
+| `http://localhost:3010` | This example, `php -S`           | Already started for this session |
 
-- [ ] **Confirm the API answers:**
-
-```bash
-curl -s -o /dev/null -w '%{http_code}\n' 'http://localhost:8000/calendars'
-```
-
-Expected: `200`
-
-- [ ] **Create `php/.env` if absent** (the example reads it; `API_PORT` must match the API above):
+- [ ] **Confirm both answer:**
 
 ```bash
-cd /home/johnrdorazio/development/LiturgicalCalendar/examples/php
-[ -f .env ] || cp .env.example .env
+curl -s -o /dev/null -w 'api:     %{http_code}\n' 'http://localhost:8000/calendars'
+curl -s -o /dev/null -w 'example: %{http_code}\n' 'http://localhost:3010/index.php'
 ```
 
-- [ ] **Start the example** (from `php/`, leave running for every task):
+Expected: `200` for both.
+
+If the example is not up, start it again — note the explicit `-t`, because passing `.` makes PHP treat it as a
+*router script* and every request dies with `Failed opening required '.'`:
 
 ```bash
-cd /home/johnrdorazio/development/LiturgicalCalendar/examples/php
-php -S localhost:3000 .
+php -S localhost:3010 -t /home/johnrdorazio/development/LiturgicalCalendar/examples/php
 ```
 
-- [ ] **Confirm the example answers:**
+`php/.env` is already written and is gitignored. It must set an **empty** `API_BASE_PATH` — the dockerised API
+serves from the root, and `/api/dev/calendars` returns 404, so copying `.env.example` verbatim breaks every
+request:
 
-```bash
-curl -s -o /dev/null -w '%{http_code}\n' 'http://localhost:3000/index.php'
+```ini
+APP_ENV=development
+API_PROTOCOL=http
+API_HOST=localhost
+API_PORT=8000
+API_BASE_PATH=
+DEBUG_MODE=false
 ```
-
-Expected: `200`
 
 Throughout the plan, these two shorthands are used:
 
 ```bash
 # GET the page (no POST — first-load state)
-GET() { curl -s 'http://localhost:3000/index.php'; }
+GET() { curl -s 'http://localhost:3010/index.php'; }
 
 # POST to the page, e.g.  POST 'rite=ambrosian&year=2026'
-POST() { curl -s -X POST -d "$1" 'http://localhost:3000/index.php'; }
+POST() { curl -s -X POST -d "$1" 'http://localhost:3010/index.php'; }
 ```
 
 Paste those two function definitions into your shell before starting.
@@ -119,9 +120,16 @@ the sections they touch.
 
 ### Task 1: Bump to ^4.2 and absorb the v4.0.0 output changes
 
-Nothing in the example reads `data-calendartype`, so of v4.0.0's three output changes only two are visible:
-the Ambrosian dioceses leave the diocese list (they become reachable again in Task 4) and the `allowNull`
-option is named. This task confirms both, and confirms nothing else broke.
+**The example is currently broken against the live API.** `CalendarSelect` v3.3.1 fatals with
+`TypeError: hasNationalCalendarWithDioceses(): Argument #1 ($item) must be of type NationalCalendar, null
+given` — its nation pass assumes every diocese's nation owns a national calendar, which holds only in the
+Roman rite, and `lugano_ch` sits in nation `CH`, which owns none. The page renders its shell and then dies
+before any select. v4.0.0 fixed exactly this.
+
+So the bump's headline effect is that the form renders at all. Of v4.0.0's three output changes, one is
+invisible here (nothing reads `data-calendartype`), and two show up once the page works: the Ambrosian sees
+are absent from the Roman diocese list (Task 4 makes them reachable again) and the `allowNull` option is
+named.
 
 **Files:**
 
@@ -138,13 +146,14 @@ option is named. This task confirms both, and confirms nothing else broke.
 
 - [ ] **Step 1: Write the failing check**
 
-The Ambrosian see `milano_it` is in the diocese list today and must not be after the bump:
+The page must stop fatalling and start rendering selects:
 
 ```bash
-GET | grep -c 'milano_it'
+GET | grep -c 'Fatal error'
+GET | grep -c '<select'
 ```
 
-Expected **now**: a non-zero count (v3.3.1 lists Ambrosian dioceses in the Roman list).
+Expected **now**: `1` and `0` — the TypeError above, and not a single select on the page.
 
 - [ ] **Step 2: Bump the constraint**
 
@@ -178,16 +187,20 @@ Expected: a `v4.2.x` version, not `v3.3.1`.
 - [ ] **Step 5: Run the check again**
 
 ```bash
+GET | grep -c 'Fatal error'
+GET | grep -c '<select'
+GET | grep -c 'name="diocesan_calendar"'
 GET | grep -c 'milano_it'
 ```
 
-Expected: `0` — the Ambrosian sees have left the Roman diocese list.
+Expected: `0`, then non-zero, then non-zero, then `0` — no crash, selects present, and the Ambrosian sees
+absent from the Roman diocese list.
 
 - [ ] **Step 6: Confirm the named empty option and a working page**
 
 ```bash
 GET | grep -o 'General Roman Calendar' | head -1
-curl -s -o /dev/null -w '%{http_code}\n' 'http://localhost:3000/index.php'
+curl -s -o /dev/null -w '%{http_code}\n' 'http://localhost:3010/index.php'
 ```
 
 Expected: `General Roman Calendar` printed, and `200`.
@@ -215,7 +228,15 @@ cd /home/johnrdorazio/development/LiturgicalCalendar/examples
 git add php/composer.json php/composer.lock
 git commit -m "Take liturgy-components-php v4.2
 
-The Ambrosian sees leave the Roman diocese list, which is a correction --
+This example had stopped rendering. CalendarSelect v3.3.1 assumed every
+diocese's nation owns a national calendar, which is true only in the Roman
+rite; lugano_ch sits in CH, which owns none, so building the select against
+live metadata died with a TypeError before a single option was emitted.
+v4.0.0 fixed it.
+
+With the page working again, two of that release's output changes become
+visible. The Ambrosian sees leave the Roman diocese list, which is a
+correction --
 they never belonged in it -- and the allowNull option is now named for the
 calendar it selects rather than reading '---'. Nothing here reads
 data-calendartype, so v4.0.0's third output change does not land.
@@ -253,7 +274,7 @@ file_put_contents('/tmp/locale-probe.txt', $fullLocale . "\n");
 Then:
 
 ```bash
-curl -s -H 'Accept-Language: en' 'http://localhost:3000/index.php' > /dev/null
+curl -s -H 'Accept-Language: en' 'http://localhost:3010/index.php' > /dev/null
 cat /tmp/locale-probe.txt
 ```
 
@@ -331,7 +352,7 @@ with:
 - [ ] **Step 5: Run the check again**
 
 ```bash
-curl -s -H 'Accept-Language: en' 'http://localhost:3000/index.php' > /dev/null
+curl -s -H 'Accept-Language: en' 'http://localhost:3010/index.php' > /dev/null
 cat /tmp/locale-probe.txt
 ```
 
@@ -350,8 +371,8 @@ Expected: `0`
 - [ ] **Step 7: Confirm the page still renders and an explicit region still wins**
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' -H 'Accept-Language: en' 'http://localhost:3000/index.php'
-curl -s -o /dev/null -w '%{http_code}\n' -H 'Accept-Language: pt-PT' 'http://localhost:3000/index.php'
+curl -s -o /dev/null -w '%{http_code}\n' -H 'Accept-Language: en' 'http://localhost:3010/index.php'
+curl -s -o /dev/null -w '%{http_code}\n' -H 'Accept-Language: pt-PT' 'http://localhost:3010/index.php'
 ```
 
 Expected: `200` for both. (`pt_PT` must not be rewritten to `pt_BR`; `LocaleResolver` only fills an absent
@@ -517,7 +538,7 @@ Expected: `LANGUAGE after include: fr_FR`
 ```bash
 GET | grep -c 'name="year"'
 GET | grep -c 'name="epiphany"'
-curl -s -o /dev/null -w '%{http_code}\n' 'http://localhost:3000/index.php'
+curl -s -o /dev/null -w '%{http_code}\n' 'http://localhost:3010/index.php'
 ```
 
 Expected: non-zero, non-zero, `200` — the inputs still render in the same place.
@@ -673,7 +694,7 @@ Expected: non-zero for the first (the four sees are back under their own rite), 
 - [ ] **Step 8: Confirm an unknown rite falls back rather than erroring**
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' -X POST -d 'rite=nonsense' 'http://localhost:3000/index.php'
+curl -s -o /dev/null -w '%{http_code}\n' -X POST -d 'rite=nonsense' 'http://localhost:3010/index.php'
 ```
 
 Expected: `200`
@@ -693,7 +714,7 @@ Expected: `min="1976"` for the first, `min="1970"` for the second.
 - [ ] **Step 10: Confirm a below-floor value is clamped in the rendered input**
 
 ```bash
-curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3000/index.php' \
+curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3010/index.php' \
   | grep -o 'name="year"[^>]*value="[0-9]*"' | head -1
 ```
 
@@ -832,7 +853,7 @@ Expected: non-zero for both.
 - [ ] **Step 6: Confirm a hand-crafted nation under Ambrosian is discarded, not thrown**
 
 ```bash
-curl -s -X POST -d 'rite=ambrosian&national_calendar=CH&year=2026' 'http://localhost:3000/index.php' | grep -c 'alert-danger'
+curl -s -X POST -d 'rite=ambrosian&national_calendar=CH&year=2026' 'http://localhost:3010/index.php' | grep -c 'alert-danger'
 ```
 
 Expected: `0` — no error alert; the nation was ignored rather than reaching `CalendarRequest`.
@@ -943,7 +964,7 @@ Expected: no output — still enabled for the General Roman Calendar.
 - [ ] **Step 6: Confirm the parameters are not sent under Ambrosian**
 
 ```bash
-curl -s -X POST -d 'rite=ambrosian&epiphany=JAN6&year=2026' 'http://localhost:3000/index.php' | grep -o 'epiphany=JAN6' | head -1
+curl -s -X POST -d 'rite=ambrosian&epiphany=JAN6&year=2026' 'http://localhost:3010/index.php' | grep -o 'epiphany=JAN6' | head -1
 ```
 
 Expected: no output — the request URL shown on the page carries no `epiphany` parameter.
@@ -1066,7 +1087,7 @@ Expected: `/calendar/roman/2026`
 - [ ] **Step 6: Confirm the Ambrosian diocesan path**
 
 ```bash
-curl -s -X POST -d 'rite=ambrosian&diocesan_calendar=milano_it&year=2026' 'http://localhost:3000/index.php' \
+curl -s -X POST -d 'rite=ambrosian&diocesan_calendar=milano_it&year=2026' 'http://localhost:3010/index.php' \
   | grep -o '/calendar/ambrosian/diocese/milano_it/2026' | head -1
 ```
 
@@ -1075,7 +1096,7 @@ Expected: `/calendar/ambrosian/diocese/milano_it/2026`
 - [ ] **Step 7: Confirm a below-floor year is clamped rather than erroring**
 
 ```bash
-curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3000/index.php' | grep -c 'alert-danger'
+curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3010/index.php' | grep -c 'alert-danger'
 ```
 
 Expected: `0` — clamped to the current year, not an error.
@@ -1181,7 +1202,7 @@ Expected: no output (exit 0).
 
 - [ ] **Step 5: Verify in a browser**
 
-Open `http://localhost:3000/index.php`, change the rite select to the Ambrosian rite, and confirm the page
+Open `http://localhost:3010/index.php`, change the rite select to the Ambrosian rite, and confirm the page
 reloads by itself and the diocese select then lists Bergamo, Lugano, Milano and Novara with no nation select
 beside it.
 
@@ -1242,7 +1263,7 @@ Expected: `/calendar/roman/2026`
 
 ```bash
 curl -s -X POST -d 'rite=roman&national_calendar=US&diocesan_calendar=boston_us&year=2026' \
-  'http://localhost:3000/index.php' | grep -o '/calendar/roman/diocese/boston_us/2026' | head -1
+  'http://localhost:3010/index.php' | grep -o '/calendar/roman/diocese/boston_us/2026' | head -1
 ```
 
 Expected: `/calendar/roman/diocese/boston_us/2026`
@@ -1259,7 +1280,7 @@ POST 'rite=ambrosian' | grep -c 'milano_it'                # expect non-zero
 
 ```bash
 curl -s -X POST -d 'rite=ambrosian&diocesan_calendar=milano_it&year=2026' \
-  'http://localhost:3000/index.php' | grep -c 'LitCalTable'
+  'http://localhost:3010/index.php' | grep -c 'LitCalTable'
 ```
 
 Expected: non-zero.
