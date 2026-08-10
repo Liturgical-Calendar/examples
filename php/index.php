@@ -31,6 +31,8 @@ use LiturgicalCalendar\Components\WebCalendar\GradeDisplay;
 use LiturgicalCalendar\Components\Metadata\MetadataProvider;
 use LiturgicalCalendar\Components\Http\HttpClientFactory;
 use LiturgicalCalendar\Components\Cache\ArrayCache;
+use LiturgicalCalendar\Components\Locale\LocaleResolver;
+use LiturgicalCalendar\Components\Locale\ScopedLocale;
 
 // ============================================================================
 // Detect Direct Access vs. Included
@@ -229,7 +231,13 @@ $detectedLocale = \Locale::canonicalize($detectedLocale);
 $baseLocale     = \Locale::getPrimaryLanguage($detectedLocale);
 $region         = \Locale::getRegion($detectedLocale);
 if (null === $region || empty($region)) {
-    $region = strtoupper($baseLocale); // make an attempt at a possible region code
+    // CLDR likely subtags: 'en' => 'US', 'pt' => 'BR'. Uppercasing the language
+    // instead produced 'en_EN', which exists on no system, so setlocale() failed
+    // and every component silently rendered in the process locale.
+    $region = LocaleResolver::likelyRegion($baseLocale);
+}
+if (null === $region || empty($region)) {
+    $region = strtoupper($baseLocale); // last resort for a language CLDR does not know
 }
 $fullLocale = $baseLocale . '_' . $region;
 
@@ -240,16 +248,12 @@ if ($directAccess && function_exists('bindtextdomain')) {
         bindtextdomain('litexmplphp', $textDomainPath);
         textdomain('litexmplphp');
 
-        // Set locale for gettext
-        $localeArray = [
-            $baseLocale . '_' . $region . '.utf8',
-            $baseLocale . '_' . $region . '.UTF-8',
-            $baseLocale . '_' . $region,
-            $baseLocale . '.utf8',
-            $baseLocale . '.UTF-8',
-            $baseLocale
-        ];
-        setlocale(LC_ALL, $localeArray);
+        // Set the locale for gettext, and pin LANGUAGE alongside it. glibc's
+        // gettext reads LANGUAGE above LC_MESSAGES, so a host exporting it would
+        // otherwise override every translation on this page, and LANGUAGE=C would
+        // switch translation off altogether.
+        $appliedLocale = setlocale(LC_ALL, LocaleResolver::candidates($fullLocale));
+        ScopedLocale::pinLanguage($fullLocale, $appliedLocale);
     }
 }
 
