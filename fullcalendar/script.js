@@ -1,5 +1,5 @@
 import LitGrade from './LitGrade.js';
-import { ApiClient, CalendarSelect, ApiOptions, Input } from '@liturgical-calendar/components-js';
+import { ApiClient, CalendarSelect, RiteSelect, ApiOptions, Input } from '@liturgical-calendar/components-js';
 import { Calendar } from '@fullcalendar/core';
 import allLocales from '@fullcalendar/core/locales-all';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -107,101 +107,144 @@ let calendar,
     shouldSetYearView = true;
 
 ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnromanodorazio.com/api/dev').then( apiClient => {
-    if (false === apiClient || false === apiClient instanceof ApiClient) {
-        alert('Error initializing the Liturgical Calendar API Client');
-    } else {
-        const calendarSelect = new CalendarSelect( currentLocale );
-        calendarSelect.allowNull()
-        .label({
-            class: 'form-label d-block mb-1'
-        }).wrapper({
-            class: 'form-group col col-md-3'
-        }).class('form-select')
-        .appendTo( '#calendarOptions');
+    // Appended before the calendar select so it reads first in the form row.
+    // It must also be in the DOM before linkToCalendarSelect() below, which
+    // reads this element to attach the rite-change listener.
+    //
+    // RiteSelect has no wrapper() of its own — unlike CalendarSelect — so the
+    // grid column it sits in is built here.
+    //
+    // No `text`: omitting it lets RiteSelect supply its own localized label.
+    const riteSelectWrapper = document.createElement('div');
+    riteSelectWrapper.className = 'form-group col col-md-3';
+    document.querySelector('#calendarOptions').appendChild(riteSelectWrapper);
 
-        const apiOptions = new ApiOptions( currentLocale );
-        apiOptions._acceptHeaderInput.hide()
-        apiOptions._yearInput.class( 'form-control' );
-        apiOptions._ascensionInput.wrapperClass('form-group col col-md-2');
-        apiOptions._corpusChristiInput.wrapperClass('form-group col col-md-2');
-        apiOptions._eternalHighPriestInput.wrapperClass('form-group col col-md-2');
-        apiOptions._yearTypeInput.defaultValue('CIVIL');
-        apiOptions.linkToCalendarSelect( calendarSelect ).appendTo( '#calendarOptions' );
+    const riteSelect = new RiteSelect( currentLocale );
+    riteSelect.label({
+        class: 'form-label d-block mb-1'
+    }).class('form-select');
+    riteSelect.appendTo( riteSelectWrapper );
 
-        apiClient.listenTo( calendarSelect ).listenTo( apiOptions );
-        apiClient._eventBus.on( 'calendarFetched', LitCalData => {
-            currentYear = parseInt(apiOptions._yearInput._domElement.value);
-            //console.log(`currentYear is ${currentYear}`);
-            if (LitCalData.hasOwnProperty("litcal")) {
-                const events = litCalDataToEvents( LitCalData.litcal );
-                updateFCSettings( events );
-                const calendarEl = document.getElementById('calendar');
-                if (false === calendar instanceof Calendar) {
-                    calendar = new Calendar(calendarEl, fullCalendarSettings);
-                } else {
-                    calendar.destroy();
-                    calendar = new Calendar(calendarEl, fullCalendarSettings);
-                }
-                calendar.render();
-                document.querySelector('#spinnerWrapper').style.display = 'none';
-                //even though the following code works for Latin, the Latin however is not removed for successive renders
-                //in other locales. Must have something to do with how the renders are working, like an append or something?
-                /*if (currentLocale === 'la') {
-                    console.log('locale is Latin, now fixing days of the week');
-                    $('.fc-day').each((idx, el) => {
-                        $(el).find('a.fc-col-header-cell-cushion').text(dayNamesShort[idx]);
-                        console.log($(el).find('a.fc-col-header-cell-cushion').text());
-                    });
-                }
-                */
+    const calendarSelect = new CalendarSelect( currentLocale );
+    calendarSelect.allowNull()
+    .label({
+        class: 'form-label d-block mb-1'
+    }).wrapper({
+        class: 'form-group col col-md-3'
+    }).class('form-select')
+    .appendTo( '#calendarOptions');
+
+    const apiOptions = new ApiOptions( currentLocale );
+    apiOptions._acceptHeaderInput.hide()
+    apiOptions._yearInput.class( 'form-control' );
+    apiOptions._ascensionInput.wrapperClass('form-group col col-md-2');
+    apiOptions._corpusChristiInput.wrapperClass('form-group col col-md-2');
+    apiOptions._eternalHighPriestInput.wrapperClass('form-group col col-md-2');
+    apiOptions._yearTypeInput.defaultValue('CIVIL');
+    // Passing riteSelect marks the rite as explicit, so it is emitted as a path
+    // segment and the calendar select is rebuilt whenever the rite changes. The
+    // Ambrosian rite has no national tier and fixes Epiphany, Ascension, Corpus
+    // Christi and the Eternal High Priest in its own books, so ApiOptions also
+    // disables those four inputs for as long as it is selected.
+    apiOptions.linkToCalendarSelect( calendarSelect, riteSelect ).appendTo( '#calendarOptions' );
+
+    // The rite select must be wired to the client as well as to ApiOptions:
+    // ApiOptions rebuilds the calendar select on a rite change, but only the
+    // client turns the rite into a path segment. Without this the form would
+    // read `ambrosian` while the request still went to /calendar/roman/.
+    apiClient.listenTo( calendarSelect ).listenTo( riteSelect ).listenTo( apiOptions );
+    apiClient._eventBus.on( 'calendarFetched', LitCalData => {
+        currentYear = parseInt(apiOptions._yearInput._domElement.value);
+        //console.log(`currentYear is ${currentYear}`);
+        if (LitCalData.hasOwnProperty("litcal")) {
+            const events = litCalDataToEvents( LitCalData.litcal );
+            updateFCSettings( events );
+            const calendarEl = document.getElementById('calendar');
+            if (false === calendar instanceof Calendar) {
+                calendar = new Calendar(calendarEl, fullCalendarSettings);
+            } else {
+                calendar.destroy();
+                calendar = new Calendar(calendarEl, fullCalendarSettings);
             }
-            if (LitCalData.hasOwnProperty('messages')) {
-                const messagesHtml = LitCalData.messages.map((message, idx) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${idx}</td><td>${message}</td>`;
-                    return tr;
+            calendar.render();
+            document.querySelector('#spinnerWrapper').style.display = 'none';
+            //even though the following code works for Latin, the Latin however is not removed for successive renders
+            //in other locales. Must have something to do with how the renders are working, like an append or something?
+            /*if (currentLocale === 'la') {
+                console.log('locale is Latin, now fixing days of the week');
+                $('.fc-day').each((idx, el) => {
+                    $(el).find('a.fc-col-header-cell-cushion').text(dayNamesShort[idx]);
+                    console.log($(el).find('a.fc-col-header-cell-cushion').text());
                 });
-                document.querySelector('#LitCalMessages tbody').replaceChildren(...messagesHtml);
             }
-        });
-
-        $(apiOptions._holydaysOfObligationInput._domElement).multiselect({
-            buttonWidth: '100%',
-            buttonClass: 'form-select',
-            templates: {
-                button: '<button type="button" class="multiselect dropdown-toggle" data-bs-toggle="dropdown"><span class="multiselect-selected-text"></span></button>'
-            },
-        });
-
-        setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, calendarSelect._domElement.value);
-
-        calendarSelect._domElement.addEventListener('change', (ev) => {
-            $(apiOptions._holydaysOfObligationInput._domElement).multiselect('rebuild');
-            setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, ev.target.value);
-        });
-
-        if (typeof FC_CONTROL !== 'undefined' && FC_CONTROL) {
-            if (today.getMonth() === 11) {
-                apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
-            }
-            fullCalendarSettings.datesSet = (dateInfo) => {
-                const currentData = dateInfo.view.getCurrentData();
-                const { currentViewType, currentDate } = currentData;
-                console.log('current view', currentViewType);
-                const viewedDate = new Date(currentDate);
-                const viewedMonth = viewedDate.getMonth();
-                console.log('current month: ', viewedMonth);
-                if (viewedMonth === 11 && apiOptions._yearTypeInput._domElement.value === 'CIVIL') {
-                    apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
-                    shouldSetYearView = false;
-                    fullCalendarSettings.initialDate = `${currentYear}-12-01`;
-                    apiClient.yearType(apiOptions._yearTypeInput._domElement.value).year(currentYear+1).refetchCalendarData();
-                } else {
-                    shouldSetYearView = true;
-                }
-            };
+            */
         }
-        apiClient.yearType(apiOptions._yearTypeInput._domElement.value).fetchNationalCalendar(calendarSelect._domElement.value);
+        if (LitCalData.hasOwnProperty('messages')) {
+            const messagesHtml = LitCalData.messages.map((message, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${idx}</td><td>${message}</td>`;
+                return tr;
+            });
+            document.querySelector('#LitCalMessages tbody').replaceChildren(...messagesHtml);
+        }
+    });
+
+    $(apiOptions._holydaysOfObligationInput._domElement).multiselect({
+        buttonWidth: '100%',
+        buttonClass: 'form-select',
+        templates: {
+            button: '<button type="button" class="multiselect dropdown-toggle" data-bs-toggle="dropdown"><span class="multiselect-selected-text"></span></button>'
+        },
+    });
+
+    setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, calendarSelect._domElement.value);
+
+    calendarSelect._domElement.addEventListener('change', (ev) => {
+        $(apiOptions._holydaysOfObligationInput._domElement).multiselect('rebuild');
+        setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, ev.target.value);
+    });
+
+    if (typeof FC_CONTROL !== 'undefined' && FC_CONTROL) {
+        if (today.getMonth() === 11) {
+            apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
+        }
+        fullCalendarSettings.datesSet = (dateInfo) => {
+            const currentData = dateInfo.view.getCurrentData();
+            const { currentViewType, currentDate } = currentData;
+            console.log('current view', currentViewType);
+            const viewedDate = new Date(currentDate);
+            const viewedMonth = viewedDate.getMonth();
+            console.log('current month: ', viewedMonth);
+            if (viewedMonth === 11 && apiOptions._yearTypeInput._domElement.value === 'CIVIL') {
+                apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
+                shouldSetYearView = false;
+                fullCalendarSettings.initialDate = `${currentYear}-12-01`;
+                apiClient.yearType(apiOptions._yearTypeInput._domElement.value).year(currentYear+1).refetchCalendarData()
+                    .catch( error => console.error(`Could not refetch the calendar: ${error.message}`) );
+            } else {
+                shouldSetYearView = true;
+            }
+        };
     }
+    // The select opens on its empty option — the rite-level calendar — which is
+    // not a nation. Passing that empty value to fetchNationalCalendar() built
+    // `/calendar/roman/nation//2026` and the calendar never rendered. Until
+    // 1.5.0 this was unreachable: constructing a CalendarSelect threw first.
+    //
+    // Since 2.0.0 the fetch methods return a promise that rejects rather than
+    // logging the failure and swallowing it, so a bare call would surface as an
+    // unhandled rejection.
+    apiClient.yearType(apiOptions._yearTypeInput._domElement.value);
+    const initialCalendar = calendarSelect._domElement.value;
+    const initialFetch = initialCalendar === ''
+        ? apiClient.fetchCalendar()
+        : apiClient.fetchNationalCalendar(initialCalendar);
+    initialFetch.catch( error => console.error(`Could not fetch the initial calendar: ${error.message}`) );
+}).catch( error => {
+    // Since 2.0.0 init() rejects rather than resolving to false, so the
+    // `apiClient instanceof ApiClient` guard this example used to need is gone.
+    // This also catches anything thrown while building the page above, hence the
+    // message covers both rather than naming the API client specifically.
+    alert(`Could not start the Liturgical Calendar example: ${error.message}`);
 });
 
