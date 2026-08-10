@@ -10,7 +10,7 @@ by hand here, driven off the `Rite` enum rather than hardcoded.
 
 One piece of it cannot be written out by hand, because the library gives the example no lever to pull: the
 Ambrosian year floor. That is closed in the library first, which makes this a two-step, two-repository change
-targeting `^4.2` rather than `^4.1`. See [Prerequisite](#prerequisite-yearmin-in-liturgy-components-php-v420).
+targeting `^4.2` rather than `^4.1`. See [Dependency](#dependency-the-rite-floor-lands-in-the-library-in-flight).
 
 ## Context
 
@@ -31,48 +31,35 @@ Two properties of this example shape every decision below. It is a plain POST fo
 so a rite change only reaches the server on a submit. And it renders two `CalendarSelect`s — a nation select
 and a diocese select — where the JavaScript examples render one.
 
-## Prerequisite: `Year::min()` in liturgy-components-php v4.2.0
+## Dependency: the rite floor lands in the library (in flight)
 
 `Rite::minYear()` returns 1970 for the Roman rite and 1976 for the Ambrosian, the first year of its reformed
-Missal. It has no callers in `src/`; only `tests/RiteTest.php` asserts it. `ApiOptions\Input\Year::get()`
-hardcodes the floor in three places — the rendered `min="1970"` attribute, and the two range checks that
-decide whether `selectedValue` is usable or should fall back to the current year — and the `Input` base class
-exposes no setter for it. The example therefore cannot raise the floor at all.
+Missal. Until now it had no callers in `src/`: `ApiOptions\Input\Year` hardcoded 1970 in the rendered `min`
+attribute and in both `selectedValue` range checks, and `Input` exposed no setter, so the example could not
+raise the floor however it was written.
 
-The JavaScript library already solved this: `YearInput` has a `min()` setter, `ApiOptions` calls
-`yearInput.min(riteProps.minYear)` on a rite change, and `ApiOptionsRite.test.js:175` covers it. PHP gets the
-setter half of the same treatment.
-
-**In `liturgy-components-php`, released as v4.2.0:**
+This is being closed in `liturgy-components-php` on `feat/year-input-rite-floor` (`6370161`), targeting
+v4.2.0. It is not this plan's work; what matters here is the interface the example consumes:
 
 ```php
-final class Year extends Input
-{
-    private int $min = 1970;
-
-    public function min(int $min): self
-    {
-        $this->min = $min;
-        return $this;
-    }
-
-    // get() unchanged apart from using $this->min for the three literals
-}
+$apiOptions->yearInput->rite($selectedRite);   // reads Rite::minYear()
+$apiOptions->yearInput->min(1976);             // or a bare year, validated to 1970..9999
 ```
 
-`get()` then uses `$this->min` in place of the literal in all three places. No `max()` counterpart: the
-ceiling is 9999 in every rite, being the limit of PHP's own date handling, so there is nothing to vary.
+The example calls `rite()`, not `min()`, so the floor is never restated at the call site. Both are chainable
+and the last call wins, so the rite may be re-applied on every request without guarding.
 
-The rite-to-floor mapping stays in the caller rather than moving into `Year`. Making `Year` rite-aware would
-mean giving it a rite, which is the beginning of porting `linkToRiteSelect()` — deliberately out of scope
-below. A plain integer setter is the smallest thing that unblocks the example.
+Two consequences for the design below:
 
-That repository's own standards apply: phpcs, PHPStan level 10, a unit test covering the default floor and a
-raised one, and an UPGRADE.md entry noting the addition.
+- **`Year::get()` now clamps the rendered value up to the floor**, so a below-floor `selectedValue` renders as
+  the floor rather than passing through. The PHP/JS divergence an earlier draft of this spec accepted no
+  longer exists, and the note describing it is gone.
+- **`ApiOptions` itself is untouched by that branch.** It gains no `rite` option and no `linkToRiteSelect()`,
+  so the year floor needs its own explicit call, and everything else in section 3 stays the example's job.
+  Passing `'rite'` in the `$options` array reaches `CalendarSelect` only.
 
-**Sequencing.** The example cannot require `^4.2` until the tag is published, so this lands in two steps: the
-library change and release first, then the example. Tagging and publishing is the author's call, not
-something this plan performs unprompted.
+**Sequencing.** The example cannot require `^4.2` until that branch merges and the tag is published, so the
+example's dependency bump is the last thing to land. Nothing else in this plan waits on it.
 
 ## Design
 
@@ -123,20 +110,15 @@ Christi and Eternal High Priest inputs are disabled and omitted from the request
 condition that disables the same inputs for national and diocesan calendars; the two are OR'd rather than
 duplicated.
 
-**Minimum year** (`$selectedRite->minYear()`): applied in two places, which is why the library prerequisite
-exists.
+**Minimum year** (`$selectedRite->minYear()`): applied in two places.
 
-- `$apiOptions->yearInput->min($selectedRite->minYear())`, so the rendered input advertises the real floor and
-  the browser refuses 1972 under Ambrosian rather than accepting it.
-- The same value replaces the `YEAR_LOWER_LIMIT = 1970` constant in the example's own server-side clamp, since
-  a client-side `min` constrains only a cooperating browser.
+- `$apiOptions->yearInput->rite($selectedRite)`, so the rendered input advertises the real floor, the browser
+  refuses 1972 under Ambrosian rather than accepting it, and a below-floor value already in the field is
+  clamped up rather than submitted.
+- `$selectedRite->minYear()` replaces the `YEAR_LOWER_LIMIT = 1970` constant in the example's own server-side
+  clamp, since a client-side `min` constrains only a cooperating browser.
 
 `YEAR_UPPER_LIMIT` stays a constant at 9999; no rite varies it.
-
-Note a small divergence from JavaScript, accepted rather than chased: given a `selectedValue` below the floor,
-`Year::get()` falls back to the current year, where the JS `ApiOptions` clamps to the floor itself. Falling
-back to the current year is `Year`'s existing behaviour for any out-of-range value, and changing it would be a
-behavioural change to the component beyond the setter this needs.
 
 ### 4. The rite in the request path
 
@@ -181,26 +163,32 @@ there is no later point at which the example would want the host's original loca
 ### 6. Containing the `ApiOptions` `LANGUAGE` pin
 
 `ApiOptions` translates its inputs when they render rather than when they are constructed, so it sets the
-locale and `LANGUAGE` and leaves both set. The example currently calls `getForm()` inline in its markup, at
-lines 742 and 745, while `dgettext('litexmplphp', …)` calls continue below it — including the "Generate
-Calendar" button. Left alone, those render in `ApiOptions`' locale rather than the example's.
+locale and `LANGUAGE` and leaves both set. `CalendarSelect`, `RiteSelect` and `WebCalendar` all restore them
+as of v4.1.0; `ApiOptions` is the exception.
 
-The two `getForm()` calls move out of the markup and into the logic section, with the example's locale
-re-pinned immediately after:
+**Which case this actually affects.** Standalone, it does not: the example constructs `ApiOptions` with the
+same `$options['locale']` it uses for its own gettext, so the value `ApiOptions` leaves behind is the value
+the example wanted anyway. The case that matters is the include path — `$directAccess === false`, how
+`LiturgicalCalendarFrontend` embeds this file. There the example never sets a locale of its own, the host
+owns it, and `ApiOptions` overwrites the host's `LANGUAGE` for the rest of its request.
+
+So the fix is to restore what was there, not to pin what the example would have chosen. The two `getForm()`
+calls move out of the markup and into the logic section — the shape `$webCalendarHtml` already uses — wrapped
+in a scope:
 
 ```php
+$localeScope            = ScopedLocale::apply(LC_ALL, $fullLocale);
 $apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
 $apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
-
-$applied = setlocale(LC_ALL, LocaleResolver::candidates($fullLocale));
-ScopedLocale::pinLanguage($fullLocale, $applied);
+$localeScope->restore();
 ```
 
-The markup then echoes the two strings. This follows the shape `$webCalendarHtml` already uses in this file —
-built in the logic section, echoed in the markup — rather than introducing a new pattern.
+`restore()` puts back the locale and the `LANGUAGE` that were in force before the scope opened, including the
+case where `LANGUAGE` was unset — which `pinLanguage()` alone cannot express, since it only ever sets a value.
+This is the one place the example wants a scope rather than a bootstrap pin, and the reason `ScopedLocale`
+offers both.
 
-`CalendarSelect`, `RiteSelect` and `WebCalendar` restore the locale themselves as of v4.1.0, so their inline
-`getSelect()` and `buildTable()` calls need no such treatment. `ApiOptions` is the only leak.
+The markup then echoes the two strings.
 
 ### 7. Auto-submit on rite change
 
