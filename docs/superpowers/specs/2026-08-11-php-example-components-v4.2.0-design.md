@@ -8,9 +8,9 @@ driving the calendar list and the request path. The PHP library does not offer t
 cheap in JavaScript — `ApiOptions::linkToRiteSelect()` is JS-only — so the behaviour it implies is written out
 by hand here, driven off the `Rite` enum rather than hardcoded.
 
-One piece of it cannot be written out by hand, because the library gives the example no lever to pull: the
-Ambrosian year floor. That is closed in the library first, which makes this a two-step, two-repository change
-targeting `^4.2` rather than `^4.1`. See [Dependency](#dependency-the-rite-floor-lands-in-the-library-in-flight).
+One piece of it could not be written out by hand, because the library gave the example no lever to pull: the
+Ambrosian year floor. That was closed in the library, and the example targets `^4.2` as a result. See
+[Dependency](#dependency-the-rite-floor-and-the-apioptions-rite-option).
 
 ## Context
 
@@ -31,35 +31,27 @@ Two properties of this example shape every decision below. It is a plain POST fo
 so a rite change only reaches the server on a submit. And it renders two `CalendarSelect`s — a nation select
 and a diocese select — where the JavaScript examples render one.
 
-## Dependency: the rite floor lands in the library (in flight)
+## Dependency: the rite floor and the `ApiOptions` rite option
 
 `Rite::minYear()` returns 1970 for the Roman rite and 1976 for the Ambrosian, the first year of its reformed
-Missal. Until now it had no callers in `src/`: `ApiOptions\Input\Year` hardcoded 1970 in the rendered `min`
-attribute and in both `selectedValue` range checks, and `Input` exposed no setter, so the example could not
-raise the floor however it was written.
+Missal. Through v4.1.0 it had no callers in `src/`: `ApiOptions\Input\Year` hardcoded 1970 in the rendered
+`min` attribute and in both `selectedValue` range checks, and `Input` exposed no setter, so the example could
+not raise the floor however it was written.
 
-This is being closed in `liturgy-components-php` on `feat/year-input-rite-floor` (`6370161`), targeting
-v4.2.0. It is not this plan's work; what matters here is the interface the example consumes:
+**v4.2.0 closes this, and is released.** Three additions matter here:
 
-```php
-$apiOptions->yearInput->rite($selectedRite);   // reads Rite::minYear()
-$apiOptions->yearInput->min(1976);             // or a bare year, validated to 1970..9999
-```
+- `Year::rite(Rite|string)` sets the floor from `Rite::minYear()`, and `Year::get()` clamps a below-floor
+  `selectedValue` up rather than rendering a year the API would reject.
+- `ApiOptions` accepts `'rite'` in its constructor options, resolves it in the options loop, and calls
+  `$this->yearInput->rite($rite)` itself (`ApiOptions.php:204`).
+- `Rite::resolve()` is the shared string-to-case resolver the four rite-accepting methods now share.
 
-The example calls `rite()`, not `min()`, so the floor is never restated at the call site. Both are chainable
-and the last call wins, so the rite may be re-applied on every request without guarding.
+The second is what shapes the design below. The example already passes one `$options` array to every
+component, so adding `'rite' => $selectedRite` to it — which section 2 does anyway, for `CalendarSelect`'s
+sake — carries the year floor as well. **The example needs no year-floor call of its own.**
 
-Two consequences for the design below:
-
-- **`Year::get()` now clamps the rendered value up to the floor**, so a below-floor `selectedValue` renders as
-  the floor rather than passing through. The PHP/JS divergence an earlier draft of this spec accepted no
-  longer exists, and the note describing it is gone.
-- **`ApiOptions` itself is untouched by that branch.** It gains no `rite` option and no `linkToRiteSelect()`,
-  so the year floor needs its own explicit call, and everything else in section 3 stays the example's job.
-  Passing `'rite'` in the `$options` array reaches `CalendarSelect` only.
-
-**Sequencing.** The example cannot require `^4.2` until that branch merges and the tag is published, so the
-example's dependency bump is the last thing to land. Nothing else in this plan waits on it.
+`ApiOptions` gained no `linkToRiteSelect()`, though: the temporal-input disabling and everything else in
+section 3 remain the example's job.
 
 ## Design
 
@@ -112,9 +104,9 @@ duplicated.
 
 **Minimum year** (`$selectedRite->minYear()`): applied in two places.
 
-- `$apiOptions->yearInput->rite($selectedRite)`, so the rendered input advertises the real floor, the browser
-  refuses 1972 under Ambrosian rather than accepting it, and a below-floor value already in the field is
-  clamped up rather than submitted.
+- The rendered input, which advertises the real floor so the browser refuses 1972 under Ambrosian and clamps
+  a below-floor value already in the field. This needs no code here: `ApiOptions` takes the rite from the
+  shared `$options` array and sets it on `yearInput` itself.
 - `$selectedRite->minYear()` replaces the `YEAR_LOWER_LIMIT = 1970` constant in the example's own server-side
   clamp, since a client-side `min` constrains only a cooperating browser.
 

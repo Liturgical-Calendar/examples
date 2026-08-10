@@ -26,18 +26,19 @@ construction time.
 - Branch: `feat/php-example-components-4.2.0`. Commit after every task.
 - Spec: `docs/superpowers/specs/2026-08-11-php-example-components-v4.2.0-design.md`.
 
-### Version sequencing — read before starting
+### Dependency status — read before starting
 
-The example ends on `^4.2`, but **v4.2.0 is not published yet**. It is being cut on
-`liturgy-components-php` branch `feat/year-input-rite-floor` (`6370161`) and delivers exactly one thing this
-plan needs: `ApiOptions\Input\Year::rite()`.
+`liturgical-calendar/components` **v4.2.0 is released and on Packagist**, so nothing in this plan is blocked
+and the example bumps straight from `^3.3` to `^4.2` in Task 1.
 
-Everything else — `Rite`, `RiteSelect`, `CalendarRequest::rite()`, `LocaleResolver`, `ScopedLocale`,
-`Rite::minYear()` — shipped in **v4.1.0, which is published today**.
+Everything the plan uses is in it: `Rite`, `RiteSelect`, `CalendarRequest::rite()`, `LocaleResolver`,
+`ScopedLocale` and `Rite::minYear()` from v4.1.0; `Year::rite()`, `Rite::resolve()` and — decisively for the
+shape of this plan — an `ApiOptions` that accepts `'rite'` in its constructor options, from v4.2.0.
 
-So: **Task 1 bumps to `^4.1`. Tasks 2-8 run against `^4.1`. Task 9 bumps to `^4.2`** and is the only task that
-blocks on the library release. Do not attempt Task 9 until `composer show liturgical-calendar/components` can
-resolve a v4.2.x tag.
+That last one is why there is no separate task for the year floor. `ApiOptions` resolves the rite in its
+options loop and calls `$this->yearInput->rite($rite)` itself (`ApiOptions.php:204` at v4.2.0), so the example
+gets the Ambrosian floor from the one `$options` array it already passes to every component. Task 4 adds
+`'rite'` to that array and verifies the floor as part of the same change.
 
 ### Why there are no unit tests in this plan
 
@@ -105,9 +106,9 @@ Paste those two function definitions into your shell before starting.
 
 | File                     | Responsibility                        | Tasks that touch it |
 | ------------------------ | ------------------------------------- | ------------------- |
-| `php/composer.json`      | Dependency constraint                 | 1, 9                |
-| `php/composer.lock`      | Resolved versions                     | 1, 9                |
-| `php/index.php`          | Logic section and markup section      | 2-7, 9              |
+| `php/composer.json`      | Dependency constraint                 | 1                   |
+| `php/composer.lock`      | Resolved versions                     | 1                   |
+| `php/index.php`          | Logic section and markup section      | 2-7                 |
 | `php/script.js`          | Client-side form behaviour            | 8                   |
 | `README.md`              | Example documentation                 | 8                   |
 
@@ -116,7 +117,7 @@ the sections they touch.
 
 ---
 
-### Task 1: Bump to ^4.1 and absorb the v4.0.0 output changes
+### Task 1: Bump to ^4.2 and absorb the v4.0.0 output changes
 
 Nothing in the example reads `data-calendartype`, so of v4.0.0's three output changes only two are visible:
 the Ambrosian dioceses leave the diocese list (they become reachable again in Task 4) and the `allowNull`
@@ -132,7 +133,8 @@ option is named. This task confirms both, and confirms nothing else broke.
 - Consumes: nothing.
 - Produces: `LiturgicalCalendar\Components\Rite`, `…\RiteSelect`, `…\Locale\LocaleResolver`,
   `…\Locale\ScopedLocale`, `CalendarRequest::rite()`, `Rite::minYear()`, `Rite::hasNationalTier()`,
-  `Rite::hasFixedTemporalOptions()` — all available to every later task.
+  `Rite::hasFixedTemporalOptions()`, `Rite::resolve()`, `Year::rite()`, and an `ApiOptions` constructor that
+  accepts `'rite'` — all available to every later task.
 
 - [ ] **Step 1: Write the failing check**
 
@@ -155,7 +157,7 @@ In `php/composer.json`, change line 6 from:
 to:
 
 ```json
-        "liturgical-calendar/components": "^4.1",
+        "liturgical-calendar/components": "^4.2",
 ```
 
 - [ ] **Step 3: Update the dependency**
@@ -171,7 +173,7 @@ composer update liturgical-calendar/components
 composer show liturgical-calendar/components | grep '^versions'
 ```
 
-Expected: a `v4.1.x` version, not `v3.3.1`.
+Expected: a `v4.2.x` version, not `v3.3.1`.
 
 - [ ] **Step 5: Run the check again**
 
@@ -211,7 +213,7 @@ Expected: no errors.
 ```bash
 cd /home/johnrdorazio/development/LiturgicalCalendar/examples
 git add php/composer.json php/composer.lock
-git commit -m "Take liturgy-components-php v4.1
+git commit -m "Take liturgy-components-php v4.2
 
 The Ambrosian sees leave the Roman diocese list, which is a correction --
 they never belonged in it -- and the allowNull option is now named for the
@@ -563,6 +565,11 @@ webCalendarHtml already uses, and gives the scope somewhere to close."
 
 ### Task 4: Add the rite select
 
+Adding `'rite'` to the shared `$options` array does two jobs at once. `CalendarSelect` partitions its dioceses
+by it, which is what makes the Ambrosian sees reachable again; and `ApiOptions` — as of v4.2.0 — resolves it
+in its options loop and calls `$this->yearInput->rite($rite)` itself, which raises the year floor to 1976 under
+the Ambrosian rite with no call site of our own. Both are verified below.
+
 **Files:**
 
 - Modify: `php/index.php` — two `use` statements; the `$options` block at line 264; a new `$riteSelect`
@@ -571,8 +578,9 @@ webCalendarHtml already uses, and gives the scope somewhere to close."
 **Interfaces:**
 
 - Consumes: `Rite`, `RiteSelect` from Task 1.
-- Produces: `$selectedRite` (a `Rite` case, never null) — consumed by Tasks 5, 6, 7 and 9. `$riteSelect` — a
-  `RiteSelect`, consumed by the markup. `$options` gains the `'rite'` key.
+- Produces: `$selectedRite` (a `Rite` case, never null) — consumed by Tasks 5, 6 and 7. `$riteSelect` — a
+  `RiteSelect`, consumed by the markup. `$options` gains the `'rite'` key, which reaches `CalendarSelect`
+  (diocese partitioning) and `ApiOptions` (year floor); `RiteSelect` ignores it.
 
 - [ ] **Step 1: Write the failing check**
 
@@ -670,7 +678,29 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST -d 'rite=nonsense' 'http://loca
 
 Expected: `200`
 
-- [ ] **Step 9: Lint**
+- [ ] **Step 9: Confirm the year floor arrived through ApiOptions**
+
+No code of ours sets this — it comes from `'rite'` being in the `$options` array `ApiOptions` was constructed
+with:
+
+```bash
+POST 'rite=ambrosian' | grep -o 'name="year"[^>]*min="[0-9]*"' | head -1
+POST 'rite=roman' | grep -o 'name="year"[^>]*min="[0-9]*"' | head -1
+```
+
+Expected: `min="1976"` for the first, `min="1970"` for the second.
+
+- [ ] **Step 10: Confirm a below-floor value is clamped in the rendered input**
+
+```bash
+curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3000/index.php' \
+  | grep -o 'name="year"[^>]*value="[0-9]*"' | head -1
+```
+
+Expected: a `value` of 1976 or later — never 1972. (`Year::get()` clamps up rather than rendering a year the
+API would reject.)
+
+- [ ] **Step 11: Lint**
 
 ```bash
 cd php && vendor/bin/phpcs
@@ -678,7 +708,7 @@ cd php && vendor/bin/phpcs
 
 Expected: no errors.
 
-- [ ] **Step 10: Commit**
+- [ ] **Step 12: Commit**
 
 ```bash
 cd /home/johnrdorazio/development/LiturgicalCalendar/examples
@@ -692,9 +722,12 @@ puts them back.
 
 The rite is read before any component is constructed because CalendarSelect
 partitions its dioceses at construction time. An unrecognised POST value
-falls back to Roman rather than erroring; RiteSelect and ApiOptions both
-ignore the options key they do not know, so one array still serves all
-three."
+falls back to Roman rather than erroring; RiteSelect ignores the options
+key it does not know, so one array still serves all three.
+
+ApiOptions reads it too, as of v4.2.0, and raises the year input's floor to
+the Ambrosian Missal's first year without our asking -- which is why there
+is no separate call to set it."
 ```
 
 ---
@@ -1193,133 +1226,9 @@ page, where neither the select nor its form is guaranteed to be there."
 
 ---
 
-### Task 9: BLOCKED until v4.2.0 is published — the rendered year floor
-
-**Do not start this task** until `feat/year-input-rite-floor` has merged in `liturgy-components-php` and a
-v4.2.x tag is on Packagist. Check with:
-
-```bash
-composer show --all liturgical-calendar/components | grep -o 'v4\.2\.[0-9]*' | head -1
-```
-
-If that prints nothing, stop; Tasks 1-8 stand on their own and the example is correct without this, save that
-the year spinner advertises `min="1970"` under a rite whose Missal begins in 1976.
-
-**Files:**
-
-- Modify: `php/composer.json:6`
-- Modify: `php/composer.lock`
-- Modify: `php/index.php` — one line alongside the other `$apiOptions` input configuration (near original
-  line 300).
-
-**Interfaces:**
-
-- Consumes: `$selectedRite` (Task 4); `ApiOptions\Input\Year::rite(Rite|string $rite): self` (new in v4.2.0).
-- Produces: nothing consumed by later tasks.
-
-- [ ] **Step 1: Write the failing check**
-
-```bash
-POST 'rite=ambrosian' | grep -o 'name="year"[^>]*min="[0-9]*"' | head -1
-```
-
-Expected **now**: a match containing `min="1970"`.
-
-- [ ] **Step 2: Bump the constraint**
-
-In `php/composer.json`, change line 6 from:
-
-```json
-        "liturgical-calendar/components": "^4.1",
-```
-
-to:
-
-```json
-        "liturgical-calendar/components": "^4.2",
-```
-
-- [ ] **Step 3: Update the dependency**
-
-```bash
-cd /home/johnrdorazio/development/LiturgicalCalendar/examples/php
-composer update liturgical-calendar/components
-composer show liturgical-calendar/components | grep '^versions'
-```
-
-Expected: a `v4.2.x` version.
-
-- [ ] **Step 4: Set the floor on the year input**
-
-Immediately after original line 300 (`$apiOptions->yearInput->class('form-control')->wrapperClass('col col-md-2');`),
-add:
-
-```php
-// The floor is a per-rite fact -- 1976 for the Ambrosian rite, whose reformed
-// Missal begins there. Year::rite() reads it from Rite::minYear() rather than
-// restating it, and clamps a below-floor value up rather than rendering it.
-$apiOptions->yearInput->rite($selectedRite);
-```
-
-Note this must come after `$selectedRite` is assigned (Task 4 put it at line 264), which it does.
-
-- [ ] **Step 5: Run the check again**
-
-```bash
-POST 'rite=ambrosian' | grep -o 'name="year"[^>]*min="[0-9]*"' | head -1
-POST 'rite=roman' | grep -o 'name="year"[^>]*min="[0-9]*"' | head -1
-```
-
-Expected: `min="1976"` for the first, `min="1970"` for the second.
-
-- [ ] **Step 6: Confirm a below-floor value is clamped in the rendered input**
-
-```bash
-curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3000/index.php' \
-  | grep -o 'name="year"[^>]*value="[0-9]*"' | head -1
-```
-
-Expected: a `value` of 1976 or later — never 1972.
-
-- [ ] **Step 7: Confirm both paths still generate**
-
-```bash
-POST 'rite=roman&year=2026' | grep -c 'LitCalTable'
-POST 'rite=ambrosian&year=2026' | grep -c 'LitCalTable'
-```
-
-Expected: non-zero for both.
-
-- [ ] **Step 8: Lint**
-
-```bash
-cd php && vendor/bin/phpcs
-```
-
-Expected: no errors.
-
-- [ ] **Step 9: Commit**
-
-```bash
-cd /home/johnrdorazio/development/LiturgicalCalendar/examples
-git add php/composer.json php/composer.lock php/index.php
-git commit -m "Take v4.2 and give the year input the rite's floor
-
-Rite::minYear() had no consumer in the library until v4.2.0: Year hardcoded
-1970 in the rendered min attribute and in both selectedValue range checks,
-and Input exposed no setter, so this example could not raise the floor
-however it was written. Year::rite() closes that.
-
-The server-side clamp added earlier stays -- a client-side min constrains
-only a cooperating browser -- but the spinner now agrees with it, and a
-below-floor value already in the field is clamped up rather than submitted."
-```
-
----
-
 ## Final verification
 
-After Task 9 (or Task 8, if v4.2.0 has not landed), run the whole matrix once:
+After Task 8, run the whole matrix once:
 
 - [ ] **Roman, no calendar:**
 
