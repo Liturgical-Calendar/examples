@@ -35,7 +35,7 @@ and launch a local instance of the API from the repo folder with:
 ## [Fullcalendar](https://litcal.johnromanodorazio.com/examples.php?example=FullCalendar)
 
 A [Fullcalendar](https://github.com/fullcalendar/fullcalendar) rendering of Liturgical events from the Liturgical Calendar API.
-This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.0.0/+esm`,
+This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.1.0/+esm`,
 which takes care of building the Calendar select and the API request options form controls,
 and making the fetch requests to the Liturgical Calendar API. The data fetched from the API is transformed for use with Fullcalendar.
 
@@ -52,7 +52,7 @@ then type "Live Preview" and choose "Live Preview: Show Preview (External Browse
 ## [Javascript](https://litcal.johnromanodorazio.com/examples.php?example=JavaScript)
 
 A simple rendering of a calendar with Liturgical events from the Liturgical Calendar API.
-This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.0.0/+esm`,
+This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.1.0/+esm`,
 which takes care of building the Calendar select, the API request options form controls, and the web calendar,
 and making the fetch requests to the Liturgical Calendar API.
 This example also implements Bootstrap for some basic CSS styling.

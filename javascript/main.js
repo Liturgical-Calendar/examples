@@ -87,7 +87,7 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
     // Ambrosian rite has no national tier and fixes Epiphany, Ascension, Corpus
     // Christi and the Eternal High Priest in its own books, so ApiOptions also
     // disables those four inputs for as long as it is selected.
-    apiOptions.linkToCalendarSelect( calendarSelect, riteSelect ).appendTo( '#calendarOptions' );
+    apiOptions.linkToCalendarSelect( calendarSelect ).linkToRiteSelect( riteSelect ).appendTo( '#calendarOptions' );
 
     // The rite select must be wired to the client as well as to ApiOptions:
     // ApiOptions rebuilds the calendar select on a rite change, but only the
