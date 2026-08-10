@@ -278,7 +278,10 @@ curl -s -H 'Accept-Language: en' 'http://localhost:3010/index.php' > /dev/null
 cat /tmp/locale-probe.txt
 ```
 
-Expected **now**: `en_EN`
+Expected **now**: the probe file is *not written at all*, and the response body carries
+`Uncaught Exception: Invalid locale: en_EN`. `CalendarSelect::locale()` refuses the locale rather than
+falling back, so the page dies before reaching the probe. That is this defect in its strongest form: any
+client sending a bare-language `Accept-Language` takes the page down.
 
 - [ ] **Step 2: Add the imports**
 

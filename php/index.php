@@ -232,8 +232,9 @@ $baseLocale     = \Locale::getPrimaryLanguage($detectedLocale);
 $region         = \Locale::getRegion($detectedLocale);
 if (null === $region || empty($region)) {
     // CLDR likely subtags: 'en' => 'US', 'pt' => 'BR'. Uppercasing the language
-    // instead produced 'en_EN', which exists on no system, so setlocale() failed
-    // and every component silently rendered in the process locale.
+    // instead produced 'en_EN', which exists on no system, and CalendarSelect
+    // refuses it outright -- "Invalid locale: en_EN" -- so any client sending a
+    // bare-language Accept-Language, which is common, took the whole page down.
     $region = LocaleResolver::likelyRegion($baseLocale);
 }
 if (null === $region || empty($region)) {
