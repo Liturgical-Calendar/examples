@@ -33,6 +33,8 @@ use LiturgicalCalendar\Components\Http\HttpClientFactory;
 use LiturgicalCalendar\Components\Cache\ArrayCache;
 use LiturgicalCalendar\Components\Locale\LocaleResolver;
 use LiturgicalCalendar\Components\Locale\ScopedLocale;
+use LiturgicalCalendar\Components\Rite;
+use LiturgicalCalendar\Components\RiteSelect;
 
 // ============================================================================
 // Detect Direct Access vs. Included
@@ -266,11 +268,28 @@ if (!function_exists('dgettext')) {
     }
 }
 
-$options = ['locale' => $fullLocale];
+// The rite is read before any component is built, because it feeds their
+// construction: a CalendarSelect partitions its dioceses by rite. An
+// unrecognised POST value falls back to the Roman rite rather than erroring,
+// matching how this example already treats an out-of-range year.
+$postedRite   = is_string($_POST['rite'] ?? null) ? $_POST['rite'] : '';
+$selectedRite = Rite::tryFrom($postedRite) ?? Rite::ROMAN;
+
+$options = ['locale' => $fullLocale, 'rite' => $selectedRite];
 
 // ============================================================================
 // Initialize Components
 // ============================================================================
+// No labelText(): omitting it lets RiteSelect supply its own localized label,
+// the same choice javascript/main.js makes by omitting `text`.
+$riteSelect = new RiteSelect($options);
+$riteSelect->label(true)
+    ->labelClass('form-label')
+    ->id('rite')
+    ->name('rite')
+    ->class('form-select')
+    ->selectedOption($selectedRite);
+
 $calendarSelectNations = new CalendarSelect($options);
 $calendarSelectNations->label(true)
     ->labelText('Nation')
@@ -744,6 +763,11 @@ if ($directAccess) {
         </div>
         <div class="card-body">
             <form method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $riteSelect->getSelect(); ?>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <?php echo $calendarSelectNations->getSelect(); ?>
