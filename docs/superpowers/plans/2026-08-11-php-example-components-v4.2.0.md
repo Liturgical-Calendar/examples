@@ -862,33 +862,7 @@ with:
                 </div>
 ```
 
-- [ ] **Step 4: Echo the strings from the markup**
-
-Replace this line:
-
-```php
-                    <?php echo $apiOptions->getForm(PathType::ALL_PATHS); ?>
-```
-
-with:
-
-```php
-                    <?php echo $apiOptionsAllPathsHtml; ?>
-```
-
-And replace this line:
-
-```php
-                    <?php echo $apiOptions->getForm(PathType::BASE_PATH); ?>
-```
-
-with:
-
-```php
-                    <?php echo $apiOptionsBasePathHtml; ?>
-```
-
-- [ ] **Step 5: Run the check again**
+- [ ] **Step 4: Run the check again**
 
 ```bash
 POST 'rite=ambrosian' | grep -c 'id="national_calendar"'
@@ -999,33 +973,7 @@ with:
 The two earlier guards in the `$_POST` loop (original lines 338 and 354) still populate `$requestData`, but
 these keys are only read under the condition above, so they are never sent.
 
-- [ ] **Step 4: Echo the strings from the markup**
-
-Replace this line:
-
-```php
-                    <?php echo $apiOptions->getForm(PathType::ALL_PATHS); ?>
-```
-
-with:
-
-```php
-                    <?php echo $apiOptionsAllPathsHtml; ?>
-```
-
-And replace this line:
-
-```php
-                    <?php echo $apiOptions->getForm(PathType::BASE_PATH); ?>
-```
-
-with:
-
-```php
-                    <?php echo $apiOptionsBasePathHtml; ?>
-```
-
-- [ ] **Step 5: Run the check again**
+- [ ] **Step 4: Run the check again**
 
 ```bash
 POST 'rite=ambrosian' | grep -o 'name="epiphany"[^>]*disabled' | head -1
