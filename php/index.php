@@ -31,6 +31,10 @@ use LiturgicalCalendar\Components\WebCalendar\GradeDisplay;
 use LiturgicalCalendar\Components\Metadata\MetadataProvider;
 use LiturgicalCalendar\Components\Http\HttpClientFactory;
 use LiturgicalCalendar\Components\Cache\ArrayCache;
+use LiturgicalCalendar\Components\Locale\LocaleResolver;
+use LiturgicalCalendar\Components\Locale\ScopedLocale;
+use LiturgicalCalendar\Components\Rite;
+use LiturgicalCalendar\Components\RiteSelect;
 
 // ============================================================================
 // Detect Direct Access vs. Included
@@ -229,7 +233,14 @@ $detectedLocale = \Locale::canonicalize($detectedLocale);
 $baseLocale     = \Locale::getPrimaryLanguage($detectedLocale);
 $region         = \Locale::getRegion($detectedLocale);
 if (null === $region || empty($region)) {
-    $region = strtoupper($baseLocale); // make an attempt at a possible region code
+    // CLDR likely subtags: 'en' => 'US', 'pt' => 'BR'. Uppercasing the language
+    // instead produced 'en_EN', which exists on no system, and CalendarSelect
+    // refuses it outright -- "Invalid locale: en_EN" -- so any client sending a
+    // bare-language Accept-Language, which is common, took the whole page down.
+    $region = LocaleResolver::likelyRegion($baseLocale);
+}
+if (null === $region || empty($region)) {
+    $region = strtoupper($baseLocale); // last resort for a language CLDR does not know
 }
 $fullLocale = $baseLocale . '_' . $region;
 
@@ -240,16 +251,12 @@ if ($directAccess && function_exists('bindtextdomain')) {
         bindtextdomain('litexmplphp', $textDomainPath);
         textdomain('litexmplphp');
 
-        // Set locale for gettext
-        $localeArray = [
-            $baseLocale . '_' . $region . '.utf8',
-            $baseLocale . '_' . $region . '.UTF-8',
-            $baseLocale . '_' . $region,
-            $baseLocale . '.utf8',
-            $baseLocale . '.UTF-8',
-            $baseLocale
-        ];
-        setlocale(LC_ALL, $localeArray);
+        // Set the locale for gettext, and pin LANGUAGE alongside it. glibc's
+        // gettext reads LANGUAGE above LC_MESSAGES, so a host exporting it would
+        // otherwise override every translation on this page, and LANGUAGE=C would
+        // switch translation off altogether.
+        $appliedLocale = setlocale(LC_ALL, LocaleResolver::candidates($fullLocale));
+        ScopedLocale::pinLanguage($fullLocale, $appliedLocale);
     }
 }
 
@@ -261,11 +268,28 @@ if (!function_exists('dgettext')) {
     }
 }
 
-$options = ['locale' => $fullLocale];
+// The rite is read before any component is built, because it feeds their
+// construction: a CalendarSelect partitions its dioceses by rite. An
+// unrecognised POST value falls back to the Roman rite rather than erroring,
+// matching how this example already treats an out-of-range year.
+$postedRite   = is_string($_POST['rite'] ?? null) ? $_POST['rite'] : '';
+$selectedRite = Rite::tryFrom($postedRite) ?? Rite::ROMAN;
+
+$options = ['locale' => $fullLocale, 'rite' => $selectedRite];
 
 // ============================================================================
 // Initialize Components
 // ============================================================================
+// No labelText(): omitting it lets RiteSelect supply its own localized label,
+// the same choice javascript/main.js makes by omitting `text`.
+$riteSelect = new RiteSelect($options);
+$riteSelect->label(true)
+    ->labelClass('form-label')
+    ->id('rite')
+    ->name('rite')
+    ->class('form-select')
+    ->selectedOption($selectedRite);
+
 $calendarSelectNations = new CalendarSelect($options);
 $calendarSelectNations->label(true)
     ->labelText('Nation')
@@ -286,7 +310,22 @@ $calendarSelectDioceses->label(true)
     ->allowNull()
     ->setOptions(OptionsType::DIOCESES);
 
-$apiOptions = new ApiOptions($options);
+// ApiOptions sets the process locale and pins LANGUAGE and does not put either
+// back, in prepareL10n() from its constructor -- not in getForm(). Standalone
+// that is harmless: it renders in the same locale this example uses. Included in
+// another page it clobbers the host's LANGUAGE, so both the construction and the
+// render are scoped.
+//
+// Two short scopes rather than one spanning both. The POST handling in between
+// can throw -- an invalid nation reaches CalendarSelect::nationFilter(), which is
+// outside the request's own try/catch -- and a scope held across it would leak
+// the locale to a host that caught the exception and carried on.
+$localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
+try {
+    $apiOptions = new ApiOptions($options);
+} finally {
+    $localeScope->restore();
+}
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('div');
 Input::setGlobalWrapperClass('form-group col col-md-3');
@@ -302,7 +341,6 @@ $apiOptions->yearInput->class('form-control')->wrapperClass('col col-md-2');
 // ============================================================================
 // Year Validation Constants
 // ============================================================================
-const YEAR_LOWER_LIMIT = 1970;
 const YEAR_UPPER_LIMIT = 9999;
 
 // ============================================================================
@@ -364,7 +402,10 @@ if (isset($_POST) && !empty($_POST)) {
     $selectedDiocese = (isset($_POST['diocesan_calendar']) && !empty($_POST['diocesan_calendar']))
         ? htmlspecialchars($_POST['diocesan_calendar'], ENT_QUOTES, 'UTF-8')
         : false;
-    $selectedNation = (isset($_POST['national_calendar']) && !empty($_POST['national_calendar']))
+    // A rite with no national tier has no nation to select, and asking
+    // CalendarRequest for one under it throws. The select is not rendered under
+    // such a rite either, so this only ever discards a hand-crafted POST.
+    $selectedNation = ($selectedRite->hasNationalTier() && isset($_POST['national_calendar']) && !empty($_POST['national_calendar']))
         ? htmlspecialchars($_POST['national_calendar'], ENT_QUOTES, 'UTF-8')
         : false;
     $selectedLocale = (isset($_POST['locale']) && !empty($_POST['locale']))
@@ -382,7 +423,9 @@ if (isset($_POST) && !empty($_POST)) {
     }
 
     // Disable mobile feast inputs for national/diocesan calendars
-    if ($selectedDiocese || $selectedNation) {
+    // A rite that fixes these in its own books joins the national and diocesan
+    // calendars, which take them from the calendar rather than the request.
+    if ($selectedDiocese || $selectedNation || $selectedRite->hasFixedTemporalOptions()) {
         $apiOptions->epiphanyInput->disabled();
         $apiOptions->ascensionInput->disabled();
         $apiOptions->corpusChristiInput->disabled();
@@ -410,6 +453,11 @@ if (isset($_POST) && !empty($_POST)) {
     try {
         $calendarRequest = $apiClient->calendar();
 
+        // Emitted for every rite, the Roman one included: a form built from a
+        // RiteSelect knows its rite explicitly, so the URL says so. Set before
+        // the nation or diocese, though the guard fires in either order.
+        $calendarRequest->rite($selectedRite);
+
         // Set calendar type (diocese takes precedence over nation)
         if ($selectedDiocese) {
             $calendarRequest->diocese($selectedDiocese);
@@ -419,12 +467,16 @@ if (isset($_POST) && !empty($_POST)) {
 
         // Set year if provided
         if (isset($_POST['year'])) {
-            $year = filter_var($_POST['year'], FILTER_VALIDATE_INT);
-            if ($year && $year >= YEAR_LOWER_LIMIT && $year <= YEAR_UPPER_LIMIT) {
+            // The floor is a per-rite fact: 1970 for the Roman rite, 1976 for the
+            // Ambrosian, whose reformed Missal begins there. A client-side min
+            // constrains only a cooperating browser, so it is enforced again here.
+            $yearLowerLimit = $selectedRite->minYear();
+            $year           = filter_var($_POST['year'], FILTER_VALIDATE_INT);
+            if ($year && $year >= $yearLowerLimit && $year <= YEAR_UPPER_LIMIT) {
                 $calendarRequest->year($year);
             } else {
-                // Fallback to current year if invalid
-                $calendarRequest->year((int) date('Y'));
+                // Fallback to the current year if invalid, never below the floor
+                $calendarRequest->year(max((int) date('Y'), $yearLowerLimit));
             }
         }
 
@@ -439,7 +491,7 @@ if (isset($_POST) && !empty($_POST)) {
         }
 
         // Set mobile feast settings (only for General Roman Calendar)
-        if (!$selectedDiocese && !$selectedNation) {
+        if (!$selectedDiocese && !$selectedNation && !$selectedRite->hasFixedTemporalOptions()) {
             if (!empty($requestData['epiphany'] ?? null)) {
                 $calendarRequest->epiphany($requestData['epiphany']);
             }
@@ -482,8 +534,12 @@ if (isset($_POST) && !empty($_POST)) {
             ));
             $apiOptions->holydaysOfObligationInput->selectedValue($holyDaysOfObligationProperties);
 
-            // If diocese selected without nation, set nation from response
-            if ($selectedDiocese && false === $selectedNation) {
+            // If diocese selected without nation, set nation from response.
+            // Only a rite with a national tier has one to read: an Ambrosian
+            // response carries no national_calendar at all, and $selectedNation
+            // is always false under such a rite, so this guard would otherwise
+            // always be entered and always dereference a missing property.
+            if ($selectedDiocese && false === $selectedNation && $selectedRite->hasNationalTier()) {
                 $calendarSelectNations->selectedOption($LiturgicalCalendar->settings->national_calendar);
                 $calendarSelectDioceses->nationFilter($LiturgicalCalendar->settings->national_calendar)
                     ->setOptions(OptionsType::DIOCESES_FOR_NATION)
@@ -528,6 +584,21 @@ if (isset($_POST) && !empty($_POST)) {
             ]);
         }
     }
+}
+
+// ============================================================================
+// Render the ApiOptions form, then give the host back the locale it had
+// ============================================================================
+// The inputs translate as they render, so the locale is re-applied for the render
+// rather than held since construction. Rendering here rather than inline in the
+// markup keeps ApiOptions' locale away from this example's own dgettext() calls
+// further down the page, and gives the scope a place to close.
+$localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
+try {
+    $apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
+    $apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
+} finally {
+    $localeScope->restore();
 }
 
 
@@ -724,11 +795,22 @@ if ($directAccess) {
             <form method="post">
                 <div class="row">
                     <div class="col-md-6">
+                        <?php echo $riteSelect->getSelect(); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <?php if ($selectedRite->hasNationalTier()) : ?>
+                    <div class="col-md-6">
                         <?php echo $calendarSelectNations->getSelect(); ?>
                     </div>
                     <div class="col-md-6">
                         <?php echo $calendarSelectDioceses->getSelect(); ?>
                     </div>
+                    <?php else : ?>
+                    <div class="col-12">
+                        <?php echo $calendarSelectDioceses->getSelect(); ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -739,10 +821,10 @@ if ($directAccess) {
                     </div>
                 </div>
                 <div class="row">
-                    <?php echo $apiOptions->getForm(PathType::ALL_PATHS); ?>
+                    <?php echo $apiOptionsAllPathsHtml; ?>
                 </div>
                 <div class="row mb-2">
-                    <?php echo $apiOptions->getForm(PathType::BASE_PATH); ?>
+                    <?php echo $apiOptionsBasePathHtml; ?>
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">

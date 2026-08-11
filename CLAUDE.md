@@ -34,7 +34,7 @@ cd php
 composer install
 cp .env.example .env
 # Edit .env to configure API_HOST, API_PORT, etc.
-php -S localhost:3000 .
+php -S localhost:3000 -t .
 ```
 
 **VSCode:** Press `Ctrl+Shift+B` and select `php-server` task.
@@ -47,11 +47,14 @@ php -S localhost:3000 .
 - `API_BASE_PATH` - API path prefix (default: /api/dev)
 - `DEBUG_MODE` - Enable verbose logging (default: false)
 
-**Testing:**
+**Linting:**
 
 ```bash
-composer test
+composer lint      # phpcs
+composer lint:fix  # phpcbf
 ```
+
+There is no test suite for this example, by design: it is a demonstration, not a library.
 
 ### Fullcalendar (`fullcalendar/`)
 
