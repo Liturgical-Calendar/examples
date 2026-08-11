@@ -395,7 +395,10 @@ if (isset($_POST) && !empty($_POST)) {
     $selectedDiocese = (isset($_POST['diocesan_calendar']) && !empty($_POST['diocesan_calendar']))
         ? htmlspecialchars($_POST['diocesan_calendar'], ENT_QUOTES, 'UTF-8')
         : false;
-    $selectedNation = (isset($_POST['national_calendar']) && !empty($_POST['national_calendar']))
+    // A rite with no national tier has no nation to select, and asking
+    // CalendarRequest for one under it throws. The select is not rendered under
+    // such a rite either, so this only ever discards a hand-crafted POST.
+    $selectedNation = ($selectedRite->hasNationalTier() && isset($_POST['national_calendar']) && !empty($_POST['national_calendar']))
         ? htmlspecialchars($_POST['national_calendar'], ENT_QUOTES, 'UTF-8')
         : false;
     $selectedLocale = (isset($_POST['locale']) && !empty($_POST['locale']))
@@ -769,12 +772,18 @@ if ($directAccess) {
                     </div>
                 </div>
                 <div class="row">
+                    <?php if ($selectedRite->hasNationalTier()) : ?>
                     <div class="col-md-6">
                         <?php echo $calendarSelectNations->getSelect(); ?>
                     </div>
                     <div class="col-md-6">
                         <?php echo $calendarSelectDioceses->getSelect(); ?>
                     </div>
+                    <?php else : ?>
+                    <div class="col-12">
+                        <?php echo $calendarSelectDioceses->getSelect(); ?>
+                    </div>
+                    <?php endif; ?>
                 </div>
                 <div class="row">
                     <div class="col-12">
