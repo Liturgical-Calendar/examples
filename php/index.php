@@ -343,6 +343,19 @@ $apiOptions->yearInput->class('form-control')->wrapperClass('col col-md-2');
 // ============================================================================
 const YEAR_UPPER_LIMIT = 9999;
 
+// Every rite's floor, handed to script.js on the form element so that changing
+// the rite can bring an out-of-range year into range before submitting. Built
+// from the enum rather than repeated in JavaScript, so the floors keep one home.
+$minYearByRite = [];
+foreach (Rite::cases() as $rite) {
+    $minYearByRite[$rite->value] = $rite->minYear();
+}
+$minYearByRiteAttr = htmlspecialchars(
+    json_encode($minYearByRite, JSON_THROW_ON_ERROR),
+    ENT_QUOTES,
+    'UTF-8'
+);
+
 // ============================================================================
 // POST Request Handling
 // ============================================================================
@@ -472,12 +485,17 @@ if (isset($_POST) && !empty($_POST)) {
             // constrains only a cooperating browser, so it is enforced again here.
             $yearLowerLimit = $selectedRite->minYear();
             $year           = filter_var($_POST['year'], FILTER_VALIDATE_INT);
-            if ($year && $year >= $yearLowerLimit && $year <= YEAR_UPPER_LIMIT) {
-                $calendarRequest->year($year);
-            } else {
-                // Fallback to the current year if invalid, never below the floor
-                $calendarRequest->year(max((int) date('Y'), $yearLowerLimit));
+            if (false === $year) {
+                // Not a number at all, so there is no year to bring into range:
+                // the current one stands in, as it does on a first page load.
+                $year = (int) date('Y');
             }
+            // A year outside the range is clamped to the nearer end rather than
+            // discarded. Changing the rite submits the form from script.js, which
+            // bypasses the browser's own constraint check, so a 1972 chosen under
+            // the Roman rite does arrive here under the Ambrosian: the year the
+            // user asked for is then 1976, not whatever year it happens to be today.
+            $calendarRequest->year(min(max($year, $yearLowerLimit), YEAR_UPPER_LIMIT));
         }
 
         // Set locale if provided
@@ -792,7 +810,7 @@ if ($directAccess) {
             </h2>
         </div>
         <div class="card-body">
-            <form method="post">
+            <form method="post" data-min-year-by-rite="<?php echo $minYearByRiteAttr; ?>">
                 <div class="row">
                     <div class="col-md-6">
                         <?php echo $riteSelect->getSelect(); ?>
