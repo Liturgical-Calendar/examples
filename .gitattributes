@@ -1,0 +1,10 @@
+# Line endings are LF, in the repository and in every working tree.
+#
+# This repo had nine CRLF files against twenty LF ones, with nothing recording
+# which was intended. Any editor or script that normalised on write turned a
+# one-line change into a whole-file diff.
+#
+# `text=auto` lets git detect text and store it with LF; `eol=lf` checks it back
+# out with LF everywhere, including Windows, so the working tree agrees with the
+# repository. Binary content is detected automatically and left alone.
+* text=auto eol=lf
