@@ -92,7 +92,11 @@ and the Ambrosian sees become reachable again.
 is driven off the `Rite` enum, so a third rite added to the library needs no change here.
 
 **No national tier** (`false === $selectedRite->hasNationalTier()`): the nation select is not rendered and the
-diocese select spans the full row. Any posted `national_calendar` is ignored. This mirrors `CalendarSelect`'s
+diocese select spans the full row. Any posted `national_calendar` is ignored, and — the case an earlier draft
+of this spec missed — the response is not read for one either. On a successful diocesan response the example
+back-fills the nation select from `settings.national_calendar`, which an Ambrosian response does not carry;
+since `$selectedNation` is always `false` under such a rite, that guard would always be entered and always
+dereference a missing property. The asymmetry has to be handled on the way back in as well as on the way out. This mirrors `CalendarSelect`'s
 own reasoning — it "skips the national pass entirely rather than rendering an empty group" — and means the
 form cannot construct the nation-under-a-riteless-tier combination that `CalendarRequest` now refuses, so the
 new `InvalidArgumentException` is unreachable from the UI rather than merely caught.

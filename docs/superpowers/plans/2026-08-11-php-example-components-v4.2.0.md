@@ -1107,7 +1107,32 @@ grep -c 'YEAR_LOWER_LIMIT' php/index.php
 
 Expected: `0`
 
-- [ ] **Step 5: Run the check again**
+- [ ] **Step 5: Stop reading a national calendar that a rite may not have**
+
+Making the request succeed exposes a pre-existing defect. On a successful diocesan response the example reads
+`settings.national_calendar` to back-fill the nation select — but an Ambrosian response carries no such key,
+because the rite has no national tier, and `selectedOption(null)` is a `TypeError`. Until now the Ambrosian
+diocesan request returned 400 and never reached this code.
+
+Find:
+
+```php
+            // If diocese selected without nation, set nation from response
+            if ($selectedDiocese && false === $selectedNation) {
+```
+
+Replace with:
+
+```php
+            // If diocese selected without nation, set nation from response.
+            // Only a rite with a national tier has one to read: an Ambrosian
+            // response carries no national_calendar at all, and $selectedNation
+            // is always false under such a rite, so this guard would otherwise
+            // always be entered and always dereference a missing property.
+            if ($selectedDiocese && false === $selectedNation && $selectedRite->hasNationalTier()) {
+```
+
+- [ ] **Step 6: Run the check again**
 
 ```bash
 POST 'year=2026' | grep -o '/calendar/roman/2026' | head -1
@@ -1115,7 +1140,7 @@ POST 'year=2026' | grep -o '/calendar/roman/2026' | head -1
 
 Expected: `/calendar/roman/2026`
 
-- [ ] **Step 6: Confirm the Ambrosian diocesan path**
+- [ ] **Step 7: Confirm the Ambrosian diocesan path**
 
 ```bash
 curl -s -X POST -d 'rite=ambrosian&diocesan_calendar=milano_it&year=2026' 'http://localhost:3010/index.php' \
@@ -1124,7 +1149,7 @@ curl -s -X POST -d 'rite=ambrosian&diocesan_calendar=milano_it&year=2026' 'http:
 
 Expected: `/calendar/ambrosian/diocese/milano_it/2026`
 
-- [ ] **Step 7: Confirm a below-floor year is clamped rather than erroring**
+- [ ] **Step 8: Confirm a below-floor year is clamped rather than erroring**
 
 ```bash
 curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3010/index.php' | grep -c 'alert-danger'
@@ -1132,7 +1157,7 @@ curl -s -X POST -d 'rite=ambrosian&year=1972' 'http://localhost:3010/index.php' 
 
 Expected: `0` — clamped to the current year, not an error.
 
-- [ ] **Step 8: Confirm a calendar still generates on both paths**
+- [ ] **Step 9: Confirm a calendar still generates on both paths**
 
 ```bash
 POST 'rite=roman&year=2026' | grep -c 'LitCalTable'
@@ -1141,7 +1166,7 @@ POST 'rite=ambrosian&year=2026' | grep -c 'LitCalTable'
 
 Expected: non-zero for both.
 
-- [ ] **Step 9: Lint**
+- [ ] **Step 10: Lint**
 
 ```bash
 cd php && vendor/bin/phpcs
@@ -1149,7 +1174,7 @@ cd php && vendor/bin/phpcs
 
 Expected: no errors.
 
-- [ ] **Step 10: Commit**
+- [ ] **Step 11: Commit**
 
 ```bash
 cd /home/johnrdorazio/development/LiturgicalCalendar/examples
@@ -1164,7 +1189,14 @@ the JS examples do.
 
 The year floor becomes a per-rite fact read from Rite::minYear() rather
 than the YEAR_LOWER_LIMIT constant, which had exactly one caller and is
-gone. YEAR_UPPER_LIMIT stays -- no rite varies it."
+gone. YEAR_UPPER_LIMIT stays -- no rite varies it.
+
+Routing the request correctly also made an Ambrosian diocesan response
+arrive for the first time, and the code that back-fills the nation select
+from it assumed every diocese's nation owns a national calendar. It does
+not: the response carries no national_calendar under a rite with no
+national tier, and passing that null on was a TypeError. Same asymmetry the
+select already accounts for, now accounted for on the way back in."
 ```
 
 ---
