@@ -291,7 +291,14 @@ $calendarSelectDioceses->label(true)
     ->allowNull()
     ->setOptions(OptionsType::DIOCESES);
 
-$apiOptions = new ApiOptions($options);
+// ApiOptions sets the process locale and pins LANGUAGE, and does not put either
+// back -- it cannot, because the locale it sets has to survive until the inputs
+// render. Both happen in the constructor, via prepareL10n(), not in getForm().
+// Standalone that is harmless: it renders in the same locale this example uses.
+// Included in another page it clobbers the host's LANGUAGE, so the render is
+// scoped and the scope closed once the last getForm() has run.
+$localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
+$apiOptions  = new ApiOptions($options);
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('div');
 Input::setGlobalWrapperClass('form-group col col-md-3');
@@ -535,6 +542,16 @@ if (isset($_POST) && !empty($_POST)) {
     }
 }
 
+// ============================================================================
+// Render the ApiOptions form, then give the host back the locale it had
+// ============================================================================
+// Rendering here rather than inline in the markup is what gives the scope
+// opened above somewhere to close, and keeps ApiOptions' locale away from this
+// example's own dgettext() calls further down the page.
+$apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
+$apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
+$localeScope->restore();
+
 
 // ============================================================================
 // BEGIN DISPLAY LOGIC
@@ -744,10 +761,10 @@ if ($directAccess) {
                     </div>
                 </div>
                 <div class="row">
-                    <?php echo $apiOptions->getForm(PathType::ALL_PATHS); ?>
+                    <?php echo $apiOptionsAllPathsHtml; ?>
                 </div>
                 <div class="row mb-2">
-                    <?php echo $apiOptions->getForm(PathType::BASE_PATH); ?>
+                    <?php echo $apiOptionsBasePathHtml; ?>
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
