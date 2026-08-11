@@ -333,7 +333,6 @@ $apiOptions->yearInput->class('form-control')->wrapperClass('col col-md-2');
 // ============================================================================
 // Year Validation Constants
 // ============================================================================
-const YEAR_LOWER_LIMIT = 1970;
 const YEAR_UPPER_LIMIT = 9999;
 
 // ============================================================================
@@ -446,6 +445,11 @@ if (isset($_POST) && !empty($_POST)) {
     try {
         $calendarRequest = $apiClient->calendar();
 
+        // Emitted for every rite, the Roman one included: a form built from a
+        // RiteSelect knows its rite explicitly, so the URL says so. Set before
+        // the nation or diocese, though the guard fires in either order.
+        $calendarRequest->rite($selectedRite);
+
         // Set calendar type (diocese takes precedence over nation)
         if ($selectedDiocese) {
             $calendarRequest->diocese($selectedDiocese);
@@ -455,12 +459,16 @@ if (isset($_POST) && !empty($_POST)) {
 
         // Set year if provided
         if (isset($_POST['year'])) {
-            $year = filter_var($_POST['year'], FILTER_VALIDATE_INT);
-            if ($year && $year >= YEAR_LOWER_LIMIT && $year <= YEAR_UPPER_LIMIT) {
+            // The floor is a per-rite fact: 1970 for the Roman rite, 1976 for the
+            // Ambrosian, whose reformed Missal begins there. A client-side min
+            // constrains only a cooperating browser, so it is enforced again here.
+            $yearLowerLimit = $selectedRite->minYear();
+            $year           = filter_var($_POST['year'], FILTER_VALIDATE_INT);
+            if ($year && $year >= $yearLowerLimit && $year <= YEAR_UPPER_LIMIT) {
                 $calendarRequest->year($year);
             } else {
-                // Fallback to current year if invalid
-                $calendarRequest->year((int) date('Y'));
+                // Fallback to the current year if invalid, never below the floor
+                $calendarRequest->year(max((int) date('Y'), $yearLowerLimit));
             }
         }
 
@@ -518,8 +526,12 @@ if (isset($_POST) && !empty($_POST)) {
             ));
             $apiOptions->holydaysOfObligationInput->selectedValue($holyDaysOfObligationProperties);
 
-            // If diocese selected without nation, set nation from response
-            if ($selectedDiocese && false === $selectedNation) {
+            // If diocese selected without nation, set nation from response.
+            // Only a rite with a national tier has one to read: an Ambrosian
+            // response carries no national_calendar at all, and $selectedNation
+            // is always false under such a rite, so this guard would otherwise
+            // always be entered and always dereference a missing property.
+            if ($selectedDiocese && false === $selectedNation && $selectedRite->hasNationalTier()) {
                 $calendarSelectNations->selectedOption($LiturgicalCalendar->settings->national_calendar);
                 $calendarSelectDioceses->nationFilter($LiturgicalCalendar->settings->national_calendar)
                     ->setOptions(OptionsType::DIOCESES_FOR_NATION)
