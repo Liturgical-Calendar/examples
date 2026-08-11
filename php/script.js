@@ -14,3 +14,20 @@ if ( document.readyState === 'loading' ) {
 } else {
     initializeMultiselect();
 }
+
+// Switching rite rebuilds the diocese list server-side, so the form is
+// submitted as soon as the rite changes rather than making the user pick a
+// rite, submit, and only then find the dioceses they wanted. Optional
+// chaining because index.php can be included in another page, where the
+// element may be absent.
+const initializeRiteAutoSubmit = () => {
+    document.getElementById('rite')?.addEventListener('change', (event) => {
+        event.target.form?.submit();
+    });
+}
+
+if ( document.readyState === 'loading' ) {
+    document.addEventListener( 'DOMContentLoaded', initializeRiteAutoSubmit );
+} else {
+    initializeRiteAutoSubmit();
+}

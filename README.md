@@ -70,6 +70,14 @@ This example makes use of the composer package `liturgical-calendar/components`,
 the API request options form controls, and the web calendar.
 This example also implements Bootstrap for some basic CSS styling.
 
+The example also renders a rite select. The Ambrosian rite has no national tier and its four sees — Bergamo,
+Lugano, Milano and Novara — render as a flat diocese list with no nation select; it also fixes Epiphany,
+Ascension, Corpus Domini and the Eternal High Priest in its own books, so those four request parameters are
+disabled under it, and its calendar begins in 1976. Changing the rite submits the form, because the diocese
+list is rebuilt server-side.
+
+This example requires `liturgical-calendar/components` `^4.2`.
+
 In order to view the example, first run `composer install` in the `example/php` folder.
 Then ensure you have copied the `.env.example` file to `.env` or `.env.development` or `.env.local`,
 with `APP_ENV` set to `development` and `API_PORT` set to the port that your local instance of the Liturgical Calendar API is running on.
