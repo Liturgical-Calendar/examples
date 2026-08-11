@@ -219,9 +219,11 @@ no components version for the PHP example and needs no change.
 
 ## Out of scope
 
-`php/composer.json` declares `"test": "phpunit tests"` but no `php/tests/` directory exists, so the script
-fails today and did before this change. Creating a test suite for the example is separate work and is not
-undertaken here.
+`php/composer.json` declared `"test": "phpunit tests"` with no `php/tests/` directory, so the script failed
+both before and during this change. Rather than build a suite for a demonstration, the script was removed
+along with the now-unused `phpunit/phpunit` dev dependency, and the `post-install-cmd`/`post-update-cmd` hooks
+that called a `Utilities::postInstall` which does not exist in the repo. Verification here is the manual
+matrix below.
 
 Unrelated refactoring of `index.php` — a 34 KB single file — is not undertaken either. The changes above stay
 within the sections they touch.

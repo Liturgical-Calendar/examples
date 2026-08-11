@@ -8,7 +8,6 @@
         "symfony/cache": "^6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.3",
         "monolog/monolog": "^3.0",
         "squizlabs/php_codesniffer": "^4.0"
     },
@@ -27,13 +26,6 @@
     ],
     "minimum-stability": "stable",
     "scripts": {
-        "post-install-cmd": [
-            "LiturgicalCalendar\\Examples\\Php\\Utilities::postInstall"
-        ],
-        "post-update-cmd": [
-            "LiturgicalCalendar\\Examples\\Php\\Utilities::postInstall"
-        ],
-        "test": "phpunit tests",
         "lint": "phpcs",
         "lint:fix": "phpcbf"
     }

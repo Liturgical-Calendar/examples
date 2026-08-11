@@ -47,11 +47,14 @@ php -S localhost:3000 .
 - `API_BASE_PATH` - API path prefix (default: /api/dev)
 - `DEBUG_MODE` - Enable verbose logging (default: false)
 
-**Testing:**
+**Linting:**
 
 ```bash
-composer test
+composer lint      # phpcs
+composer lint:fix  # phpcbf
 ```
+
+There is no test suite for this example, by design: it is a demonstration, not a library.
 
 ### Fullcalendar (`fullcalendar/`)
 
