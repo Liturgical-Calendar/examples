@@ -413,12 +413,20 @@ LANGUAGE silently overrode this page's own translations."
 `ApiOptions` translates its inputs when they render, so it sets the locale and `LANGUAGE` and — unlike
 `CalendarSelect`, `RiteSelect` and `WebCalendar`, which restore them as of v4.1.0 — leaves both set.
 
-**Read this before writing the check.** Standalone, this is harmless: `ApiOptions` is constructed with the
-same `$options['locale']` the example uses for its own gettext, so what it leaves behind is what the example
-wanted anyway. The case that matters is the **include** path — `$directAccess === false`, how
-`LiturgicalCalendarFrontend` embeds this file. There the example sets no locale of its own, the host owns it,
-and `ApiOptions` overwrites the host's `LANGUAGE`. The check below therefore exercises the include path; a
-`curl` against the standalone page cannot detect this and must not be used to verify it.
+**Read this before writing the check.** Two things about this task are counter-intuitive.
+
+*It is not detectable standalone.* `ApiOptions` is constructed with the same `$options['locale']` the example
+uses for its own gettext, so what it leaves behind is what the example wanted anyway. The case that matters is
+the **include** path — `$directAccess === false`, how `LiturgicalCalendarFrontend` embeds this file. There the
+example sets no locale of its own, the host owns it, and `ApiOptions` overwrites the host's `LANGUAGE`. The
+check below exercises the include path; a `curl` against the standalone page cannot detect this and must not
+be used to verify it.
+
+*The pin happens in the constructor, not at render.* `prepareL10n()` is called from `ApiOptions::__construct()`
+(`ApiOptions.php:189`) and pins there (`:273`); `getForm()` "does not touch the process locale or `LANGUAGE`"
+(`:410`). A scope opened around only the render would capture the already-polluted value and faithfully
+restore the pollution. **The scope must open before `new ApiOptions($options)` and close after the last
+`getForm()`.**
 
 The fix restores what the host had, rather than pinning what the example would have chosen — `restore()` can
 express "LANGUAGE was unset", which `pinLanguage()` cannot.
@@ -479,31 +487,51 @@ php _include-probe.php
 
 Expected **now**: something other than `fr_FR` — `ApiOptions` has overwritten the host's `LANGUAGE`.
 
-- [ ] **Step 2: Render the form before the page, inside a scope**
+- [ ] **Step 2: Open the scope before the component is constructed**
+
+Find this line (locate by text; line numbers have drifted):
+
+```php
+$apiOptions = new ApiOptions($options);
+```
+
+Replace it with:
+
+```php
+// ApiOptions sets the process locale and pins LANGUAGE, and does not put either
+// back -- it cannot, because the locale it sets has to survive until the inputs
+// render. Both happen in the constructor, via prepareL10n(), not in getForm().
+// Standalone that is harmless: it renders in the same locale this example uses.
+// Included in another page it clobbers the host's LANGUAGE, so the render is
+// scoped and the scope closed once the last getForm() has run.
+$localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
+$apiOptions  = new ApiOptions($options);
+```
+
+- [ ] **Step 3: Render the form and close the scope**
 
 The insertion point is immediately after the closing `}` of the `if (isset($_POST) && !empty($_POST)) {`
-block (original line 531) and before the `BEGIN DISPLAY LOGIC` banner comment. It must be after every
-`selectedValue()` and `disabled()` call, or the form would render stale. Insert:
+block and before the `BEGIN DISPLAY LOGIC` banner comment. It must be after every `selectedValue()` and
+`disabled()` call, or the form renders stale. Insert:
 
 ```php
 // ============================================================================
 // Render the ApiOptions form, then give the host back the locale it had
 // ============================================================================
-// ApiOptions translates its inputs as they render, so it sets the locale and
-// LANGUAGE and leaves both set -- CalendarSelect, RiteSelect and WebCalendar all
-// restore them, ApiOptions is the exception. Standalone that is harmless, since
-// it renders in this example's own locale anyway; included in another page it
-// clobbers the host's LANGUAGE for the rest of the request. Scoping the render
-// puts back whatever was there, including LANGUAGE having been unset.
-$localeScope            = ScopedLocale::apply(LC_ALL, $fullLocale);
+// Rendering here rather than inline in the markup is what gives the scope
+// opened above somewhere to close, and keeps ApiOptions' locale away from this
+// example's own dgettext() calls further down the page.
 $apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
 $apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
 $localeScope->restore();
 ```
 
-- [ ] **Step 3: Echo the strings from the markup**
+The scope spans the POST-handling block and is deliberately not wrapped in `try`/`finally`: that would mean
+indenting some 250 lines for an example, and the request handling inside already catches its own exceptions.
 
-At original line 742, replace:
+- [ ] **Step 4: Echo the strings from the markup**
+
+Replace this line:
 
 ```php
                     <?php echo $apiOptions->getForm(PathType::ALL_PATHS); ?>
@@ -515,7 +543,7 @@ with:
                     <?php echo $apiOptionsAllPathsHtml; ?>
 ```
 
-At original line 745, replace:
+And replace this line:
 
 ```php
                     <?php echo $apiOptions->getForm(PathType::BASE_PATH); ?>
@@ -527,7 +555,7 @@ with:
                     <?php echo $apiOptionsBasePathHtml; ?>
 ```
 
-- [ ] **Step 4: Run the check again**
+- [ ] **Step 5: Run the check again**
 
 ```bash
 cd /home/johnrdorazio/development/LiturgicalCalendar/examples/php
@@ -536,7 +564,7 @@ php _include-probe.php
 
 Expected: `LANGUAGE after include: fr_FR`
 
-- [ ] **Step 5: Confirm the standalone page is unaffected**
+- [ ] **Step 6: Confirm the standalone page is unaffected**
 
 ```bash
 GET | grep -c 'name="year"'
@@ -546,7 +574,7 @@ curl -s -o /dev/null -w '%{http_code}\n' 'http://localhost:3010/index.php'
 
 Expected: non-zero, non-zero, `200` — the inputs still render in the same place.
 
-- [ ] **Step 6: Delete the temporary harness**
+- [ ] **Step 7: Delete the temporary harness**
 
 ```bash
 rm php/_include-probe.php
@@ -555,7 +583,7 @@ git status --porcelain php/
 
 Expected: `php/_include-probe.php` does not appear.
 
-- [ ] **Step 7: Lint**
+- [ ] **Step 8: Lint**
 
 ```bash
 cd php && vendor/bin/phpcs
@@ -563,7 +591,7 @@ cd php && vendor/bin/phpcs
 
 Expected: no errors.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 cd /home/johnrdorazio/development/LiturgicalCalendar/examples
@@ -834,7 +862,33 @@ with:
                 </div>
 ```
 
-- [ ] **Step 4: Run the check again**
+- [ ] **Step 4: Echo the strings from the markup**
+
+Replace this line:
+
+```php
+                    <?php echo $apiOptions->getForm(PathType::ALL_PATHS); ?>
+```
+
+with:
+
+```php
+                    <?php echo $apiOptionsAllPathsHtml; ?>
+```
+
+And replace this line:
+
+```php
+                    <?php echo $apiOptions->getForm(PathType::BASE_PATH); ?>
+```
+
+with:
+
+```php
+                    <?php echo $apiOptionsBasePathHtml; ?>
+```
+
+- [ ] **Step 5: Run the check again**
 
 ```bash
 POST 'rite=ambrosian' | grep -c 'id="national_calendar"'
@@ -945,7 +999,33 @@ with:
 The two earlier guards in the `$_POST` loop (original lines 338 and 354) still populate `$requestData`, but
 these keys are only read under the condition above, so they are never sent.
 
-- [ ] **Step 4: Run the check again**
+- [ ] **Step 4: Echo the strings from the markup**
+
+Replace this line:
+
+```php
+                    <?php echo $apiOptions->getForm(PathType::ALL_PATHS); ?>
+```
+
+with:
+
+```php
+                    <?php echo $apiOptionsAllPathsHtml; ?>
+```
+
+And replace this line:
+
+```php
+                    <?php echo $apiOptions->getForm(PathType::BASE_PATH); ?>
+```
+
+with:
+
+```php
+                    <?php echo $apiOptionsBasePathHtml; ?>
+```
+
+- [ ] **Step 5: Run the check again**
 
 ```bash
 POST 'rite=ambrosian' | grep -o 'name="epiphany"[^>]*disabled' | head -1

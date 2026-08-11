@@ -154,31 +154,44 @@ there is no later point at which the example would want the host's original loca
 
 ### 6. Containing the `ApiOptions` `LANGUAGE` pin
 
-`ApiOptions` translates its inputs when they render rather than when they are constructed, so it sets the
-locale and `LANGUAGE` and leaves both set. `CalendarSelect`, `RiteSelect` and `WebCalendar` all restore them
-as of v4.1.0; `ApiOptions` is the exception.
+`ApiOptions` sets the process locale and pins `LANGUAGE`, and does not put either back. The library is
+explicit about why it cannot: restoring immediately "would undo the locale the inputs are about to translate
+in". `CalendarSelect`, `RiteSelect` and `WebCalendar` all restore; `ApiOptions` is the exception.
 
-**Which case this actually affects.** Standalone, it does not: the example constructs `ApiOptions` with the
-same `$options['locale']` it uses for its own gettext, so the value `ApiOptions` leaves behind is the value
-the example wanted anyway. The case that matters is the include path — `$directAccess === false`, how
-`LiturgicalCalendarFrontend` embeds this file. There the example never sets a locale of its own, the host
-owns it, and `ApiOptions` overwrites the host's `LANGUAGE` for the rest of its request.
+**When the pin happens.** In the constructor, not at render. `prepareL10n()` is called from `__construct()`
+(`ApiOptions.php:189`) and pins there (`:273`); `getForm()` explicitly "does not touch the process locale or
+`LANGUAGE`" (`:410`). The locale set at construction has to survive until the inputs render, which is the
+whole reason the class leaves it set.
 
-So the fix is to restore what was there, not to pin what the example would have chosen. The two `getForm()`
-calls move out of the markup and into the logic section — the shape `$webCalendarHtml` already uses — wrapped
-in a scope:
+**Which case this affects.** Standalone, none: the example constructs `ApiOptions` with the same
+`$options['locale']` it uses for its own gettext, so the value left behind is the value it wanted. The case
+that matters is the include path — `$directAccess === false`, how `LiturgicalCalendarFrontend` embeds this
+file. There the example never sets a locale of its own, the host owns it, and `ApiOptions` overwrites the
+host's `LANGUAGE` for the rest of its request.
+
+So the containment must span construction through render, and restore what was there rather than pin what the
+example would have chosen. The two `getForm()` calls move out of the markup into the logic section — the
+shape `$webCalendarHtml` already uses — and the scope brackets both ends:
 
 ```php
-$localeScope            = ScopedLocale::apply(LC_ALL, $fullLocale);
+// before the component is constructed
+$localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
+$apiOptions  = new ApiOptions($options);
+
+// … POST handling configures the inputs …
+
+// after the last render
 $apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
 $apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
 $localeScope->restore();
 ```
 
-`restore()` puts back the locale and the `LANGUAGE` that were in force before the scope opened, including the
-case where `LANGUAGE` was unset — which `pinLanguage()` alone cannot express, since it only ever sets a value.
-This is the one place the example wants a scope rather than a bootstrap pin, and the reason `ScopedLocale`
-offers both.
+`restore()` puts back the locale and the `LANGUAGE` in force before the scope opened, including the case where
+`LANGUAGE` was unset — which `pinLanguage()` cannot express, since it only ever sets a value.
+
+The span is wide, covering the POST-handling block, and it is not exception-safe: a throw between the two ends
+leaves the host's locale changed. Wrapping ~250 lines in `try`/`finally` is disproportionate for an example,
+and the request handling inside already catches its own exceptions, so this is accepted rather than solved.
 
 The markup then echoes the two strings.
 
