@@ -416,7 +416,9 @@ if (isset($_POST) && !empty($_POST)) {
     }
 
     // Disable mobile feast inputs for national/diocesan calendars
-    if ($selectedDiocese || $selectedNation) {
+    // A rite that fixes these in its own books joins the national and diocesan
+    // calendars, which take them from the calendar rather than the request.
+    if ($selectedDiocese || $selectedNation || $selectedRite->hasFixedTemporalOptions()) {
         $apiOptions->epiphanyInput->disabled();
         $apiOptions->ascensionInput->disabled();
         $apiOptions->corpusChristiInput->disabled();
@@ -473,7 +475,7 @@ if (isset($_POST) && !empty($_POST)) {
         }
 
         // Set mobile feast settings (only for General Roman Calendar)
-        if (!$selectedDiocese && !$selectedNation) {
+        if (!$selectedDiocese && !$selectedNation && !$selectedRite->hasFixedTemporalOptions()) {
             if (!empty($requestData['epiphany'] ?? null)) {
                 $calendarRequest->epiphany($requestData['epiphany']);
             }
