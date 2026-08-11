@@ -34,7 +34,7 @@ cd php
 composer install
 cp .env.example .env
 # Edit .env to configure API_HOST, API_PORT, etc.
-php -S localhost:3000 .
+php -S localhost:3000 -t .
 ```
 
 **VSCode:** Press `Ctrl+Shift+B` and select `php-server` task.

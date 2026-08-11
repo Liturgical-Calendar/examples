@@ -310,14 +310,22 @@ $calendarSelectDioceses->label(true)
     ->allowNull()
     ->setOptions(OptionsType::DIOCESES);
 
-// ApiOptions sets the process locale and pins LANGUAGE, and does not put either
-// back -- it cannot, because the locale it sets has to survive until the inputs
-// render. Both happen in the constructor, via prepareL10n(), not in getForm().
-// Standalone that is harmless: it renders in the same locale this example uses.
-// Included in another page it clobbers the host's LANGUAGE, so the render is
-// scoped and the scope closed once the last getForm() has run.
+// ApiOptions sets the process locale and pins LANGUAGE and does not put either
+// back, in prepareL10n() from its constructor -- not in getForm(). Standalone
+// that is harmless: it renders in the same locale this example uses. Included in
+// another page it clobbers the host's LANGUAGE, so both the construction and the
+// render are scoped.
+//
+// Two short scopes rather than one spanning both. The POST handling in between
+// can throw -- an invalid nation reaches CalendarSelect::nationFilter(), which is
+// outside the request's own try/catch -- and a scope held across it would leak
+// the locale to a host that caught the exception and carried on.
 $localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
-$apiOptions  = new ApiOptions($options);
+try {
+    $apiOptions = new ApiOptions($options);
+} finally {
+    $localeScope->restore();
+}
 $apiOptions->acceptHeaderInput->hide();
 Input::setGlobalWrapper('div');
 Input::setGlobalWrapperClass('form-group col col-md-3');
@@ -581,12 +589,17 @@ if (isset($_POST) && !empty($_POST)) {
 // ============================================================================
 // Render the ApiOptions form, then give the host back the locale it had
 // ============================================================================
-// Rendering here rather than inline in the markup is what gives the scope
-// opened above somewhere to close, and keeps ApiOptions' locale away from this
-// example's own dgettext() calls further down the page.
-$apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
-$apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
-$localeScope->restore();
+// The inputs translate as they render, so the locale is re-applied for the render
+// rather than held since construction. Rendering here rather than inline in the
+// markup keeps ApiOptions' locale away from this example's own dgettext() calls
+// further down the page, and gives the scope a place to close.
+$localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
+try {
+    $apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
+    $apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
+} finally {
+    $localeScope->restore();
+}
 
 
 // ============================================================================

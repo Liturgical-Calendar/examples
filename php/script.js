@@ -22,7 +22,22 @@ if ( document.readyState === 'loading' ) {
 // element may be absent.
 const initializeRiteAutoSubmit = () => {
     document.getElementById('rite')?.addEventListener('change', (event) => {
-        event.target.form?.submit();
+        const form = event.target.form;
+        if (!form) {
+            return;
+        }
+        // A calendar picked under the previous rite does not exist under the new
+        // one: boston_us is Roman, and carrying it into an Ambrosian submit builds
+        // /calendar/ambrosian/diocese/boston_us and earns a 400. Clear both so the
+        // reload starts from the rite alone. The nation select is absent under a
+        // rite with no national tier, hence the null check.
+        ['national_calendar', 'diocesan_calendar'].forEach((name) => {
+            const select = form.elements.namedItem(name);
+            if (select) {
+                select.value = '';
+            }
+        });
+        form.submit();
     });
 }
 

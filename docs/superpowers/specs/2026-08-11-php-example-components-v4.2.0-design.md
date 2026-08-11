@@ -178,24 +178,37 @@ example would have chosen. The two `getForm()` calls move out of the markup into
 shape `$webCalendarHtml` already uses — and the scope brackets both ends:
 
 ```php
-// before the component is constructed
 $localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
-$apiOptions  = new ApiOptions($options);
+try {
+    $apiOptions = new ApiOptions($options);
+} finally {
+    $localeScope->restore();
+}
 
-// … POST handling configures the inputs …
+// … POST handling configures the inputs, holding no scope …
 
-// after the last render
-$apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
-$apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
-$localeScope->restore();
+$localeScope = ScopedLocale::apply(LC_ALL, $fullLocale);
+try {
+    $apiOptionsAllPathsHtml = $apiOptions->getForm(PathType::ALL_PATHS);
+    $apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
+} finally {
+    $localeScope->restore();
+}
 ```
 
 `restore()` puts back the locale and the `LANGUAGE` in force before the scope opened, including the case where
 `LANGUAGE` was unset — which `pinLanguage()` cannot express, since it only ever sets a value.
 
-The span is wide, covering the POST-handling block, and it is not exception-safe: a throw between the two ends
-leaves the host's locale changed. Wrapping ~250 lines in `try`/`finally` is disproportionate for an example,
-and the request handling inside already catches its own exceptions, so this is accepted rather than solved.
+**Two short scopes, not one wide one.** An earlier draft held a single scope from construction through render
+and accepted the leak on a throw, reasoning that the request handling caught its own exceptions. It does not
+catch all of them: an invalid `national_calendar` reaches `CalendarSelect::nationFilter()`, which throws
+`Invalid nation: …` outside that `try`. A host that caught the exception and carried on would keep the changed
+locale. Splitting the scope leaves the throwing code inside no scope at all, and each remaining span is short
+enough to wrap in `try`/`finally` without restructuring the file.
+
+The inputs translate as they render, so re-applying the locale for the render is equivalent to holding it
+since construction — verified by rendering the form in `it_IT` before and after the split and diffing the
+whole page, which is byte-identical.
 
 The markup then echoes the two strings.
 

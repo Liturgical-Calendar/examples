@@ -526,8 +526,10 @@ $apiOptionsBasePathHtml = $apiOptions->getForm(PathType::BASE_PATH);
 $localeScope->restore();
 ```
 
-The scope spans the POST-handling block and is deliberately not wrapped in `try`/`finally`: that would mean
-indenting some 250 lines for an example, and the request handling inside already catches its own exceptions.
+Each scope is wrapped in `try`/`finally`. They are deliberately two short spans rather than one running from
+construction to render: the POST handling in between can throw past its own `try` — an invalid
+`national_calendar` reaches `CalendarSelect::nationFilter()` — and a scope held across it would leak the
+locale to a host that caught the exception and carried on.
 
 - [ ] **Step 4: Echo the strings from the markup**
 
@@ -1276,10 +1278,10 @@ select, the API request options form controls, and the web calendar." add:
 
 ```markdown
 The example also renders a rite select. The Ambrosian rite has no national tier and its four sees — Bergamo,
-Lugano, Milano and Novara — render as a flat diocese list with no nation select; it also fixes Epiphany,
-Ascension, Corpus Domini and the Eternal High Priest in its own books, so those four request parameters are
-disabled under it, and its calendar begins in 1976. Changing the rite submits the form, because the diocese
-list is rebuilt server-side.
+Lugano, Milano and Novara — render as a flat diocese list with no nation select. Its reformed Missal fixes
+Epiphany, Ascension and Corpus Domini in its own books, and does not establish the Eternal High Priest at all,
+so those four request parameters are disabled under it; its calendar begins in 1976. Changing the rite submits
+the form, because the diocese list is rebuilt server-side.
 
 This example requires `liturgical-calendar/components` `^4.2`.
 ```
