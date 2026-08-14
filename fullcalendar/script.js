@@ -70,6 +70,11 @@ function reportFailure(message) {
     dismiss.className = 'btn btn-secondary';
     dismiss.textContent = 'Close';
     dismiss.addEventListener('click', () => dialog.close());
+    // Remove on `close` rather than in the click handler: a modal <dialog> also
+    // closes on Escape, which fires this event but not that click. Either way the
+    // element has to leave the document, or a page that reports more than one
+    // failure accumulates a dismissed dialog per failure.
+    dialog.addEventListener('close', () => dialog.remove());
     dialog.append(text, dismiss);
     document.body.appendChild(dialog);
     dialog.showModal();

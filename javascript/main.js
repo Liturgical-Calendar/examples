@@ -48,6 +48,45 @@ Input.setGlobalWrapper('div');
 Input.setGlobalWrapperClass(formGroupClass(2));
 
 /**
+ * Reports a failure the reader needs to see, rather than only the console.
+ *
+ * Without this the page just stays empty: the table renders nothing and the only
+ * account of why is in devtools. Uses toastr where the host page provides it --
+ * the frontend loads it for the examples page -- and falls back to a native
+ * `<dialog>` for this example standalone, which does not. Deliberately not
+ * `alert()`, which blocks the event loop behind an unstyleable browser modal.
+ *
+ * The same helper, for the same reason, as in fullcalendar/script.js: each example
+ * here is self-contained and imported straight from a CDN with no build step, so
+ * they share conventions rather than modules.
+ *
+ * @param {string} message - The message to show. Inserted as text, never as markup.
+ * @returns {void}
+ */
+function reportFailure(message) {
+    console.error(message);
+    if (typeof toastr !== 'undefined') {
+        toastr.error(message, null, { timeOut: 0, extendedTimeOut: 0, closeButton: true });
+        return;
+    }
+    const dialog = document.createElement('dialog');
+    dialog.className = 'litcal-failure';
+    const text = document.createElement('p');
+    text.textContent = message;
+    const dismiss = document.createElement('button');
+    dismiss.type = 'button';
+    dismiss.className = 'btn btn-secondary';
+    dismiss.textContent = 'Close';
+    dismiss.addEventListener('click', () => dialog.close());
+    // Remove on `close` rather than in the click handler: a modal <dialog> also
+    // closes on Escape, which fires this event but not that click.
+    dialog.addEventListener('close', () => dialog.remove());
+    dialog.append(text, dismiss);
+    document.body.appendChild(dialog);
+    dialog.showModal();
+}
+
+/**
  * Sets the background color of the holy days of obligation select button based on the value of the calendar select element.
  * If the value is empty, the background color is removed.
  * If the value is not empty, the background color is set to #e9ecef.
@@ -177,12 +216,12 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         // failure raised before the request goes out -- an unserviceable rite, an unusable
         // locale -- rejects with a plain Error, so naming the URL unconditionally printed
         // a literal "from undefined".
-        console.error(`Could not fetch the initial calendar${error.url ? ` from ${error.url}` : ''}: ${error.message}`);
+        reportFailure(`Could not fetch the initial calendar${error.url ? ` from ${error.url}` : ''}: ${error.message}`);
     });
 }).catch((error) => {
     // Since 2.0.0 init() rejects rather than resolving to false, so the
     // `apiClient instanceof ApiClient` guard this example used to need is gone.
     // This also catches anything thrown while building the page above; `error.url`
     // is only set on the ApiClientError that a failed request rejects with.
-    console.error(`Could not start the Liturgical Calendar example: ${error.message}`);
+    reportFailure(`Could not start the Liturgical Calendar example: ${error.message}`);
 });
