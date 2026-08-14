@@ -35,9 +35,12 @@ and launch a local instance of the API from the repo folder with:
 ## [Fullcalendar](https://litcal.johnromanodorazio.com/examples.php?example=FullCalendar)
 
 A [Fullcalendar](https://github.com/fullcalendar/fullcalendar) rendering of Liturgical events from the Liturgical Calendar API.
-This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.1.0/+esm`,
-which takes care of building the Calendar select and the API request options form controls,
-and making the fetch requests to the Liturgical Calendar API. The data fetched from the API is transformed for use with Fullcalendar.
+This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.7.0/+esm`,
+and is built on its `CalendarControls` meta-component, which bundles the rite select, the calendar select and the API request
+options form controls, wires them to each other and to the API client, renders the API's messages, and dispatches the initial
+fetch. The example itself is left with the part no component can supply: transforming the fetched data into Fullcalendar events
+and constructing the `Calendar`. It uses `CalendarControls` rather than `CalendarViewer` because the latter's mandatory
+`calendar` slot holds a `WebCalendar`, which a Fullcalendar page has no use for.
 
 This example also implements bootstrap for some basic CSS styling.
 
@@ -52,9 +55,10 @@ then type "Live Preview" and choose "Live Preview: Show Preview (External Browse
 ## [Javascript](https://litcal.johnromanodorazio.com/examples.php?example=JavaScript)
 
 A simple rendering of a calendar with Liturgical events from the Liturgical Calendar API.
-This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.1.0/+esm`,
-which takes care of building the Calendar select, the API request options form controls, and the web calendar,
-and making the fetch requests to the Liturgical Calendar API.
+This example uses the ES module published at `https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.7.0/+esm`,
+and is built on its `CalendarViewer` meta-component, which bundles the rite select, the calendar select, the API request options
+form controls and the web calendar, wires them to each other and to the API client, renders the API's messages, and dispatches
+the initial fetch.
 This example also implements Bootstrap for some basic CSS styling.
 
 To use your local instance of the API, set the API url in `javascript/main.js` by passing it as a parameter to `ApiClient.init('http://localhost:8000')`,

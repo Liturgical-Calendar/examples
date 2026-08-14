@@ -1,5 +1,5 @@
 import LitGrade from './LitGrade.js';
-import { ApiClient, CalendarSelect, RiteSelect, ApiOptions, Input } from '@liturgical-calendar/components-js';
+import { ApiClient, ApiOptionsFilter, CalendarControls, Input } from '@liturgical-calendar/components-js';
 import { Calendar } from '@fullcalendar/core';
 import allLocales from '@fullcalendar/core/locales-all';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -23,10 +23,78 @@ function setHolyDaysOfObligationBgColor(hdobInput, calendarSelectValue) {
     }
 }
 
+/**
+ * Builds the grid column class for a form control's wrapper.
+ *
+ * Each of the two rows the form is split across is budgeted to twelve columns, so
+ * neither wraps: 2 + 4 + 2 + 2 + 2 for the rite, calendar, locale, year type and
+ * year, and 3 + 2 + 2 + 2 + 3 for the five General Roman parameters.
+ *
+ * @param {number} span - The number of columns to span at the md breakpoint.
+ * @returns {string} The wrapper class.
+ */
+const formGroupClass = span => `form-group col col-md-${span}`;
+
 Input.setGlobalInputClass('form-select');
 Input.setGlobalLabelClass('form-label d-block mb-1');
 Input.setGlobalWrapper('div');
-Input.setGlobalWrapperClass('form-group col col-md-3');
+// The narrowest of the two widths any ApiOptions input takes; the wider ones
+// override it individually below.
+Input.setGlobalWrapperClass(formGroupClass(2));
+
+/**
+ * Reports a failure the user needs to see, rather than only the console.
+ *
+ * Uses toastr where the host page provides it -- the frontend loads it for the
+ * examples page -- and falls back to a native `<dialog>` for the standalone pages,
+ * which do not. Deliberately NOT `alert()`, which this example used to call: it
+ * blocks the event loop, freezing the page behind a browser-chrome modal that
+ * cannot be styled and, on the initial-fetch path, would have to be dismissed
+ * before the spinner could even be hidden.
+ *
+ * @param {string} message - The message to show. Inserted as text, never as markup.
+ * @returns {void}
+ */
+function reportFailure(message) {
+    console.error(message);
+    if (typeof toastr !== 'undefined') {
+        toastr.error(message, null, { timeOut: 0, extendedTimeOut: 0, closeButton: true });
+        return;
+    }
+    const dialog = document.createElement('dialog');
+    dialog.className = 'litcal-failure';
+    const text = document.createElement('p');
+    text.textContent = message;
+    const dismiss = document.createElement('button');
+    dismiss.type = 'button';
+    dismiss.className = 'btn btn-secondary';
+    dismiss.textContent = 'Close';
+    dismiss.addEventListener('click', () => dialog.close());
+    // Remove on `close` rather than in the click handler: a modal <dialog> also
+    // closes on Escape, which fires this event but not that click. Either way the
+    // element has to leave the document, or a page that reports more than one
+    // failure accumulates a dismissed dialog per failure.
+    dialog.addEventListener('close', () => dialog.remove());
+    dialog.append(text, dismiss);
+    document.body.appendChild(dialog);
+    dialog.showModal();
+}
+
+/**
+ * Hides the loading spinner.
+ *
+ * Called when the initial request SETTLES and when startup fails outright, never
+ * only on success: the spinner covers the page, so anything that leaves it up is
+ * indistinguishable from a request that never returns.
+ *
+ * @returns {void}
+ */
+function hideSpinner() {
+    const spinner = document.querySelector('#spinnerWrapper');
+    if (spinner !== null) {
+        spinner.style.display = 'none';
+    }
+}
 
 const currentLocale = Cookies.get('currentLocale') ?? 'en';
 const today = Object.freeze(new Date());
@@ -107,53 +175,68 @@ let calendar,
     shouldSetYearView = true;
 
 ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnromanodorazio.com/api/dev').then( apiClient => {
-    // Appended before the calendar select so it reads first in the form row.
-    // It must also be in the DOM before linkToCalendarSelect() below, which
-    // reads this element to attach the rite-change listener.
+    // CalendarControls, not CalendarViewer: this page's renderer is FullCalendar, and
+    // CalendarViewer's mandatory `calendar` slot holds a WebCalendar that would have
+    // nothing to do here. The messages slot lives on CalendarControls rather than only
+    // on CalendarViewer for exactly this consumer.
     //
-    // RiteSelect has no wrapper() of its own — unlike CalendarSelect — so the
-    // grid column it sits in is built here.
+    // The two wires the rite needs are the trap this class exists to close. ApiOptions
+    // rebuilds the calendar list and disables the temporal options the rite fixes, but
+    // only the client turns the rite into a path segment; wiring just the first leaves
+    // the form reading `ambrosian` while every request still goes to /calendar/roman/.
+    // listenTo() installs both.
     //
-    // No `text`: omitting it lets RiteSelect supply its own localized label.
-    const riteSelectWrapper = document.createElement('div');
-    riteSelectWrapper.className = 'form-group col col-md-3';
-    document.querySelector('#calendarOptions').appendChild(riteSelectWrapper);
+    // Row one only. The General Roman parameters are appended separately below, so this
+    // is ALL_CALENDARS rather than the NONE that put all ten inputs in one container.
+    const controls = new CalendarControls({
+        locale: currentLocale,
+        apiClient,
+        filter: ApiOptionsFilter.ALL_CALENDARS,
+        theme: {
+            select: 'form-select',
+            label: 'form-label d-block mb-1',
+            // Since 2.4.0 the wrapper role reaches the rite select too, so both selects
+            // take their grid column from here rather than from a hand-built div.
+            //
+            // No flat `wrapper` key: since 2.7.0 that would reach the locale input as
+            // well and wrap it a second time, overriding the global column class -- and
+            // would then throw if anything below reached for that input's wrapper.
+            riteSelect: { wrapperClass: formGroupClass(2) },
+            calendarSelect: { wrapperClass: formGroupClass(4) }
+        }
+    });
 
-    const riteSelect = new RiteSelect( currentLocale );
-    riteSelect.label({
-        class: 'form-label d-block mb-1'
-    }).class('form-select');
-    riteSelect.appendTo( riteSelectWrapper );
-
-    const calendarSelect = new CalendarSelect( currentLocale );
-    calendarSelect.allowNull()
-    .label({
-        class: 'form-label d-block mb-1'
-    }).wrapper({
-        class: 'form-group col col-md-3'
-    }).class('form-select')
-    .appendTo( '#calendarOptions');
-
-    const apiOptions = new ApiOptions( currentLocale );
-    apiOptions._acceptHeaderInput.hide()
+    // The theme bag deliberately does not reach ApiOptions' inputs -- it bundles a
+    // variable number of them depending on the filter, so there is no fixed set of
+    // per-child keys to name -- so these stay set one by one.
+    const apiOptions = controls.apiOptions;
+    apiOptions._acceptHeaderInput.hide(); // flag read at append time, so before appendTo()
     apiOptions._yearInput.class( 'form-control' );
-    apiOptions._ascensionInput.wrapperClass('form-group col col-md-2');
-    apiOptions._corpusChristiInput.wrapperClass('form-group col col-md-2');
-    apiOptions._eternalHighPriestInput.wrapperClass('form-group col col-md-2');
+    // The two inputs with the longest option labels get the extra width; the rest
+    // keep the global col-md-2.
+    apiOptions._epiphanyInput.wrapperClass( formGroupClass(3) );
+    apiOptions._holydaysOfObligationInput.wrapperClass( formGroupClass(3) );
     apiOptions._yearTypeInput.defaultValue('CIVIL');
-    // Passing riteSelect marks the rite as explicit, so it is emitted as a path
-    // segment and the calendar select is rebuilt whenever the rite changes. The
-    // Ambrosian rite has no national tier and fixes Epiphany, Ascension, Corpus
-    // Christi and the Eternal High Priest in its own books, so ApiOptions also
-    // disables those four inputs for as long as it is selected.
-    apiOptions.linkToCalendarSelect( calendarSelect ).linkToRiteSelect( riteSelect ).appendTo( '#calendarOptions' );
 
-    // The rite select must be wired to the client as well as to ApiOptions:
-    // ApiOptions rebuilds the calendar select on a rite change, but only the
-    // client turns the rite into a path segment. Without this the form would
-    // read `ambrosian` while the request still went to /calendar/roman/.
-    apiClient.listenTo( calendarSelect ).listenTo( riteSelect ).listenTo( apiOptions );
-    apiClient._eventBus.on( 'calendarFetched', LitCalData => {
+    // Row one: the rite and calendar selects, then the ALL_CALENDARS inputs.
+    controls.appendTo({
+        controls: '#calendarOptions',
+        messages: '#LitCalMessages tbody'
+    });
+
+    // Row two. ApiOptions is one object whose appendTo() moves whichever inputs its
+    // CURRENT filter selects, so calling filter().appendTo() again distributes the rest
+    // of the same instance into a second container -- no second ApiOptions, and no
+    // duplicated inputs. The two filters select disjoint sets, so this leaves row one
+    // alone, and neither is NONE, which a repeated filter() call does not allow.
+    apiOptions.filter( ApiOptionsFilter.GENERAL_ROMAN ).appendTo( '#generalRomanOptions' );
+
+    controls.listenTo( apiClient );
+
+    // Only the FullCalendar half is left to do here: the messages slot named above
+    // renders the API's messages array itself, building each row with textContent
+    // rather than the innerHTML this example used to interpolate the API's strings into.
+    controls.onCalendarFetched( LitCalData => {
         currentYear = parseInt(apiOptions._yearInput._domElement.value);
         //console.log(`currentYear is ${currentYear}`);
         if (LitCalData.hasOwnProperty("litcal")) {
@@ -167,7 +250,6 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
                 calendar = new Calendar(calendarEl, fullCalendarSettings);
             }
             calendar.render();
-            document.querySelector('#spinnerWrapper').style.display = 'none';
             //even though the following code works for Latin, the Latin however is not removed for successive renders
             //in other locales. Must have something to do with how the renders are working, like an append or something?
             /*if (currentLocale === 'la') {
@@ -179,14 +261,6 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
             }
             */
         }
-        if (LitCalData.hasOwnProperty('messages')) {
-            const messagesHtml = LitCalData.messages.map((message, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${idx}</td><td>${message}</td>`;
-                return tr;
-            });
-            document.querySelector('#LitCalMessages tbody').replaceChildren(...messagesHtml);
-        }
     });
 
     $(apiOptions._holydaysOfObligationInput._domElement).multiselect({
@@ -197,9 +271,10 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         },
     });
 
-    setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, calendarSelect._domElement.value);
+    const calendarSelectElement = controls.calendarSelect._domElement;
+    setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, calendarSelectElement.value);
 
-    calendarSelect._domElement.addEventListener('change', (ev) => {
+    calendarSelectElement.addEventListener('change', (ev) => {
         $(apiOptions._holydaysOfObligationInput._domElement).multiselect('rebuild');
         setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, ev.target.value);
     });
@@ -226,25 +301,40 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
             }
         };
     }
-    // The select opens on its empty option — the rite-level calendar — which is
-    // not a nation. Passing that empty value to fetchNationalCalendar() built
-    // `/calendar/roman/nation//2026` and the calendar never rendered. Until
-    // 1.5.0 this was unreachable: constructing a CalendarSelect threw first.
+    // The year type is set on the client by hand because defaultValue() fires no
+    // change event, so the listener listenTo() installed has nothing to react to and
+    // the first request would otherwise go out under the client's own default.
+    apiClient.yearType(apiOptions._yearTypeInput._domElement.value);
+
+    // controls.fetch() dispatches three ways from the data-calendartype attribute
+    // CalendarSelect puts on each option: the empty option this select opens on is the
+    // rite-level calendar, then national, then diocesan. The two branches written here
+    // by hand had no diocesan case, so picking a diocese called fetchNationalCalendar()
+    // with a diocese id.
     //
     // Since 2.0.0 the fetch methods return a promise that rejects rather than
     // logging the failure and swallowing it, so a bare call would surface as an
     // unhandled rejection.
-    apiClient.yearType(apiOptions._yearTypeInput._domElement.value);
-    const initialCalendar = calendarSelect._domElement.value;
-    const initialFetch = initialCalendar === ''
-        ? apiClient.fetchCalendar()
-        : apiClient.fetchNationalCalendar(initialCalendar);
-    initialFetch.catch( error => console.error(`Could not fetch the initial calendar: ${error.message}`) );
+    //
+    // The spinner is hidden when that first request SETTLES, not only when it succeeds.
+    // Hiding it inside onCalendarFetched() -- the only place it used to be hidden --
+    // left it spinning over the page forever if the initial fetch failed, with the error
+    // visible only in the console. 2.6.0 added `settled` for exactly this, but only on
+    // the mountInto() path; on the constructor path this example uses, the fetch promise
+    // is already ours, so .finally() is that same signal.
+    controls.fetch()
+        .catch( error => reportFailure(`Could not fetch the initial calendar: ${error.message}`) )
+        .finally( hideSpinner );
 }).catch( error => {
     // Since 2.0.0 init() rejects rather than resolving to false, so the
     // `apiClient instanceof ApiClient` guard this example used to need is gone.
     // This also catches anything thrown while building the page above, hence the
     // message covers both rather than naming the API client specifically.
-    alert(`Could not start the Liturgical Calendar example: ${error.message}`);
+    //
+    // The spinner is hidden here too. It is only ever hidden, never re-shown, so a
+    // failure on this path -- which is reached BEFORE the fetch whose .finally()
+    // hides it above -- otherwise left it covering the page for good.
+    hideSpinner();
+    reportFailure(`Could not start the Liturgical Calendar example: ${error.message}`);
 });
 

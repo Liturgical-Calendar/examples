@@ -202,3 +202,22 @@ body:not(.production) {
     border-right: 1px groove White;
 }
 
+
+/* Fallback failure dialog, used on the standalone pages, which do not load toastr.
+   The frontend's examples page does, and takes the toastr branch instead. */
+dialog.litcal-failure {
+    max-width: 32rem;
+    padding: 1.25rem;
+    border: 1px solid #b02a37;
+    border-radius: .375rem;
+    color: #58151c;
+    background: #f8d7da;
+}
+
+dialog.litcal-failure::backdrop {
+    background: rgba(0, 0, 0, .4);
+}
+
+dialog.litcal-failure p {
+    margin: 0 0 1rem;
+}

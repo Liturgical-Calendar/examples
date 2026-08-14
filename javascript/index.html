@@ -23,9 +23,12 @@
 
 <body class="p-4">
     <form id="litcalForm">
-        <div class="row mb-4" id="calendarOptions">
-            <h2>Liturgical Calendar as an HTML table produced by Javascript</h2>
-        </div>
+        <h2 class="mb-4">Liturgical Calendar as an HTML table produced by Javascript</h2>
+        <!-- The rite and calendar selects, and the parameters that apply to every calendar.
+             main.js fills both rows: nothing is appended here in the markup. -->
+        <div class="row mb-3" id="calendarOptions"></div>
+        <!-- The parameters that only apply to the General Roman Calendar. -->
+        <div class="row mb-4" id="generalRomanOptions"></div>
     </form>
 
     <div id="litcalWebcalendar"></div>
@@ -38,7 +41,7 @@
     <script type='importmap'>
         {
             "imports": {
-                "@liturgical-calendar/components-js": "https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.1.0/+esm"
+                "@liturgical-calendar/components-js": "https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.7.0/+esm"
             }
         }
     </script>

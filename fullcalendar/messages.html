@@ -36,7 +36,11 @@
     </div>
 
     <header>
-        <div id="calendarOptions" class="row mb-4"></div>
+        <!-- Two rows, as in the JavaScript example: the rite and calendar selects and the
+             parameters that apply to every calendar, then the five that only apply to the
+             General Roman Calendar. script.js fills both. -->
+        <div id="calendarOptions" class="row mb-3"></div>
+        <div id="generalRomanOptions" class="row mb-4"></div>
     </header>
 
     <table id="LitCalMessages">
@@ -54,7 +58,7 @@
                 "@fullcalendar/daygrid": "https://cdn.skypack.dev/@fullcalendar/daygrid@6.1.19",
                 "@fullcalendar/list": "https://cdn.skypack.dev/@fullcalendar/list@6.1.19",
                 "@fullcalendar/bootstrap5": "https://cdn.skypack.dev/@fullcalendar/bootstrap5@6.1.19",
-                "@liturgical-calendar/components-js": "https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.1.0/+esm"
+                "@liturgical-calendar/components-js": "https://cdn.jsdelivr.net/npm/@liturgical-calendar/components-js@2.7.0/+esm"
             }
         }
     </script>
