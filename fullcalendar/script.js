@@ -1,5 +1,5 @@
 import LitGrade from './LitGrade.js';
-import { ApiClient, ApiOptionsFilter, CalendarControls, Input } from '@liturgical-calendar/components-js';
+import { ApiClient, ApiOptionsFilter, CalendarControls, Input, ThemePreset } from '@liturgical-calendar/components-js';
 import { Calendar } from '@fullcalendar/core';
 import allLocales from '@fullcalendar/core/locales-all';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -9,17 +9,26 @@ import la from './la.js';
 
 
 /**
- * Sets the background color of the holy days of obligation select button based on the value of the calendar select element.
- * If the value is empty, the background color is removed.
- * If the value is not empty, the background color is set to #e9ecef.
+ * Greys the holy days of obligation multiselect button when the current selection
+ * predetermines that input, and hands it back to the user when it does not.
+ *
+ * Driven by `CalendarControls.selection.predeterminedInputs` rather than by the
+ * calendar select's value. The two agree for THIS input -- holy days are not fixed by
+ * any rite, so they follow the calendar half of the rule alone -- but the payload is
+ * derived from the very rule ApiOptions uses to disable an input, so the greying and
+ * the disabling cannot drift, and the same test now reads correctly for the four
+ * inputs where `value === ''` does not: under the Ambrosian rite the Missal fixes
+ * Epiphany, Ascension and Corpus Domini and does not establish the Eternal High
+ * Priest, so those are predetermined with no calendar selected at all.
+ *
  * @param {HTMLSelectElement} hdobInput - The holy days of obligation select element.
- * @param {string} calendarSelectValue - The value of the calendar select element.
+ * @param {boolean} readOnly - Whether the current selection predetermines the input.
  */
-function setHolyDaysOfObligationBgColor(hdobInput, calendarSelectValue) {
-    if (calendarSelectValue === '') {
-        $(hdobInput).multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
-    } else {
+function setHolyDaysOfObligationBgColor(hdobInput, readOnly) {
+    if (readOnly) {
         $(hdobInput).parent().find('button.multiselect').css('background-color', '#e9ecef');
+    } else {
+        $(hdobInput).multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
     }
 }
 
@@ -35,8 +44,10 @@ function setHolyDaysOfObligationBgColor(hdobInput, calendarSelectValue) {
  */
 const formGroupClass = span => `form-group col col-md-${span}`;
 
-Input.setGlobalInputClass('form-select');
-Input.setGlobalLabelClass('form-label d-block mb-1');
+// A preset covers CONTROLS and never LAYOUT -- no wrapper, no grid span, no spacing
+// utility -- so the two wrapper globals stay here. The input and label class globals
+// are gone: naming a preset opens the `theme.apiOptions` gate, so the theme bag below
+// reaches all ten ApiOptions inputs and supplies both.
 Input.setGlobalWrapper('div');
 // The narrowest of the two widths any ApiOptions input takes; the wider ones
 // override it individually below.
@@ -193,7 +204,14 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         apiClient,
         filter: ApiOptionsFilter.ALL_CALENDARS,
         theme: {
-            select: 'form-select',
+            // Since 2.8.0 a preset supplies the `select` and `input` classes this page
+            // used to spell out, and naming one opens the `theme.apiOptions` gate, so
+            // they reach all ten ApiOptions inputs as well as the two selects. The name
+            // is hardcoded rather than probed for: this page renders Fullcalendar with
+            // its own bootstrap5 plugin and theme system, so it is a Bootstrap 5 page
+            // by construction. `label` is still written out because a preset covers
+            // CONTROLS and never LAYOUT, and `d-block mb-1` is layout.
+            preset: ThemePreset.BOOTSTRAP_5,
             label: 'form-label d-block mb-1',
             // Since 2.4.0 the wrapper role reaches the rite select too, so both selects
             // take their grid column from here rather than from a hand-built div.
@@ -206,17 +224,23 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         }
     });
 
-    // The theme bag deliberately does not reach ApiOptions' inputs -- it bundles a
-    // variable number of them depending on the filter, so there is no fixed set of
-    // per-child keys to name -- so these stay set one by one.
+    // The preset above styles all ten ApiOptions inputs, so what is left here is only
+    // what a preset does not cover: the Accept header input's visibility, the two column
+    // widths that differ from the global col-md-2, and the year type default. The
+    // `yearInput.class( 'form-control' )` that used to sit here went with them -- it
+    // overrode the global input class to reach the very value the `input` role already
+    // resolves to under this preset.
+    //
+    // These are the canonical accessors 2.8.0 added. The underscore spellings still
+    // work and are not deprecated, but on ApiOptions that prefix now means
+    // package-internal, and these ten are the ones a consumer is meant to reach for.
     const apiOptions = controls.apiOptions;
-    apiOptions._acceptHeaderInput.hide(); // flag read at append time, so before appendTo()
-    apiOptions._yearInput.class( 'form-control' );
+    apiOptions.acceptHeaderInput.hide(); // flag read at append time, so before appendTo()
     // The two inputs with the longest option labels get the extra width; the rest
     // keep the global col-md-2.
-    apiOptions._epiphanyInput.wrapperClass( formGroupClass(3) );
-    apiOptions._holydaysOfObligationInput.wrapperClass( formGroupClass(3) );
-    apiOptions._yearTypeInput.defaultValue('CIVIL');
+    apiOptions.epiphanyInput.wrapperClass( formGroupClass(3) );
+    apiOptions.holydaysOfObligationInput.wrapperClass( formGroupClass(3) );
+    apiOptions.yearTypeInput.defaultValue('CIVIL');
 
     // Row one: the rite and calendar selects, then the ALL_CALENDARS inputs.
     controls.appendTo({
@@ -234,10 +258,11 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
     controls.listenTo( apiClient );
 
     // Only the FullCalendar half is left to do here: the messages slot named above
-    // renders the API's messages array itself, building each row with textContent
-    // rather than the innerHTML this example used to interpolate the API's strings into.
+    // renders the API's messages array itself. Since 2.8.0 it sanitizes that markup
+    // against an allowlist rather than writing it as text, so the decree links and
+    // emphasis the API emits render as markup instead of as literal tags.
     controls.onCalendarFetched( LitCalData => {
-        currentYear = parseInt(apiOptions._yearInput._domElement.value);
+        currentYear = parseInt(apiOptions.yearInput._domElement.value);
         //console.log(`currentYear is ${currentYear}`);
         if (LitCalData.hasOwnProperty("litcal")) {
             const events = litCalDataToEvents( LitCalData.litcal );
@@ -263,7 +288,8 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         }
     });
 
-    $(apiOptions._holydaysOfObligationInput._domElement).multiselect({
+    const holydaysInput = apiOptions.holydaysOfObligationInput._domElement;
+    $(holydaysInput).multiselect({
         buttonWidth: '100%',
         buttonClass: 'form-select',
         templates: {
@@ -271,17 +297,32 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         },
     });
 
-    const calendarSelectElement = controls.calendarSelect._domElement;
-    setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, calendarSelectElement.value);
+    /**
+     * Repaints the multiselect button from a selection payload.
+     *
+     * @param {{predeterminedInputs: ReadonlyArray<string>}} selection - The payload.
+     * @returns {void}
+     */
+    const paint = ({ predeterminedInputs }) => {
+        setHolyDaysOfObligationBgColor(holydaysInput, predeterminedInputs.includes('holydaysOfObligationInput'));
+    };
 
-    calendarSelectElement.addEventListener('change', (ev) => {
-        $(apiOptions._holydaysOfObligationInput._domElement).multiselect('rebuild');
-        setHolyDaysOfObligationBgColor(apiOptions._holydaysOfObligationInput._domElement, ev.target.value);
+    // `selection` is a synchronous, race-free read and onSelectionChange() deliberately
+    // does not fire on subscribe, so the initial paint is this one extra line. The
+    // callback then fires once per user action, coalesced onto a microtask, and only
+    // when the payload actually changed -- a locale change, or reselecting the option
+    // already selected, notifies nobody. This replaces a raw `change` listener on the
+    // calendar select plus a `value === ''` test, which is the library's own domain
+    // knowledge re-derived by hand.
+    paint(controls.selection);
+    controls.onSelectionChange((selection) => {
+        $(holydaysInput).multiselect('rebuild');
+        paint(selection);
     });
 
     if (typeof FC_CONTROL !== 'undefined' && FC_CONTROL) {
         if (today.getMonth() === 11) {
-            apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
+            apiOptions.yearTypeInput._domElement.value = 'LITURGICAL';
         }
         fullCalendarSettings.datesSet = (dateInfo) => {
             const currentData = dateInfo.view.getCurrentData();
@@ -290,11 +331,11 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
             const viewedDate = new Date(currentDate);
             const viewedMonth = viewedDate.getMonth();
             console.log('current month: ', viewedMonth);
-            if (viewedMonth === 11 && apiOptions._yearTypeInput._domElement.value === 'CIVIL') {
-                apiOptions._yearTypeInput._domElement.value = 'LITURGICAL';
+            if (viewedMonth === 11 && apiOptions.yearTypeInput._domElement.value === 'CIVIL') {
+                apiOptions.yearTypeInput._domElement.value = 'LITURGICAL';
                 shouldSetYearView = false;
                 fullCalendarSettings.initialDate = `${currentYear}-12-01`;
-                apiClient.yearType(apiOptions._yearTypeInput._domElement.value).year(currentYear+1).refetchCalendarData()
+                apiClient.yearType(apiOptions.yearTypeInput._domElement.value).year(currentYear+1).refetchCalendarData()
                     .catch( error => console.error(`Could not refetch the calendar: ${error.message}`) );
             } else {
                 shouldSetYearView = true;
@@ -304,7 +345,7 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
     // The year type is set on the client by hand because defaultValue() fires no
     // change event, so the listener listenTo() installed has nothing to react to and
     // the first request would otherwise go out under the client's own default.
-    apiClient.yearType(apiOptions._yearTypeInput._domElement.value);
+    apiClient.yearType(apiOptions.yearTypeInput._domElement.value);
 
     // controls.fetch() dispatches three ways from the data-calendartype attribute
     // CalendarSelect puts on each option: the empty option this select opens on is the
