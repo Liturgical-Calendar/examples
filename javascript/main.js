@@ -1,4 +1,4 @@
-import { ApiClient, ApiOptionsFilter, CalendarViewer, Input, Grouping, ColorAs, Column, ColumnOrder, DateFormat, GradeDisplay } from '@liturgical-calendar/components-js';
+import { ApiClient, ApiOptionsFilter, CalendarViewer, Input, ThemePreset, Grouping, ColorAs, Column, ColumnOrder, DateFormat, GradeDisplay } from '@liturgical-calendar/components-js';
 
 /**
  * Detect Bootstrap version (4 or 5) based on available features
@@ -20,8 +20,12 @@ function getBootstrapVersion() {
 const bsVersion = getBootstrapVersion();
 const isBS5 = bsVersion === 5;
 
-// Use appropriate classes based on Bootstrap version
-const selectClass = isBS5 ? 'form-select' : 'form-control';
+// Which framework the page loaded is a page fact the library cannot see, so the probe
+// above stays with the consumer -- but since 2.8.0 it chooses a PRESET NAME rather than
+// a class table. That `<select>` is `form-select` in Bootstrap 5 and `form-control` in
+// Bootstrap 4 is what the framework calls those things, not this example's decision, and
+// it was the same mapping every consuming page was rewriting.
+const themePreset = isBS5 ? ThemePreset.BOOTSTRAP_5 : ThemePreset.BOOTSTRAP_4;
 
 /**
  * Builds the grid column class for a form control's wrapper.
@@ -40,8 +44,10 @@ function formGroupClass(span) {
     return isBS5 ? `form-group col col-md-${span}` : `form-group col-md-${span}`;
 }
 
-Input.setGlobalInputClass(selectClass);
-Input.setGlobalLabelClass('form-label d-block mb-1');
+// A preset covers CONTROLS and never LAYOUT -- no wrapper, no grid span, no spacing
+// utility -- so the two wrapper globals stay here. The input and label class globals
+// are gone: naming a preset opens the `theme.apiOptions` gate, so the theme bag below
+// reaches all ten ApiOptions inputs and supplies both.
 Input.setGlobalWrapper('div');
 // The narrowest of the two widths any ApiOptions input takes; the wider ones
 // override it individually below.
@@ -87,17 +93,26 @@ function reportFailure(message) {
 }
 
 /**
- * Sets the background color of the holy days of obligation select button based on the value of the calendar select element.
- * If the value is empty, the background color is removed.
- * If the value is not empty, the background color is set to #e9ecef.
+ * Greys the holy days of obligation multiselect button when the current selection
+ * predetermines that input, and hands it back to the user when it does not.
+ *
+ * Driven by `CalendarControls.selection.predeterminedInputs` rather than by the
+ * calendar select's value. The two agree for THIS input -- holy days are not fixed by
+ * any rite, so they follow the calendar half of the rule alone -- but the payload is
+ * derived from the very rule ApiOptions uses to disable an input, so the greying and
+ * the disabling cannot drift, and the same test now reads correctly for the four
+ * inputs where `value === ''` does not: under the Ambrosian rite the Missal fixes
+ * Epiphany, Ascension and Corpus Domini and does not establish the Eternal High
+ * Priest, so those are predetermined with no calendar selected at all.
+ *
  * @param {HTMLSelectElement} hdobInput - The holy days of obligation select element.
- * @param {string} calendarSelectValue - The value of the calendar select element.
+ * @param {boolean} readOnly - Whether the current selection predetermines the input.
  */
-function setHolyDaysOfObligationBgColor(hdobInput, calendarSelectValue) {
-    if (calendarSelectValue === '') {
-        $(hdobInput).multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
-    } else {
+function setHolyDaysOfObligationBgColor(hdobInput, readOnly) {
+    if (readOnly) {
         $(hdobInput).parent().find('button.multiselect').css('background-color', '#e9ecef');
+    } else {
+        $(hdobInput).multiselect('deselectAll', false).multiselect('selectAll', false).parent().find('button.multiselect').removeAttr('style');
     }
 }
 
@@ -127,7 +142,14 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         // Row one only. The General Roman parameters are appended separately below.
         filter: ApiOptionsFilter.ALL_CALENDARS,
         theme: {
-            select: selectClass,
+            // Since 2.8.0 a preset supplies the `select` and `input` classes this page
+            // used to spell out, and naming one opens the `theme.apiOptions` gate, so
+            // they reach all ten ApiOptions inputs as well as the two selects. `label`
+            // is still written out: a preset covers CONTROLS and never LAYOUT, and
+            // `d-block mb-1` is layout. Writing it also keeps the Bootstrap 4 branch
+            // rendering exactly as before, since `bootstrap4` emits no label class of
+            // its own -- `.form-label` is a Bootstrap 5 class.
+            preset: themePreset,
             label: 'form-label d-block mb-1',
             // Since 2.4.0 the wrapper role reaches the rite select too, so both selects
             // take their grid column from here rather than from a hand-built div.
@@ -150,23 +172,29 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
         }
     });
 
-    // The theme bag deliberately does not reach ApiOptions' inputs -- ApiOptions bundles
-    // a variable number of them depending on the filter, so there is no fixed set of
-    // per-child keys to name -- so these are still reached directly, and the widths that
-    // differ from the global col-md-2 are still set one by one.
+    // The preset above styles all ten ApiOptions inputs, so what is left here is only
+    // what a preset does not cover: the Accept header input's visibility, and the two
+    // column widths that differ from the global col-md-2. The
+    // `yearInput.class( 'form-control' )` that used to sit here went with them -- it
+    // overrode the global input class to reach the very value the `input` role already
+    // resolves to under either preset.
+    //
+    // These are the canonical accessors 2.8.0 added. The underscore spellings still
+    // work and are not deprecated, but on ApiOptions that prefix now means
+    // package-internal, and these ten are the ones a consumer is meant to reach for.
     const apiOptions = viewer.controls.apiOptions;
-    apiOptions._acceptHeaderInput.hide(); // read at append time; see above
-    apiOptions._yearInput.class( 'form-control' ); // override the global input class
+    apiOptions.acceptHeaderInput.hide(); // read at append time; see above
     // The two inputs with the longest option labels get the extra width; the rest
     // keep the global col-md-2.
-    apiOptions._epiphanyInput.wrapperClass( formGroupClass(3) );
-    apiOptions._holydaysOfObligationInput.wrapperClass( formGroupClass(3) );
+    apiOptions.epiphanyInput.wrapperClass( formGroupClass(3) );
+    apiOptions.holydaysOfObligationInput.wrapperClass( formGroupClass(3) );
 
     // Row one: the rite and calendar selects, then the inputs the ALL_CALENDARS filter
     // selects -- locale, year type and year, in that order, the Accept header input
-    // having been hidden above. The messages slot renders the API's messages array,
-    // building each row with textContent rather than the innerHTML this example used to
-    // interpolate the API's strings into.
+    // having been hidden above. The messages slot renders the API's messages array;
+    // since 2.8.0 it sanitizes that markup against an allowlist rather than writing it
+    // as text, so the decree links and emphasis the API emits render as markup instead
+    // of as literal tags.
     viewer.appendTo({
         controls: '#calendarOptions',
         calendar: '#litcalWebcalendar',
@@ -195,15 +223,30 @@ ApiClient.init(typeof BaseUrl !== 'undefined' ? BaseUrl : 'https://litcal.johnro
             ? { button: '<button type="button" class="multiselect dropdown-toggle" data-bs-toggle="dropdown"><span class="multiselect-selected-text"></span></button>' }
             : { button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span></button>' }
     };
-    const holydaysInput = apiOptions._holydaysOfObligationInput._domElement;
+    const holydaysInput = apiOptions.holydaysOfObligationInput._domElement;
     $(holydaysInput).multiselect(multiselectConfig);
 
-    const calendarSelectElement = viewer.controls.calendarSelect._domElement;
-    setHolyDaysOfObligationBgColor(holydaysInput, calendarSelectElement.value);
+    /**
+     * Repaints the multiselect button from a selection payload.
+     *
+     * @param {{predeterminedInputs: ReadonlyArray<string>}} selection - The payload.
+     * @returns {void}
+     */
+    const paint = ({ predeterminedInputs }) => {
+        setHolyDaysOfObligationBgColor(holydaysInput, predeterminedInputs.includes('holydaysOfObligationInput'));
+    };
 
-    calendarSelectElement.addEventListener('change', (ev) => {
+    // `selection` is a synchronous, race-free read and onSelectionChange() deliberately
+    // does not fire on subscribe, so the initial paint is this one extra line. The
+    // callback then fires once per user action, coalesced onto a microtask, and only
+    // when the payload actually changed -- a locale change, or reselecting the option
+    // already selected, notifies nobody. This replaces a raw `change` listener on the
+    // calendar select plus a `value === ''` test, which is the library's own domain
+    // knowledge re-derived by hand.
+    paint(viewer.controls.selection);
+    viewer.controls.onSelectionChange((selection) => {
         $(holydaysInput).multiselect('rebuild');
-        setHolyDaysOfObligationBgColor(holydaysInput, ev.target.value);
+        paint(selection);
     });
 
     // Dispatched three ways from the data-calendartype attribute CalendarSelect puts on
